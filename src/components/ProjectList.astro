@@ -1,0 +1,32 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { useT, type Lang } from '../i18n/ui';
+import { getProjects } from '../lib/projects';
+
+interface Props { lang: Lang; cat: 'taahhut' | 'kentsel'; tag: string; heading: string; id?: string }
+const { lang, cat, tag, heading, id } = Astro.props;
+const t = useT(lang);
+const items = (await getProjects(lang)).filter((p) => p.data.kategori === cat);
+const listId = `list-${cat}`;
+const statuses = ['all', 'tamamlandi', 'devam'] as const;
+const count = (s: (typeof statuses)[number]) => items.filter((p) => s === 'all' || p.data.durum === s).length;
+---
+<section class="section tight" id={id}>
+  <div class="head-row reveal">
+    <header class="section-head">
+      <p class="sheet-tag" set:html={tag} />
+      <h2 set:html={heading} />
+    </header>
+    <div class="filters" role="group" aria-label={t.common.filterAria} data-for={listId}>
+      {statuses.map((s, i) => (
+        <button type="button" class:list={['chip', { 'is-active': i === 0 }]} data-status={s} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {t.common.filter[s]} <small>{count(s)}</small>
+        </button>
+      ))}
+    </div>
+  </div>
+  <div class="projects stagger" id={listId}>
+    {items.map((p) => <ProjectCard lang={lang} p={p} />)}
+    <p class="empty" hidden={items.length > 0}>{t.common.empty}</p>
+  </div>
+</section>

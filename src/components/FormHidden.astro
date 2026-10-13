@@ -1,0 +1,11 @@
+---
+// Form servisine giden gizli alanlar: konu satırı, form türü, dil ve spam tuzağı.
+interface Props { subject: string; form: string; lang: string }
+const { subject, form, lang } = Astro.props;
+---
+<input type="hidden" name="_subject" value={subject}>
+<input type="hidden" name="form" value={form}>
+<input type="hidden" name="dil" value={lang}>
+<div class="hp" aria-hidden="true">
+  <label>Bu alanı boş bırakın <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+</div>

@@ -1,0 +1,9 @@
+---
+import { getCollection } from 'astro:content';
+import V from '../../../views/ProjectPage.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('projeler')).map((p) => ({ params: { slug: p.id } }));
+}
+---
+<V lang="en" id={Astro.params.slug} />

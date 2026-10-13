@@ -1,0 +1,9 @@
+# Referans kurumlar. Projelerde "isveren: <kimlik>" ile bağlanır.
+# Hakkımızda sayfasındaki referans listesi bu dosyadan oluşturulur.
+- id: iski
+  tr: { kisa: "İSKİ", tam: "İstanbul Su ve Kanalizasyon İdaresi" }
+  en: { kisa: "İSKİ", tam: "Istanbul Water and Sewerage Administration" }
+
+- id: iuc
+  tr: { kisa: "İÜ-Cerrahpaşa", tam: "İstanbul Üniversitesi-Cerrahpaşa" }
+  en: { kisa: "IUC", tam: "Istanbul University-Cerrahpaşa" }

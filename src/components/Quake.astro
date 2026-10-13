@@ -1,0 +1,53 @@
+---
+import { useT, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const t = useT(Astro.props.lang);
+const k = t.kentsel;
+const q = k.quake;
+---
+<section class="section" id="deprem">
+  <header class="section-head reveal">
+    <p class="sheet-tag">{k.quakeTag}</p>
+    <h2 set:html={k.quakeH} />
+    <p class="section-sub">{k.quakeSub}</p>
+  </header>
+  <div class="quake-wrap reveal">
+    <div class="quake-stage">
+      <svg viewBox="0 0 600 420" id="quakeSvg" role="img" aria-label={q.aria}>
+        <defs>
+          <pattern id="soil2" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="14" class="hatch-line" />
+          </pattern>
+        </defs>
+        <line x1="300" y1="10" x2="300" y2="410" class="axis" />
+        <g id="qGround">
+          <rect x="-60" y="370" width="720" height="60" fill="url(#soil2)" />
+          <line x1="-60" y1="370" x2="660" y2="370" class="ground" />
+          <rect x="150" y="350" width="300" height="20" class="q-found" />
+        </g>
+        <g id="qStubs"></g><g id="qWalls"></g><g id="qCols"></g><g id="qSlabs"></g>
+        <text x="20" y="30" class="note" id="qModeLabel"></text>
+      </svg>
+      <p class="quake-note">{q.note}</p>
+    </div>
+    <div class="quake-panel">
+      <fieldset class="seg">
+        <legend>{q.sys}</legend>
+        <label><input type="radio" name="qmode" value="old" checked><span>{q.old}</span></label>
+        <label><input type="radio" name="qmode" value="new"><span>{q.new}</span></label>
+      </fieldset>
+      <fieldset class="seg">
+        <legend>{q.lvl}</legend>
+        <label><input type="radio" name="qlevel" value="1"><span>{q.l1}</span></label>
+        <label><input type="radio" name="qlevel" value="2" checked><span>{q.l2}</span></label>
+        <label><input type="radio" name="qlevel" value="3"><span>{q.l3}</span></label>
+      </fieldset>
+      <button class="btn btn-primary btn-block" id="qStart" type="button">{q.start}</button>
+      <dl class="readout">
+        <div><dt>{q.drift}</dt><dd><b id="qDrift">0.00</b> %</dd></div>
+        <div><dt>{q.top}</dt><dd><b id="qTop">0.0</b> cm</dd></div>
+        <div class="status" id="qStatus" data-state="idle"><dt>{q.st}</dt><dd id="qStatusText">{q.idle}</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>

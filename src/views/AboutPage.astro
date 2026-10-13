@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import Areas from '../components/Areas.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { ROUTES, useT, type Lang } from '../i18n/ui';
+import { getReferences } from '../lib/projects';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const a = t.about;
+const refs = await getReferences(lang);
+---
+<Base lang={lang} page="about" title={t.meta.about.title} description={t.meta.about.desc} alternates={ROUTES.about}>
+  <header class="page-head">
+    <p class="sheet-tag" set:html={a.tag} />
+    <h1 set:html={a.h1} />
+    <p class="lead">{a.lead}</p>
+  </header>
+
+  <section class="section tight">
+    <div class="two-col">
+      <p class="big reveal" set:html={a.big} />
+      <div class="prose reveal">{a.prose.map((p) => <p>{p}</p>)}</div>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <header class="section-head reveal"><p class="sheet-tag">{a.areasTag}</p><h2 set:html={a.areasH} /></header>
+    <Areas lang={lang} />
+  </section>
+
+  <section class="section tight">
+    <header class="section-head reveal"><p class="sheet-tag">{a.expTag}</p><h2 set:html={a.expH} /></header>
+    <div class="principles stagger">
+      {a.principles.map(([h, p], i) => (
+        <div class="principle reveal"><b>0{i + 1}</b><h3>{h}</h3><p>{p}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section tight">
+    <header class="section-head reveal"><p class="sheet-tag">{a.refTag}</p><h2 set:html={a.refH} /></header>
+    <ol class="refs stagger">
+      {refs.map((r, i) => (
+        <li class="ref reveal">
+          <span class="ref-no">R-{String(i + 1).padStart(2, '0')}</span>
+          <div class="ref-name"><strong>{r.kisa}</strong><span>{r.tam}</span></div>
+          <span class="ref-meta">{r.cats.map((c) => t.common.cat[c]).join(' · ') || '—'}</span>
+          <span class="ref-count"><b>{r.count}</b> {a.refJobs}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>

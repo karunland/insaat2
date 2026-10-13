@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { ROUTES, useT } from '../i18n/ui';
+const t = useT('tr');
+const e = useT('en');
+---
+<Base lang="tr" page="notFound" title={t.meta.notFound.title} description={t.meta.notFound.desc} alternates={ROUTES.home} noindex>
+  <header class="page-head">
+    <p class="sheet-tag" set:html={t.notFound.tag} />
+    <h1 set:html={t.notFound.h1} />
+    <p class="lead">{t.notFound.lead}</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href={ROUTES.home.tr}>{t.notFound.btn} <span aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href={ROUTES.home.en} lang="en">{e.notFound.btn}</a>
+    </div>
+  </header>
+</Base>

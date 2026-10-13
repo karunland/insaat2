@@ -1,0 +1,21 @@
+---
+import { Image } from 'astro:assets';
+import { projectPath, useT, type Lang } from '../i18n/ui';
+import type { Project } from '../lib/projects';
+
+interface Props { lang: Lang; p: Project }
+const { lang, p } = Astro.props;
+const t = useT(lang);
+---
+<a class="sheet reveal" href={projectPath(lang, p.id)} data-status={p.data.durum}>
+  <div class="sheet-img">
+    <Image src={p.data.kapak} alt="" widths={[480, 720, 960]} sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 400px" />
+    <span class="badge" data-status={p.data.durum}>{t.common.status[p.data.durum]}</span>
+  </div>
+  <div class="sheet-body">
+    <span class="sheet-cat">{t.common.cat[p.data.kategori]}{p.client && ` · ${p.client.kisa}`}</span>
+    <h3>{p.text.baslik}</h3>
+    {p.text.olcek && <p>{p.text.olcek}</p>}
+  </div>
+  <footer class="sheet-block"><span>{p.code}</span><span>{p.text.konum.split(',')[0]}</span><span>{p.data.yil}</span></footer>
+</a>

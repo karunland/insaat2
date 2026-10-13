@@ -1,0 +1,179 @@
+---
+import '../styles/global.css';
+import { SITE } from '../config/site.mjs';
+import { ROUTES, otherLang, useT, type Lang, type RouteKey } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  page: RouteKey | 'notFound';
+  /** Menüde vurgulanacak sayfa (proje sayfasında kategori sayfası) */
+  navCurrent?: RouteKey;
+  title: string;
+  description: string;
+  /** Bu sayfanın iki dildeki adresleri (dil değiştirici + hreflang) */
+  alternates: Record<Lang, string>;
+  og?: { image: string; width?: number; height?: number; alt?: string; type?: 'website' | 'article' };
+  jsonLd?: object[];
+  noindex?: boolean;
+}
+
+const { lang, page, navCurrent, title, description, alternates, og, jsonLd = [], noindex = false } = Astro.props;
+const t = useT(lang);
+const other = otherLang(lang);
+const abs = (p: string) => new URL(p, SITE.url).href;
+const canonical = abs(Astro.url.pathname);
+const PAFTA: Record<string, string> = { home: '00', about: '01', taahhut: '02', kentsel: '03', project: '04', contact: '05', notFound: '—' };
+const pageName = page === 'notFound' ? '404' : t.common.nav[page];
+const current = navCurrent ?? page;
+const year = new Date().getFullYear();
+
+const ogImage = og ? { ...og, image: abs(og.image) } : { image: abs('/og-default.png'), width: 1200, height: 630, alt: SITE.name, type: 'website' as const };
+
+const org = {
+  '@type': 'GeneralContractor',
+  '@id': `${SITE.url}/#organization`,
+  name: SITE.name,
+  legalName: SITE.legalName,
+  url: `${SITE.url}/`,
+  logo: abs('/logo.png'),
+  image: abs('/og-default.png'),
+  description: t.meta.home.desc,
+  telephone: SITE.phone,
+  email: SITE.email,
+  foundingDate: String(SITE.foundedYear),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.address.street,
+    addressLocality: SITE.address.city,
+    postalCode: SITE.address.postalCode,
+    addressCountry: SITE.address.country,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lon },
+  openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: SITE.hours.days, opens: SITE.hours.open, closes: SITE.hours.close }],
+  areaServed: { '@type': 'City', name: SITE.address.city },
+  ...(SITE.social.length ? { sameAs: SITE.social } : {}),
+};
+const website = {
+  '@type': 'WebSite',
+  '@id': `${SITE.url}/#website`,
+  url: `${SITE.url}/`,
+  name: SITE.name,
+  inLanguage: ['tr-TR', 'en-US'],
+  publisher: { '@id': org['@id'] },
+};
+const ld = { '@context': 'https://schema.org', '@graph': [org, website, ...jsonLd] };
+
+const navKeys: RouteKey[] = ['about', 'taahhut', 'kentsel', 'contact'];
+const footKeys: RouteKey[] = ['home', 'about', 'taahhut', 'kentsel', 'contact'];
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  {noindex && <meta name="robots" content="noindex">}
+  <meta name="theme-color" content="#F3F0E8">
+  {!noindex && <link rel="canonical" href={canonical}>}
+  {!noindex && <link rel="alternate" hreflang="tr" href={abs(alternates.tr)}>}
+  {!noindex && <link rel="alternate" hreflang="en" href={abs(alternates.en)}>}
+  {!noindex && <link rel="alternate" hreflang="x-default" href={abs(alternates.tr)}>}
+
+  <meta property="og:type" content={ogImage.type ?? 'website'}>
+  <meta property="og:site_name" content={SITE.name}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:locale" content={t.locale}>
+  <meta property="og:locale:alternate" content={useT(other).locale}>
+  <meta property="og:image" content={ogImage.image}>
+  {ogImage.width && <meta property="og:image:width" content={String(ogImage.width)}>}
+  {ogImage.height && <meta property="og:image:height" content={String(ogImage.height)}>}
+  <meta property="og:image:alt" content={ogImage.alt ?? title}>
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/logo.png">
+  <link rel="sitemap" href="/sitemap-index.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script is:inline>
+    try {
+      var t = localStorage.getItem('maksef-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</head>
+<body>
+  <a class="skip" href="#main">{t.common.skip}</a>
+  <div class="crosshair" aria-hidden="true"><span class="ch-x"></span><span class="ch-y"></span></div>
+  <div class="hud" aria-hidden="true">
+    <span class="hud-xy">X <b id="hudX">0000.0</b> &nbsp;Y <b id="hudY">0000.0</b></span>
+    <span class="hud-kot">KOT <b id="hudKot">±0.00</b> m</span>
+  </div>
+
+  <header class="site-header">
+    <a href={ROUTES.home[lang]} class="brand" aria-label={t.common.homeAria}>
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="6" class="bm-bg" />
+        <path d="M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z" class="bm-beam" />
+      </svg>
+      <span class="brand-text">MAKSEF<small>{t.common.brandSub}</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      {navKeys.map((k) => (
+        <a href={ROUTES[k][lang]} class={k === 'contact' ? 'nav-cta' : undefined} aria-current={k === current ? 'page' : undefined}>
+          {t.common.nav[k]}
+        </a>
+      ))}
+    </nav>
+    <div class="tools">
+      <a class="lang-switch" href={alternates[other]} hreflang={other} lang={other} title={useT(other).langName}>{useT(other).langShort}</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label={t.common.themeAria}>
+        <span class="tt-dot"></span><span class="tt-label">{t.common.theme}</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label={t.common.menu} aria-expanded="false" aria-controls="nav">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="foot-nav">
+      <nav aria-label={t.common.footerNav}>
+        {footKeys.map((k) => <a href={ROUTES[k][lang]}>{t.common.nav[k]}</a>)}
+      </nav>
+      <a href={alternates[other]} hreflang={other} lang={other}>{useT(other).langName} →</a>
+    </div>
+    <div class="tb-grid">
+      <div class="tb-cell tb-brand">
+        <span class="tb-l">{t.common.tb.firm}</span>
+        <strong>MAKSEF</strong>
+        <span>{t.common.tagline}</span>
+      </div>
+      <div class="tb-cell"><span class="tb-l">{t.common.tb.page}</span>{pageName}</div>
+      <div class="tb-cell"><span class="tb-l">{t.common.tb.sheet}</span>{PAFTA[page]} / 05</div>
+      <div class="tb-cell"><span class="tb-l">{t.common.tb.scale}</span>1:1</div>
+      <div class="tb-cell"><span class="tb-l">{t.common.tb.lang}</span>{t.langShort}</div>
+      <div class="tb-cell"><span class="tb-l">{t.common.tb.phone}</span><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></div>
+      <div class="tb-cell"><span class="tb-l">{t.common.tb.mail}</span><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div>
+      <div class="tb-cell"><span class="tb-l">{t.common.tb.date}</span>{year}</div>
+      <div class="tb-cell"><span class="tb-l">{t.common.tb.approved}</span>{t.common.tb.gravity}</div>
+    </div>
+    <p class="tb-copy">© {year} {SITE.legalName}. {t.common.rights}</p>
+  </footer>
+
+  <!-- Tarayıcı betiklerinin metinleri (src/i18n/ui.ts → client) -->
+  <script type="application/json" id="i18n-client" set:html={JSON.stringify(t.client)} />
+  <script>
+    import '../scripts/main.js';
+  </script>
+</body>
+</html>

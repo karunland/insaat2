@@ -1,0 +1,18 @@
+---
+import { SITE } from '../config/site.mjs';
+import { ROUTES, useT, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang; heading?: string; text?: string; button?: string; href?: string }
+const { lang } = Astro.props;
+const t = useT(lang);
+const { heading = t.common.cta.h, text = t.common.cta.p, button = t.common.cta.btn, href = ROUTES.contact[lang] } = Astro.props;
+---
+<section class="cta-band">
+  <div class="cta-inner reveal">
+    <div><h2 set:html={heading} /><p>{text}</p></div>
+    <div class="cta-actions">
+      <a class="btn btn-primary" href={href}>{button} <span aria-hidden="true">→</span></a>
+      <a class="cta-phone" href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectList from '../components/ProjectList.astro';
+import Quake from '../components/Quake.astro';
+import FormHidden from '../components/FormHidden.astro';
+import { SITE } from '../config/site.mjs';
+import { ROUTES, useT, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const k = t.kentsel;
+const f = k.form;
+const kots = ['+15.00', '+12.00', '+9.00', '+6.00', '+3.00', '±0.00'];
+const endpoint = SITE.forms.kentsel;
+---
+<Base lang={lang} page="kentsel" title={t.meta.kentsel.title} description={t.meta.kentsel.desc} alternates={ROUTES.kentsel}>
+  <header class="page-head">
+    <p class="sheet-tag" set:html={k.tag} />
+    <h1 set:html={k.h1} />
+    <p class="lead">{k.lead}</p>
+    <div class="hero-actions">
+      <a href="#basvuru" class="btn btn-primary">{k.btnApply} <span aria-hidden="true">↓</span></a>
+      <a href="#projeler" class="btn btn-ghost">{k.btnProjects} <span aria-hidden="true">↓</span></a>
+    </div>
+  </header>
+
+  <section class="section tight" id="surec">
+    <header class="section-head reveal">
+      <p class="sheet-tag">{k.processTag}</p>
+      <h2 set:html={k.processH} />
+      <p class="section-sub">{k.processSub}</p>
+    </header>
+    <ol class="loadpath">
+      {k.steps.map(([h, p], i) => (
+        <li class="lp-step reveal"><span class="lp-kot">{kots[i]}</span><h3>{h}</h3><p>{p}</p></li>
+      ))}
+    </ol>
+  </section>
+
+  <Quake lang={lang} />
+
+  <ProjectList lang={lang} cat="kentsel" tag={k.listTag} heading={k.listH} id="projeler" />
+
+  <section class="section" id="basvuru">
+    <div class="contact-grid">
+      <div class="reveal">
+        <header class="section-head">
+          <p class="sheet-tag">{k.formTag}</p>
+          <h2 set:html={k.formH} />
+          <p class="section-sub">{k.formSub}</p>
+        </header>
+        <p class="legend">{k.prep}</p>
+        <ul class="ticks prep">{k.prepList.map((x) => <li>{x}</li>)}</ul>
+      </div>
+
+      <form class="form form-box reveal" method="post" action={endpoint || undefined}
+            data-form data-endpoint={endpoint} data-mailto={SITE.email} novalidate>
+        <FormHidden subject={f.subject} form="kentsel" lang={lang} />
+        <p class="legend">{f.applicant}</p>
+        <div class="field"><label for="kName">{f.name} *</label><input id="kName" name="ad_soyad" type="text" autocomplete="name" required></div>
+        <div class="field-row">
+          <div class="field"><label for="kPhone">{f.phone} *</label><input id="kPhone" name="telefon" type="tel" autocomplete="tel" required></div>
+          <div class="field"><label for="kMail">{f.mail}</label><input id="kMail" name="email" type="email" autocomplete="email"></div>
+        </div>
+        <p class="legend">{f.building}</p>
+        <div class="field"><label for="kAddress">{f.address} *</label><textarea id="kAddress" name="adres" rows="2" autocomplete="street-address" required></textarea></div>
+        <div class="field-row three">
+          <div class="field"><label for="kAge">{f.age}</label><input id="kAge" name="bina_yasi" type="number" inputmode="numeric" min="0" max="200" placeholder={f.agePh}></div>
+          <div class="field"><label for="kFloors">{f.floors}</label><input id="kFloors" name="kat_sayisi" type="number" inputmode="numeric" min="1" max="80"></div>
+          <div class="field"><label for="kFlats">{f.flats}</label><input id="kFlats" name="daire_sayisi" type="number" inputmode="numeric" min="1" max="2000"></div>
+        </div>
+        <div class="field"><label for="kOwner">{f.owner}</label><select id="kOwner" name="malik_durumu">{f.owners.map((o) => <option>{o}</option>)}</select></div>
+        <div class="field"><label for="kMsg">{f.msg}</label><textarea id="kMsg" name="mesaj" rows="4"></textarea></div>
+        <label class="check" for="kConsent"><input type="checkbox" id="kConsent" name="kvkk_onay" value={t.client.yes} required><span>{t.common.kvkk}</span></label>
+        <button class="btn btn-primary" type="submit">{f.submit} <span aria-hidden="true">→</span></button>
+        <p class="form-msg" role="status"></p>
+      </form>
+    </div>
+  </section>
+</Base>

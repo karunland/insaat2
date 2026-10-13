@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroDrawing from '../components/HeroDrawing.astro';
+import Areas from '../components/Areas.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../config/site.mjs';
+import { ROUTES, useT, type Lang } from '../i18n/ui';
+import { getProjects } from '../lib/projects';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const h = t.home;
+
+// Izgarada tek kart kalmasın: 3'ün katı kadar öne çıkan proje (en fazla 6)
+const featured = (await getProjects(lang)).filter((p) => p.data.onecikan);
+const n = featured.length < 3 ? featured.length : Math.min(6, featured.length - (featured.length % 3));
+const years = new Date().getFullYear() - SITE.foundedYear;
+const stats = [
+  { v: years, s: '', label: h.numbers.years },
+  { v: SITE.stats.completedProjects, s: '+', label: h.numbers.projects },
+  { v: SITE.stats.infraKm, s: ' km', label: h.numbers.km },
+  { v: SITE.stats.unitsDelivered, s: '+', label: h.numbers.units },
+];
+const fmt = (v: number) => v.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
+---
+<Base lang={lang} page="home" title={t.meta.home.title} description={t.meta.home.desc} alternates={ROUTES.home}>
+  <section class="hero">
+    <div class="hero-text">
+      <p class="sheet-tag" set:html={h.tag} />
+      <h1 set:html={h.h1} />
+      <p class="lead">{h.lead}</p>
+      <div class="hero-actions">
+        <a href={ROUTES.contact[lang]} class="btn btn-primary">{h.btnContact} <span aria-hidden="true">→</span></a>
+        <a href="#alanlar" class="btn btn-ghost">{h.btnAreas} <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+    <HeroDrawing lang={lang} />
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">{[...h.ticker, ...h.ticker].map((w) => <span>{w}</span>)}</div>
+  </div>
+
+  <section class="section" id="alanlar">
+    <header class="section-head reveal">
+      <p class="sheet-tag">{h.areasTag}</p>
+      <h2 set:html={h.areasH} />
+    </header>
+    <Areas lang={lang} />
+  </section>
+
+  {n > 0 && (
+    <section class="section tight">
+      <div class="head-row reveal">
+        <header class="section-head">
+          <p class="sheet-tag">{h.featuredTag}</p>
+          <h2 set:html={h.featuredH} />
+        </header>
+        <div class="filters">
+          <a class="link-arrow" href={ROUTES.taahhut[lang]}>{h.allTaahhut} →</a>
+          <a class="link-arrow" href={ROUTES.kentsel[lang]}>{h.allKentsel} →</a>
+        </div>
+      </div>
+      <div class="projects stagger">
+        {featured.slice(0, n).map((p) => <ProjectCard lang={lang} p={p} />)}
+      </div>
+    </section>
+  )}
+
+  <section class="numbers stagger" aria-label={h.numbersAria}>
+    {stats.map((x) => (
+      <div class="num reveal"><b data-count={x.v} data-suffix={x.s}>{fmt(x.v)}{x.s}</b><span>{x.label}</span></div>
+    ))}
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>

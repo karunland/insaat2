@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import FormHidden from '../components/FormHidden.astro';
+import { SITE } from '../config/site.mjs';
+import { ROUTES, useT, type Lang } from '../i18n/ui';
+import { getProjects } from '../lib/projects';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const c = t.contact;
+const f = c.form;
+const endpoint = SITE.forms.contact;
+
+// Proje sayfasından ?proje=<kimlik> ile gelindiğinde formu doldurmak için
+const projectMap = Object.fromEntries(
+  (await getProjects(lang)).map((p) => [p.id, { title: p.text.baslik, cat: p.data.kategori }]),
+);
+const { lat, lon } = SITE.geo;
+const d = 0.012;
+const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - d},${lat - d * 0.6},${lon + d},${lat + d * 0.6}&layer=mapnik&marker=${lat},${lon}`;
+const directions = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+const coord = `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'} · ${Math.abs(lon).toFixed(4)}° ${lon >= 0 ? 'E' : 'W'}`;
+---
+<Base lang={lang} page="contact" title={t.meta.contact.title} description={t.meta.contact.desc} alternates={ROUTES.contact}>
+  <header class="page-head">
+    <p class="sheet-tag" set:html={c.tag} />
+    <h1 set:html={c.h1} />
+    <p class="lead">{c.lead}</p>
+  </header>
+
+  <section class="section tight">
+    <div class="contact-grid">
+      <form class="form form-box reveal" method="post" action={endpoint || undefined} id="contactForm"
+            data-form data-endpoint={endpoint} data-mailto={SITE.email} novalidate>
+        <FormHidden subject={f.subject} form="iletisim" lang={lang} />
+        <input type="hidden" name="proje" id="cProject" value="">
+        <div class="project-note" id="projectNote" hidden>
+          <span>{f.project}: <b></b></span>
+          <button type="button" aria-label={f.projectRemove}>✕</button>
+        </div>
+        <div class="field"><label for="cName">{f.name} *</label><input id="cName" name="ad_soyad" type="text" autocomplete="name" required></div>
+        <div class="field-row">
+          <div class="field"><label for="cPhone">{f.phone}</label><input id="cPhone" name="telefon" type="tel" autocomplete="tel"></div>
+          <div class="field"><label for="cMail">{f.mail} *</label><input id="cMail" name="email" type="email" autocomplete="email" required></div>
+        </div>
+        <div class="field"><label for="cTopic">{f.topic}</label><select id="cTopic" name="konu">{f.topics.map((x) => <option>{x}</option>)}</select></div>
+        <div class="field"><label for="cMsg">{f.msg} *</label><textarea id="cMsg" name="mesaj" rows="6" required></textarea></div>
+        <label class="check" for="cConsent"><input type="checkbox" id="cConsent" name="kvkk_onay" value={t.client.yes} required><span>{t.common.kvkk}</span></label>
+        <button class="btn btn-primary" type="submit">{f.submit} <span aria-hidden="true">→</span></button>
+        <p class="form-msg" role="status"></p>
+      </form>
+
+      <aside class="contact-info reveal">
+        <dl>
+          <div><dt>{c.info.addr}</dt><dd>{SITE.address.street}<br>{SITE.address.postalCode} {SITE.address.city}</dd></div>
+          <div><dt>{c.info.phone}</dt><dd><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></dd></div>
+          <div><dt>{c.info.mail}</dt><dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd></div>
+          <div><dt>{c.info.hours}</dt><dd>{c.info.hoursValue}</dd></div>
+        </dl>
+        <div class="coords">
+          <span>{coord}</span>
+          <a href={directions} target="_blank" rel="noopener">{c.info.directions}</a>
+        </div>
+      </aside>
+    </div>
+
+    <figure class="map reveal">
+      <iframe src={mapSrc} title={c.mapTitle} loading="lazy" referrerpolicy="no-referrer"></iframe>
+      <figcaption class="caption"><span>{c.mapCaption}</span><span>{coord}</span></figcaption>
+    </figure>
+  </section>
+
+  <script type="application/json" id="project-map" set:html={JSON.stringify({ map: projectMap, topicByCat: f.topicByCat, msg: f.projectMsg })} />
+</Base>

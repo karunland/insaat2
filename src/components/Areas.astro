@@ -1,0 +1,44 @@
+---
+import { ROUTES, useT, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const items = [
+  { code: 'A', key: 'taahhut' as const },
+  { code: 'B', key: 'kentsel' as const },
+];
+---
+<div class="areas stagger">
+  {items.map(({ code, key }) => {
+    const a = t.areas[key];
+    return (
+      <a class="area reveal" href={ROUTES[key][lang]}>
+        <span class="area-code"><b>{code}</b>{t.areas.label} {code}</span>
+        {key === 'taahhut' ? (
+          <svg viewBox="0 0 400 150" aria-hidden="true">
+            <path d="M0 60H140V140H260V60H400" />
+            <path class="soil" d="M10 80l20-20M30 100l40-40M50 120l60-60M80 130l60-70M290 130l60-70M320 130l60-70M350 130l40-45M380 130l20-25" />
+            <path class="acc" d="M146 60V140M254 60V140M146 80H254" />
+            <circle class="acc" cx="200" cy="114" r="20" /><circle cx="200" cy="114" r="13" />
+            <path d="M290 60V18H380V60M300 30h12M324 30h12M348 30h12M300 44h12M324 44h12M348 44h12" />
+            <path d="M20 60V40h70v20M30 40l10-14h30l10 14" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 400 150" aria-hidden="true">
+            <path d="M0 140H400" />
+            <path d="M40 140V62H140V140M52 76h16M80 76h16M108 76h16M52 96h16M80 96h16M108 96h16M52 116h16M108 116h16M80 140v-20h16v20" />
+            <path class="acc" d="M70 66l6 10-5 8 7 11M126 100l-6 10 5 7-7 12" />
+            <path class="acc" d="M168 100H232M220 88l12 12-12 12" />
+            <path d="M262 140V16H372V140M262 34H372M262 52H372M262 70H372M262 88H372M262 106H372M262 124H372M290 16v124M344 16v124" />
+            <path class="acc" d="M256 34h-8M256 70h-8M256 106h-8" />
+          </svg>
+        )}
+        <h3>{a.h}</h3>
+        <p>{a.p}</p>
+        <ul class="ticks">{a.ticks.map((x) => <li>{x}</li>)}</ul>
+        <span class="link-arrow">{a.link} →</span>
+      </a>
+    );
+  })}
+</div>
