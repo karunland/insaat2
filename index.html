@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="tr" data-base="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MAKSEF İnşaat — Taahhüt ve Kentsel Dönüşüm</title>
+  <meta name="description" content="MAKSEF; kamu kurumlarının altyapı ve bina işlerini taahhüt eden, riskli binaları kentsel dönüşümle yenileyen bir inşaat firmasıdır.">
+  <meta name="theme-color" content="#F3F0E8">
+  <link rel="alternate" hreflang="en" href="en/index.html">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314213D'/%3E%3Cpath d='M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z' fill='%23E8590C'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem('maksef-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">İçeriğe geç</a>
+  <div class="crosshair" aria-hidden="true"><span class="ch-x"></span><span class="ch-y"></span></div>
+  <div class="hud" aria-hidden="true">
+    <span class="hud-xy">X <b id="hudX">0000.0</b> &nbsp;Y <b id="hudY">0000.0</b></span>
+    <span class="hud-kot">KOT <b id="hudKot">±0.00</b> m</span>
+  </div>
+
+  <header class="site-header">
+    <a href="index.html" class="brand" aria-label="MAKSEF ana sayfa">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="6" class="bm-bg"/>
+        <path d="M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z" class="bm-beam"/>
+      </svg>
+      <span class="brand-text">MAKSEF<small>inşaat</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="taahhut.html">Taahhüt</a>
+      <a href="kentsel-donusum.html">Kentsel Dönüşüm</a>
+      <a href="iletisim.html" class="nav-cta">İletişim</a>
+    </nav>
+    <div class="tools">
+      <a class="lang-switch" href="en/index.html" hreflang="en" lang="en" title="English">EN</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ozalit (koyu) modunu aç/kapat">
+        <span class="tt-dot"></span><span class="tt-label">Ozalit</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Menüyü aç" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-text">
+        <p class="sheet-tag">PAFTA 00 <i></i> ANA SAYFA</p>
+        <h1>Yerin altından<br><em>çatının üstüne.</em></h1>
+        <p class="lead">MAKSEF; kamu kurumlarının altyapı ve bina işlerini taahhüt eden, riskli binaları kentsel dönüşümle güvenli yuvalara çeviren bir inşaat firmasıdır.</p>
+        <div class="hero-actions">
+          <a href="iletisim.html" class="btn btn-primary">Bize ulaşın <span aria-hidden="true">→</span></a>
+          <a href="#alanlar" class="btn btn-ghost">Faaliyet alanlarımız <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <figure class="hero-drawing" aria-label="Kendini çizen bina kesiti ve altındaki kanal borusu">
+        <svg viewBox="0 0 560 520" class="frame-svg" role="img" aria-hidden="true">
+          <defs>
+            <pattern id="soil" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="14" class="hatch-line"/>
+            </pattern>
+            <pattern id="concrete" width="22" height="22" patternUnits="userSpaceOnUse">
+              <circle cx="4" cy="5" r="1" class="dot"/><circle cx="15" cy="12" r="1.4" class="dot"/><path d="M8 17 l3 -2 l1 3z" class="dot"/>
+            </pattern>
+          </defs>
+          <g>
+            <line x1="100" y1="44" x2="100" y2="500" class="axis draw" pathLength="1" style="--d:.1s"/>
+            <line x1="220" y1="44" x2="220" y2="500" class="axis draw" pathLength="1" style="--d:.2s"/>
+            <line x1="340" y1="44" x2="340" y2="500" class="axis draw" pathLength="1" style="--d:.3s"/>
+            <line x1="460" y1="44" x2="460" y2="500" class="axis draw" pathLength="1" style="--d:.4s"/>
+            <g class="fade" style="--d:.5s">
+              <circle cx="100" cy="30" r="14" class="bubble"/><text x="100" y="35" class="bubble-t">A</text>
+              <circle cx="220" cy="30" r="14" class="bubble"/><text x="220" y="35" class="bubble-t">B</text>
+              <circle cx="340" cy="30" r="14" class="bubble"/><text x="340" y="35" class="bubble-t">C</text>
+              <circle cx="460" cy="30" r="14" class="bubble"/><text x="460" y="35" class="bubble-t">D</text>
+            </g>
+          </g>
+          <g class="fade" style="--d:2.9s">
+            <line x1="100" y1="78" x2="460" y2="78" class="dim"/>
+            <path d="M96 82 l8 -8 M216 82 l8 -8 M336 82 l8 -8 M456 82 l8 -8" class="dim"/>
+            <text x="160" y="72" class="dim-t">6.00</text><text x="280" y="72" class="dim-t">6.00</text><text x="400" y="72" class="dim-t">6.00</text>
+          </g>
+          <rect x="20" y="430" width="520" height="70" fill="url(#soil)" class="fade" style="--d:.6s"/>
+          <line x1="20" y1="430" x2="540" y2="430" class="ground draw" pathLength="1" style="--d:.5s"/>
+          <rect x="78" y="408" width="404" height="22" class="found draw" pathLength="1" style="--d:.8s"/>
+          <rect x="78" y="408" width="404" height="22" fill="url(#concrete)" class="fade" style="--d:1.2s"/>
+          <g>
+            <line x1="100" y1="408" x2="100" y2="110" class="col draw" pathLength="1" style="--d:1.0s"/>
+            <line x1="220" y1="408" x2="220" y2="110" class="col draw" pathLength="1" style="--d:1.1s"/>
+            <line x1="340" y1="408" x2="340" y2="110" class="col draw" pathLength="1" style="--d:1.2s"/>
+            <line x1="460" y1="408" x2="460" y2="110" class="col draw" pathLength="1" style="--d:1.3s"/>
+          </g>
+          <g>
+            <line x1="86" y1="350" x2="474" y2="350" class="slab draw" pathLength="1" style="--d:1.6s"/>
+            <line x1="86" y1="290" x2="474" y2="290" class="slab draw" pathLength="1" style="--d:1.8s"/>
+            <line x1="86" y1="230" x2="474" y2="230" class="slab draw" pathLength="1" style="--d:2.0s"/>
+            <line x1="86" y1="170" x2="474" y2="170" class="slab draw" pathLength="1" style="--d:2.2s"/>
+            <line x1="86" y1="110" x2="474" y2="110" class="slab draw" pathLength="1" style="--d:2.4s"/>
+            <path d="M86 110 v-14 M474 110 v-14" class="slab-thin draw" pathLength="1" style="--d:2.6s"/>
+          </g>
+          <rect x="214" y="110" width="12" height="298" class="shear fade" style="--d:2.7s"/>
+          <g class="fade" style="--d:3.0s">
+            <line x1="508" y1="110" x2="508" y2="408" class="dim"/>
+            <path d="M504 114 l8 -8 M504 174 l8 -8 M504 234 l8 -8 M504 294 l8 -8 M504 354 l8 -8 M504 412 l8 -8" class="dim"/>
+            <text x="524" y="144" class="dim-t v">3.00</text><text x="524" y="204" class="dim-t v">3.00</text>
+            <text x="524" y="264" class="dim-t v">3.00</text><text x="524" y="324" class="dim-t v">3.00</text>
+            <text x="524" y="383" class="dim-t v">2.90</text>
+          </g>
+          <g class="fade" style="--d:3.2s">
+            <path d="M40 110 l8 -10 h-16z" class="kot"/><text x="36" y="94" class="note">+15.00</text>
+            <path d="M40 430 l8 -10 h-16z" class="kot"/><text x="36" y="414" class="note">±0.00</text>
+          </g>
+          <g class="fade" style="--d:3.3s">
+            <circle cx="300" cy="468" r="17" class="pipe"/><circle cx="300" cy="468" r="11" class="pipe-in"/>
+            <rect x="324" y="459" width="108" height="18" class="label-bg"/>
+            <text x="330" y="472" class="note accent">Ø800 kolektör</text>
+          </g>
+          <g class="fade" style="--d:3.4s">
+            <path d="M300 230 L352 200 H446" class="leader"/><circle cx="300" cy="230" r="3" class="leader-dot"/>
+            <text x="354" y="195" class="note">K-301 · 30/60</text>
+            <path d="M226 320 L244 380 H346" class="leader"/><circle cx="226" cy="320" r="3" class="leader-dot"/>
+            <text x="248" y="375" class="note accent">P-02 · perde</text>
+          </g>
+        </svg>
+        <figcaption class="caption"><span>KESİT A–A</span><span>ÖLÇEK 1:200</span></figcaption>
+      </figure>
+    </section>
+
+    <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Taahhüt</span><span>Kentsel Dönüşüm</span><span>Altyapı</span><span>Kamu Binaları</span><span>Atıksu & İçme Suyu</span><span>Güçlendirme</span><span>Anahtar Teslim</span><span>6306 Sayılı Kanun</span><span>Taahhüt</span><span>Kentsel Dönüşüm</span><span>Altyapı</span><span>Kamu Binaları</span><span>Atıksu & İçme Suyu</span><span>Güçlendirme</span><span>Anahtar Teslim</span><span>6306 Sayılı Kanun</span></div></div>
+
+    <section class="section" id="alanlar">
+      <header class="section-head reveal">
+        <p class="sheet-tag">FAALİYET ALANLARI</p>
+        <h2>İki alan, <em>tek disiplin.</em></h2>
+      </header>
+      <div class="areas stagger">
+        <a class="area reveal" href="taahhut.html">
+          <span class="area-code"><b>A</b>FAALİYET ALANI A</span>
+          <svg viewBox="0 0 400 150" aria-hidden="true">
+            <path d="M0 60H140V140H260V60H400"/>
+            <path class="soil" d="M10 80l20-20M30 100l40-40M50 120l60-60M80 130l60-70M290 130l60-70M320 130l60-70M350 130l40-45M380 130l20-25"/>
+            <path class="acc" d="M146 60V140M254 60V140M146 80H254"/>
+            <circle class="acc" cx="200" cy="114" r="20"/><circle cx="200" cy="114" r="13"/>
+            <path d="M290 60V18H380V60M300 30h12M324 30h12M348 30h12M300 44h12M324 44h12M348 44h12"/>
+            <path d="M20 60V40h70v20M30 40l10-14h30l10 14"/>
+          </svg>
+          <h3>Taahhüt</h3>
+          <p>Kamu kurumlarının ihaleyle verdiği altyapı ve bina işlerini; şartnameye, takvime ve bütçeye sadık kalarak yürütüyoruz.</p>
+          <ul class="ticks"><li>Atıksu, içme suyu ve yağmursuyu hatları</li><li>Kamu binalarında onarım ve güçlendirme</li><li>İş programı ve hakediş disiplini</li></ul>
+          <span class="link-arrow">Taahhüt projeleri →</span>
+        </a>
+        <a class="area reveal" href="kentsel-donusum.html">
+          <span class="area-code"><b>B</b>FAALİYET ALANI B</span>
+          <svg viewBox="0 0 400 150" aria-hidden="true">
+            <path d="M0 140H400"/>
+            <path d="M40 140V62H140V140M52 76h16M80 76h16M108 76h16M52 96h16M80 96h16M108 96h16M52 116h16M108 116h16M80 140v-20h16v20"/>
+            <path class="acc" d="M70 66l6 10-5 8 7 11M126 100l-6 10 5 7-7 12"/>
+            <path class="acc" d="M168 100H232M220 88l12 12-12 12"/>
+            <path d="M262 140V16H372V140M262 34H372M262 52H372M262 70H372M262 88H372M262 106H372M262 124H372M290 16v124M344 16v124"/>
+            <path class="acc" d="M256 34h-8M256 70h-8M256 106h-8"/>
+          </svg>
+          <h3>Kentsel Dönüşüm</h3>
+          <p>Deprem riski taşıyan binanızı, hak sahipleriyle şeffaf bir süreç içinde yıkıp bugünün yönetmeliğine göre yeniden inşa ediyoruz.</p>
+          <ul class="ticks"><li>Riskli yapı tespitinden anahtar teslime</li><li>Her malikle açık sözleşme ve düzenli bilgi</li><li>TBDY 2018'e uygun yeni yapı</li></ul>
+          <span class="link-arrow">Kentsel dönüşüm →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section tight">
+      <div class="head-row reveal">
+        <header class="section-head">
+          <p class="sheet-tag">ÖNE ÇIKAN PROJELER</p>
+          <h2>Sahadan <em>seçmeler.</em></h2>
+        </header>
+        <div class="filters">
+          <a class="link-arrow" href="taahhut.html">Tüm taahhüt projeleri →</a>
+          <a class="link-arrow" href="kentsel-donusum.html">Tüm kentsel dönüşüm projeleri →</a>
+        </div>
+      </div>
+      <div class="projects stagger" id="featured"></div>
+    </section>
+
+    <section class="numbers stagger" aria-label="Rakamlarla MAKSEF">
+      <div class="num reveal"><b data-count="15">15</b><span>yıllık deneyim</span></div>
+      <div class="num reveal"><b data-count="60" data-suffix="+">60+</b><span>tamamlanan proje</span></div>
+      <div class="num reveal"><b data-count="25" data-suffix=" km">25 km</b><span>altyapı hattı</span></div>
+      <div class="num reveal"><b data-count="350" data-suffix="+">350+</b><span>teslim edilen bağımsız bölüm</span></div>
+    </section>
+
+    <section class="cta-band">
+      <div class="cta-inner reveal">
+        <div><h2>Bir ihale, bir bina ya da sadece bir soru. <em>Konuşalım.</em></h2><p>Ekibimiz size kısa sürede dönüş yapar.</p></div>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="iletisim.html">İletişime geçin <span aria-hidden="true">→</span></a>
+          <a class="cta-phone" href="tel:+902120000000">+90 212 000 00 00</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="foot-nav">
+      <nav aria-label="Footer"><a href="index.html">Ana Sayfa</a><a href="hakkimizda.html">Hakkımızda</a><a href="taahhut.html">Taahhüt</a><a href="kentsel-donusum.html">Kentsel Dönüşüm</a><a href="iletisim.html">İletişim</a></nav>
+      <a href="en/index.html" hreflang="en" lang="en">English →</a>
+    </div>
+    <div class="tb-grid">
+      <div class="tb-cell tb-brand">
+        <span class="tb-l">FİRMA</span>
+        <strong>MAKSEF</strong>
+        <span>Taahhüt · Kentsel Dönüşüm</span>
+      </div>
+      <div class="tb-cell"><span class="tb-l">SAYFA</span>Ana Sayfa</div>
+      <div class="tb-cell"><span class="tb-l">PAFTA NO</span>00 / 05</div>
+      <div class="tb-cell"><span class="tb-l">ÖLÇEK</span>1:1</div>
+      <div class="tb-cell"><span class="tb-l">DİL</span>TR</div>
+      <div class="tb-cell"><span class="tb-l">TELEFON</span><a href="tel:+902120000000">+90 212 000 00 00</a></div>
+      <div class="tb-cell"><span class="tb-l">E-POSTA</span><a href="mailto:info@maksef.com.tr">info@maksef.com.tr</a></div>
+      <div class="tb-cell"><span class="tb-l">TARİH</span><span class="js-year">2026</span></div>
+      <div class="tb-cell"><span class="tb-l">ONAYLAYAN</span>Yer çekimi</div>
+    </div>
+    <p class="tb-copy">© <span class="js-year">2026</span> MAKSEF. Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/projects-data.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

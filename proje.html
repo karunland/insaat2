@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="tr" data-base="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proje — MAKSEF</title>
+  <meta name="description" content="MAKSEF proje detayı.">
+  <meta name="theme-color" content="#F3F0E8">
+  <link rel="alternate" hreflang="en" href="en/project.html">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314213D'/%3E%3Cpath d='M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z' fill='%23E8590C'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem('maksef-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">İçeriğe geç</a>
+  <div class="crosshair" aria-hidden="true"><span class="ch-x"></span><span class="ch-y"></span></div>
+  <div class="hud" aria-hidden="true">
+    <span class="hud-xy">X <b id="hudX">0000.0</b> &nbsp;Y <b id="hudY">0000.0</b></span>
+    <span class="hud-kot">KOT <b id="hudKot">±0.00</b> m</span>
+  </div>
+
+  <header class="site-header">
+    <a href="index.html" class="brand" aria-label="MAKSEF ana sayfa">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="6" class="bm-bg"/>
+        <path d="M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z" class="bm-beam"/>
+      </svg>
+      <span class="brand-text">MAKSEF<small>inşaat</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="taahhut.html">Taahhüt</a>
+      <a href="kentsel-donusum.html">Kentsel Dönüşüm</a>
+      <a href="iletisim.html" class="nav-cta">İletişim</a>
+    </nav>
+    <div class="tools">
+      <a class="lang-switch" href="en/project.html" hreflang="en" lang="en" title="English">EN</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ozalit (koyu) modunu aç/kapat">
+        <span class="tt-dot"></span><span class="tt-label">Ozalit</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Menüyü aç" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div id="projectDetail"><noscript><p class="page-head">Proje bilgilerini görmek için tarayıcınızda JavaScript'i etkinleştirin.</p></noscript></div>
+
+    <section class="cta-band">
+      <div class="cta-inner reveal">
+        <div><h2>Bir ihale, bir bina ya da sadece bir soru. <em>Konuşalım.</em></h2><p>Ekibimiz size kısa sürede dönüş yapar.</p></div>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="iletisim.html">İletişime geçin <span aria-hidden="true">→</span></a>
+          <a class="cta-phone" href="tel:+902120000000">+90 212 000 00 00</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <header class="section-head reveal"><p class="sheet-tag">DİĞER PROJELER</p><h2>Benzer <em>projeler</em></h2></header>
+      <div class="projects stagger" id="otherProjects"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="foot-nav">
+      <nav aria-label="Footer"><a href="index.html">Ana Sayfa</a><a href="hakkimizda.html">Hakkımızda</a><a href="taahhut.html">Taahhüt</a><a href="kentsel-donusum.html">Kentsel Dönüşüm</a><a href="iletisim.html">İletişim</a></nav>
+      <a href="en/project.html" hreflang="en" lang="en">English →</a>
+    </div>
+    <div class="tb-grid">
+      <div class="tb-cell tb-brand">
+        <span class="tb-l">FİRMA</span>
+        <strong>MAKSEF</strong>
+        <span>Taahhüt · Kentsel Dönüşüm</span>
+      </div>
+      <div class="tb-cell"><span class="tb-l">SAYFA</span>Proje Detay</div>
+      <div class="tb-cell"><span class="tb-l">PAFTA NO</span>04 / 05</div>
+      <div class="tb-cell"><span class="tb-l">ÖLÇEK</span>1:1</div>
+      <div class="tb-cell"><span class="tb-l">DİL</span>TR</div>
+      <div class="tb-cell"><span class="tb-l">TELEFON</span><a href="tel:+902120000000">+90 212 000 00 00</a></div>
+      <div class="tb-cell"><span class="tb-l">E-POSTA</span><a href="mailto:info@maksef.com.tr">info@maksef.com.tr</a></div>
+      <div class="tb-cell"><span class="tb-l">TARİH</span><span class="js-year">2026</span></div>
+      <div class="tb-cell"><span class="tb-l">ONAYLAYAN</span>Yer çekimi</div>
+    </div>
+    <p class="tb-copy">© <span class="js-year">2026</span> MAKSEF. Tüm hakları saklıdır.</p>
+  </footer>
+
+  <script src="js/projects-data.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

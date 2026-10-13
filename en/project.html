@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-base="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project — MAKSEF</title>
+  <meta name="description" content="MAKSEF project details.">
+  <meta name="theme-color" content="#F3F0E8">
+  <link rel="alternate" hreflang="tr" href="../proje.html">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314213D'/%3E%3Cpath d='M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z' fill='%23E8590C'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem('maksef-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="crosshair" aria-hidden="true"><span class="ch-x"></span><span class="ch-y"></span></div>
+  <div class="hud" aria-hidden="true">
+    <span class="hud-xy">X <b id="hudX">0000.0</b> &nbsp;Y <b id="hudY">0000.0</b></span>
+    <span class="hud-kot">KOT <b id="hudKot">±0.00</b> m</span>
+  </div>
+
+  <header class="site-header">
+    <a href="index.html" class="brand" aria-label="MAKSEF home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="6" class="bm-bg"/>
+        <path d="M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z" class="bm-beam"/>
+      </svg>
+      <span class="brand-text">MAKSEF<small>construction</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="about.html">About</a>
+      <a href="contracting.html">Contracting</a>
+      <a href="urban-renewal.html">Urban Renewal</a>
+      <a href="contact.html" class="nav-cta">Contact</a>
+    </nav>
+    <div class="tools">
+      <a class="lang-switch" href="../proje.html" hreflang="tr" lang="tr" title="Türkçe">TR</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle blueprint (dark) mode">
+        <span class="tt-dot"></span><span class="tt-label">Blueprint</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div id="projectDetail"><noscript><p class="page-head">Please enable JavaScript to view project details.</p></noscript></div>
+
+    <section class="cta-band">
+      <div class="cta-inner reveal">
+        <div><h2>A tender, a building or just a question. <em>Let's talk.</em></h2><p>Our team will get back to you shortly.</p></div>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="contact.html">Get in touch <span aria-hidden="true">→</span></a>
+          <a class="cta-phone" href="tel:+902120000000">+90 212 000 00 00</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <header class="section-head reveal"><p class="sheet-tag">MORE PROJECTS</p><h2>Related <em>projects</em></h2></header>
+      <div class="projects stagger" id="otherProjects"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="foot-nav">
+      <nav aria-label="Footer"><a href="index.html">Home</a><a href="about.html">About</a><a href="contracting.html">Contracting</a><a href="urban-renewal.html">Urban Renewal</a><a href="contact.html">Contact</a></nav>
+      <a href="../proje.html" hreflang="tr" lang="tr">Türkçe →</a>
+    </div>
+    <div class="tb-grid">
+      <div class="tb-cell tb-brand">
+        <span class="tb-l">COMPANY</span>
+        <strong>MAKSEF</strong>
+        <span>Contracting · Urban Renewal</span>
+      </div>
+      <div class="tb-cell"><span class="tb-l">PAGE</span>Project</div>
+      <div class="tb-cell"><span class="tb-l">SHEET NO</span>04 / 05</div>
+      <div class="tb-cell"><span class="tb-l">SCALE</span>1:1</div>
+      <div class="tb-cell"><span class="tb-l">LANG</span>EN</div>
+      <div class="tb-cell"><span class="tb-l">PHONE</span><a href="tel:+902120000000">+90 212 000 00 00</a></div>
+      <div class="tb-cell"><span class="tb-l">EMAIL</span><a href="mailto:info@maksef.com.tr">info@maksef.com.tr</a></div>
+      <div class="tb-cell"><span class="tb-l">DATE</span><span class="js-year">2026</span></div>
+      <div class="tb-cell"><span class="tb-l">APPROVED BY</span>Gravity</div>
+    </div>
+    <p class="tb-copy">© <span class="js-year">2026</span> MAKSEF. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/projects-data.js"></script>
+  <script src="../js/projects.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

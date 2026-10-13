@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" data-base="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Urban Renewal — MAKSEF</title>
+  <meta name="description" content="Urban renewal for at-risk buildings: the process, our projects and a preliminary assessment application.">
+  <meta name="theme-color" content="#F3F0E8">
+  <link rel="alternate" hreflang="tr" href="../kentsel-donusum.html">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314213D'/%3E%3Cpath d='M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z' fill='%23E8590C'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    try {
+      var t = localStorage.getItem('maksef-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="crosshair" aria-hidden="true"><span class="ch-x"></span><span class="ch-y"></span></div>
+  <div class="hud" aria-hidden="true">
+    <span class="hud-xy">X <b id="hudX">0000.0</b> &nbsp;Y <b id="hudY">0000.0</b></span>
+    <span class="hud-kot">KOT <b id="hudKot">±0.00</b> m</span>
+  </div>
+
+  <header class="site-header">
+    <a href="index.html" class="brand" aria-label="MAKSEF home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="6" class="bm-bg"/>
+        <path d="M8 8h16v3h-6.5v10H24v3H8v-3h6.5V11H8z" class="bm-beam"/>
+      </svg>
+      <span class="brand-text">MAKSEF<small>construction</small></span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="about.html">About</a>
+      <a href="contracting.html">Contracting</a>
+      <a href="urban-renewal.html" aria-current="page">Urban Renewal</a>
+      <a href="contact.html" class="nav-cta">Contact</a>
+    </nav>
+    <div class="tools">
+      <a class="lang-switch" href="../kentsel-donusum.html" hreflang="tr" lang="tr" title="Türkçe">TR</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle blueprint (dark) mode">
+        <span class="tt-dot"></span><span class="tt-label">Blueprint</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <header class="page-head">
+      <p class="sheet-tag">SHEET 03 <i></i> URBAN RENEWAL</p>
+      <h1>Your old building, <em>a new beginning.</em></h1>
+      <p class="lead">We demolish earthquake-vulnerable buildings and rebuild them to today's code, through a transparent process with every owner.</p>
+      <div class="hero-actions">
+        <a href="#basvuru" class="btn btn-primary">Apply now <span aria-hidden="true">↓</span></a>
+        <a href="#projeler" class="btn btn-ghost">Our projects <span aria-hidden="true">↓</span></a>
+      </div>
+    </header>
+
+    <section class="section tight" id="surec">
+      <header class="section-head reveal"><p class="sheet-tag">PROCESS</p><h2>How does <em>it work?</em></h2><p class="section-sub">Six steps from application to handover. At every step you know what is happening and who is doing what.</p></header>
+      <ol class="loadpath">
+        <li class="lp-step reveal"><span class="lp-kot">+15.00</span><h3>First meeting and site visit</h3><p>We review your building, title deeds and expectations together.</p></li>
+        <li class="lp-step reveal"><span class="lp-kot">+12.00</span><h3>Risk assessment</h3><p>We support you through the assessment carried out by licensed bodies under Law No. 6306.</p></li>
+        <li class="lp-step reveal"><span class="lp-kot">+9.00</span><h3>Owners' meeting and agreement</h3><p>Share ratios, flat layouts and the delivery schedule are presented openly to all owners; contracts are signed.</p></li>
+        <li class="lp-step reveal"><span class="lp-kot">+6.00</span><h3>Design and permits</h3><p>Architectural, structural and MEP designs are prepared and the building permit is obtained.</p></li>
+        <li class="lp-step reveal"><span class="lp-kot">+3.00</span><h3>Demolition and construction</h3><p>The building is safely demolished and rebuilt to the 2018 Turkish Seismic Code, with regular progress reports.</p></li>
+        <li class="lp-step reveal"><span class="lp-kot">±0.00</span><h3>Turnkey handover</h3><p>The occupancy permit is obtained and flats are handed over to the owners.</p></li>
+      </ol>
+    </section>
+
+    <section class="section" id="deprem">
+      <header class="section-head reveal"><p class="sheet-tag">WHY RENEW?</p><h2>Same earthquake, <em>two different buildings.</em></h2><p class="section-sub">Buildings constructed under old codes, with ground floors opened up for shops, are among the most damaged in earthquakes. See the difference yourself.</p></header>
+      <div class="quake-wrap reveal">
+        <div class="quake-stage">
+          <svg viewBox="0 0 600 420" id="quakeSvg" role="img" aria-label="Earthquake comparison: a six-storey building under shaking">
+            <defs>
+              <pattern id="soil2" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="14" class="hatch-line"/>
+              </pattern>
+            </defs>
+            <line x1="300" y1="10" x2="300" y2="410" class="axis"/>
+            <g id="qGround">
+              <rect x="-60" y="370" width="720" height="60" fill="url(#soil2)"/>
+              <line x1="-60" y1="370" x2="660" y2="370" class="ground"/>
+              <rect x="150" y="350" width="300" height="20" class="q-found"/>
+            </g>
+            <g id="qStubs"></g><g id="qWalls"></g><g id="qCols"></g><g id="qSlabs"></g>
+            <text x="20" y="30" class="note" id="qModeLabel"></text>
+          </svg>
+          <p class="quake-note">Illustrative visualisation only; not a structural analysis.</p>
+        </div>
+        <div class="quake-panel">
+          <fieldset class="seg">
+            <legend>Building</legend>
+            <label><input type="radio" name="qmode" value="old" checked><span>Old building</span></label>
+            <label><input type="radio" name="qmode" value="new"><span>New building</span></label>
+          </fieldset>
+          <fieldset class="seg">
+            <legend>Shaking intensity</legend>
+            <label><input type="radio" name="qlevel" value="1"><span>Light</span></label>
+            <label><input type="radio" name="qlevel" value="2" checked><span>Moderate</span></label>
+            <label><input type="radio" name="qlevel" value="3"><span>Severe</span></label>
+          </fieldset>
+          <button class="btn btn-primary btn-block" id="qStart" type="button">Start shaking</button>
+          <dl class="readout">
+            <div><dt>Max. storey drift</dt><dd><b id="qDrift">0.00</b> %</dd></div>
+            <div><dt>Roof displacement</dt><dd><b id="qTop">0.0</b> cm</dd></div>
+            <div class="status" id="qStatus" data-state="idle"><dt>Status</dt><dd id="qStatusText">Idle</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tight" id="projeler">
+      <div class="head-row reveal">
+        <header class="section-head">
+          <p class="sheet-tag">PROJECTS</p>
+          <h2>Urban renewal <em>projects</em></h2>
+        </header>
+        <div class="filters" role="group" aria-label="Filter by status">
+          <button type="button" class="chip is-active" data-status="all" aria-pressed="true">All</button>
+          <button type="button" class="chip" data-status="tamamlandi" aria-pressed="false">Completed</button>
+          <button type="button" class="chip" data-status="devam" aria-pressed="false">Ongoing</button>
+        </div>
+      </div>
+      <div class="projects" id="projectList" data-cat="kentsel"></div>
+    </section>
+
+    <section class="section" id="basvuru">
+      <div class="contact-grid">
+        <div class="reveal">
+          <header class="section-head"><p class="sheet-tag">APPLICATION</p><h2>Request a <em>preliminary assessment</em> for your building.</h2><p class="section-sub">Any resident or the building manager can fill in the form. We will review the details and call you.</p></header>
+          <p class="legend">If you have them, please prepare:</p>
+          <ul class="ticks" style="margin-top:16px"><li>Title deed details (block / parcel)</li><li>Building permit or occupancy date</li><li>Risk assessment report, if any</li></ul>
+        </div>
+        <!-- data-endpoint: Formspree vb. adresinizi yazarsanız form doğrudan gönderilir; boşsa e-posta uygulaması açılır -->
+        <form class="form form-box reveal" data-form data-endpoint="" data-mailto="info@maksef.com.tr" data-subject="Urban renewal application" novalidate>
+          <p class="legend">APPLICANT</p>
+          <div class="field-row">
+            <div class="field"><label for="kName">Full name *</label><input id="kName" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="kPhone">Phone *</label><input id="kPhone" name="phone" type="tel" autocomplete="tel" required></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="kMail">Email</label><input id="kMail" name="email" type="email" autocomplete="email"></div>
+            <div class="field"><label for="kRole">Your role in the building</label><select id="kRole" name="role"><option>Flat owner</option><option>Building manager</option><option>Land owner</option><option>Tenant</option><option>Other</option></select></div>
+          </div>
+          <p class="legend">BUILDING DETAILS</p>
+          <div class="field-row">
+            <div class="field"><label for="kDistrict">District *</label><input id="kDistrict" name="district" type="text" required></div>
+            <div class="field"><label for="kHood">Neighbourhood</label><input id="kHood" name="neighbourhood" type="text"></div>
+          </div>
+          <div class="field-row three">
+            <div class="field"><label for="kParcel">Block / Parcel</label><input id="kParcel" name="parcel" type="text" placeholder="123 / 45"></div>
+            <div class="field"><label for="kYear">Year built</label><input id="kYear" name="year_built" type="number" inputmode="numeric" min="1900" max="2026"></div>
+            <div class="field"><label for="kFloors">Number of storeys</label><input id="kFloors" name="floors" type="number" inputmode="numeric" min="1" max="60"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="kUnits">Number of units</label><input id="kUnits" name="units" type="number" inputmode="numeric" min="1"></div>
+            <div class="field"><label for="kRisk">Risk assessment</label><select id="kRisk" name="risk_report"><option>Not sure</option><option>Done</option><option>Not done</option></select></div>
+          </div>
+          <div class="field"><label for="kMsg">Notes</label><textarea id="kMsg" name="message" rows="4"></textarea></div>
+          <label class="check" for="kConsent"><input type="checkbox" id="kConsent" name="consent" required><span>I consent to my personal data being processed to evaluate my request and to contact me (KVKK).</span></label>
+          <button class="btn btn-primary" type="submit">Send application <span aria-hidden="true">→</span></button>
+          <p class="form-msg" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="foot-nav">
+      <nav aria-label="Footer"><a href="index.html">Home</a><a href="about.html">About</a><a href="contracting.html">Contracting</a><a href="urban-renewal.html">Urban Renewal</a><a href="contact.html">Contact</a></nav>
+      <a href="../kentsel-donusum.html" hreflang="tr" lang="tr">Türkçe →</a>
+    </div>
+    <div class="tb-grid">
+      <div class="tb-cell tb-brand">
+        <span class="tb-l">COMPANY</span>
+        <strong>MAKSEF</strong>
+        <span>Contracting · Urban Renewal</span>
+      </div>
+      <div class="tb-cell"><span class="tb-l">PAGE</span>Urban Renewal</div>
+      <div class="tb-cell"><span class="tb-l">SHEET NO</span>03 / 05</div>
+      <div class="tb-cell"><span class="tb-l">SCALE</span>1:1</div>
+      <div class="tb-cell"><span class="tb-l">LANG</span>EN</div>
+      <div class="tb-cell"><span class="tb-l">PHONE</span><a href="tel:+902120000000">+90 212 000 00 00</a></div>
+      <div class="tb-cell"><span class="tb-l">EMAIL</span><a href="mailto:info@maksef.com.tr">info@maksef.com.tr</a></div>
+      <div class="tb-cell"><span class="tb-l">DATE</span><span class="js-year">2026</span></div>
+      <div class="tb-cell"><span class="tb-l">APPROVED BY</span>Gravity</div>
+    </div>
+    <p class="tb-copy">© <span class="js-year">2026</span> MAKSEF. All rights reserved.</p>
+  </footer>
+
+  <script src="../js/projects-data.js"></script>
+  <script src="../js/projects.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>
