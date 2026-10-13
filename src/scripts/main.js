@@ -79,7 +79,7 @@
     });
   }
   $$('.stagger').forEach(function (g) {
-    $$('.reveal', g).forEach(function (el, i) { el.style.setProperty('--rd', (i % 3) * 0.08 + 's'); });
+    $$('.reveal', g).forEach(function (el, i) { el.style.setProperty('--rd', Math.min(i, 6) * 0.08 + 's'); });
   });
   reveal(document);
 
@@ -248,19 +248,65 @@
   /* ---------- Proje listesi: durum filtresi ---------- */
   $$('.filters[data-for]').forEach(function (group) {
     var list = document.getElementById(group.dataset.for);
+    if (!list) return;
     var chips = $$('.chip', group);
     var cards = $$('.sheet', list);
     var empty = $('.empty', list);
+    var canAnimate = !reduceMotion && cards.length > 0 && typeof cards[0].animate === 'function';
+    var changeId = 0;
+
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
-        var s = chip.dataset.status, shown = 0;
-        chips.forEach(function (c) { c.classList.toggle('is-active', c === chip); c.setAttribute('aria-pressed', String(c === chip)); });
+        if (chip.classList.contains('is-active')) return;
+
+        var id = ++changeId;
+        var s = chip.dataset.status;
+        var previous = new Map();
         cards.forEach(function (card) {
-          var show = s === 'all' || card.dataset.status === s;
-          card.hidden = !show;
-          if (show) { shown++; card.classList.add('is-in'); }
+          if (typeof card.getAnimations === 'function') {
+            card.getAnimations().forEach(function (animation) { animation.cancel(); });
+          }
+          if (!card.hidden) previous.set(card, card.getBoundingClientRect());
         });
-        if (empty) empty.hidden = shown > 0;
+        chips.forEach(function (c) { c.classList.toggle('is-active', c === chip); c.setAttribute('aria-pressed', String(c === chip)); });
+
+        var leaving = cards.filter(function (card) {
+          return !card.hidden && s !== 'all' && card.dataset.status !== s;
+        });
+        var exits = !canAnimate ? [] : leaving.map(function (card) {
+          return card.animate([
+            { opacity: 1, transform: 'translateY(0) scale(1)' },
+            { opacity: 0, transform: 'translateY(10px) scale(.98)' },
+          ], { duration: 210, easing: 'ease-in', fill: 'forwards' });
+        });
+
+        Promise.all(exits.map(function (animation) { return animation.finished.catch(function () {}); })).then(function () {
+          if (id !== changeId) return;
+
+          cards.forEach(function (card) {
+            card.hidden = s !== 'all' && card.dataset.status !== s;
+            if (!card.hidden) card.classList.add('is-in');
+          });
+          var shown = cards.filter(function (card) { return !card.hidden; });
+          if (empty) empty.hidden = shown.length > 0;
+          list.offsetHeight;
+
+          if (!canAnimate) return;
+          shown.forEach(function (card, index) {
+            var from = previous.get(card);
+            var to = card.getBoundingClientRect();
+            var animation = from
+              ? card.animate([
+                { transform: 'translate(' + (from.left - to.left) + 'px, ' + (from.top - to.top) + 'px)' },
+                { transform: 'translate(0, 0)' },
+              ], { duration: 520, easing: 'cubic-bezier(.2, .7, .1, 1)' })
+              : card.animate([
+                { opacity: 0, transform: 'translateY(14px) scale(.98)' },
+                { opacity: 1, transform: 'translateY(0) scale(1)' },
+              ], { duration: 430, delay: Math.min(index, 5) * 55, easing: 'cubic-bezier(.2, .7, .1, 1)' });
+            animation.finished.catch(function () {});
+          });
+        });
       });
     });
   });
