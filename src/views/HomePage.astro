@@ -55,7 +55,7 @@ const fmt = (v: number) => v.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
     <section class="section tight">
       <div class="head-row reveal">
         <header class="section-head">
-          <p class="sheet-tag">{h.featuredTag}</p>
+          {h.featuredTag && <p class="sheet-tag">{h.featuredTag}</p>}
           <h2 set:html={h.featuredH} />
         </header>
         <div class="filters">

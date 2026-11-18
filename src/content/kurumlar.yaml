@@ -1,9 +1,34 @@
 # Referans kurumlar. Projelerde "isveren: <kimlik>" ile bağlanır.
 # Hakkımızda sayfasındaki referans listesi bu dosyadan oluşturulur.
-- id: iski
-  tr: { kisa: "İSKİ", tam: "İstanbul Su ve Kanalizasyon İdaresi" }
-  en: { kisa: "İSKİ", tam: "Istanbul Water and Sewerage Administration" }
+
+- id: ibb-tesisler
+  tr: { kisa: "İBB Tesisler Bakım Onarım", tam: "İstanbul Büyükşehir Belediyesi Tesisler Bakım Onarım Şube Müdürlüğü" }
+  en: { kisa: "IMM Facilities Maintenance", tam: "Istanbul Metropolitan Municipality Facilities Maintenance Directorate" }
+
+- id: ibb-yesil-alan
+  tr: { kisa: "İBB Yeşil Alan Tesisler", tam: "İstanbul Büyükşehir Belediyesi Yeşil Alan Tesisler Bakım Onarım Şube Müdürlüğü" }
+  en: { kisa: "IMM Green Areas Facilities", tam: "Istanbul Metropolitan Municipality Green Area Facilities Maintenance Directorate" }
 
 - id: iuc
-  tr: { kisa: "İÜ-Cerrahpaşa", tam: "İstanbul Üniversitesi-Cerrahpaşa" }
-  en: { kisa: "IUC", tam: "Istanbul University-Cerrahpaşa" }
+  tr: { kisa: "İÜ-Cerrahpaşa", tam: "İstanbul Üniversitesi-Cerrahpaşa Yapı İşleri ve Teknik Daire Başkanlığı" }
+  en: { kisa: "IUC", tam: "Istanbul University-Cerrahpaşa Construction and Technical Department" }
+
+- id: sbu
+  tr: { kisa: "SBÜ Yapı İşleri", tam: "Sağlık Bilimleri Üniversitesi Yapı İşleri ve Teknik Daire Başkanlığı" }
+  en: { kisa: "UHS Construction Dept.", tam: "University of Health Sciences Construction and Technical Department" }
+
+- id: iston
+  tr: { kisa: "İSTON", tam: "İSTON İstanbul Beton Elemanları ve Hazır Beton Fabrikaları San. ve Tic. A.Ş." }
+  en: { kisa: "ISTON", tam: "ISTON Istanbul Concrete Elements and Ready Mixed Concrete Factories Inc." }
+
+- id: gul-insaat
+  tr: { kisa: "Gül İnşaat", tam: "Gül İnşaat A.Ş." }
+  en: { kisa: "Gül Construction", tam: "Gül Construction Inc." }
+
+- id: hakim-insaat
+  tr: { kisa: "Hakim İnşaat", tam: "Hakim İnşaat" }
+  en: { kisa: "Hakim Construction", tam: "Hakim Construction" }
+
+- id: ufuk-proje
+  tr: { kisa: "Ufuk Proje & Mutlu Gün", tam: "Ufuk Proje - Mutlu Gün İş Ortaklığı" }
+  en: { kisa: "Ufuk Proje & Mutlu Gün", tam: "Ufuk Proje - Mutlu Gün Joint Venture" }

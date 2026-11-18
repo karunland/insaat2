@@ -107,7 +107,7 @@ const footKeys: RouteKey[] = ['home', 'about', 'taahhut', 'kentsel', 'contact'];
   </script>
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
 </head>
-<body>
+<body data-page={page}>
   <a class="skip" href="#main">{t.common.skip}</a>
   <div class="crosshair" aria-hidden="true"><span class="ch-x"></span><span class="ch-y"></span></div>
   <div class="hud" aria-hidden="true">
@@ -141,7 +141,7 @@ const footKeys: RouteKey[] = ['home', 'about', 'taahhut', 'kentsel', 'contact'];
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class:list={[`main-${page}`]}>
     <slot />
   </main>
 

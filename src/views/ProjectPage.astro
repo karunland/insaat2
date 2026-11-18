@@ -55,6 +55,19 @@ const breadcrumb = {
     <span aria-current="page">{title}</span>
   </nav>
 
+  {gallery.length > 0 && (
+    <section class="detail-sec detail-gallery-sec reveal" aria-label={pt.gallery}>
+      <div class="gallery" data-gallery data-code={p.code}>
+        {gallery.map((g, i) => (
+          <button type="button" class="g-item" data-full={g.full} data-alt={g.alt} aria-label={`${pt.photo} ${i + 1} — ${pt.open}`}>
+            <Image src={g.src} alt={g.alt} widths={[400, 800, 1200, 1600]}
+                   sizes={i === 0 ? '(max-width: 640px) 100vw, (max-width: 1200px) 66vw, 50vw' : '(max-width: 640px) 50vw, (max-width: 1200px) 33vw, 25vw'} />
+          </button>
+        ))}
+      </div>
+    </section>
+  )}
+
   <header class="page-head detail-head">
     <p class="sheet-tag"><Fragment set:html={pt.tag} /> · {p.code}</p>
     <h1>{title}</h1>
@@ -76,20 +89,6 @@ const breadcrumb = {
       </dl>
     </aside>
   </div>
-
-  {gallery.length > 0 && (
-    <section class="detail-sec reveal" aria-label={pt.gallery}>
-      <h2 class="h-sub">{pt.photos} <small>{gallery.length}</small></h2>
-      <div class="gallery" data-gallery data-code={p.code}>
-        {gallery.map((g, i) => (
-          <button type="button" class="g-item" data-full={g.full} data-alt={g.alt} aria-label={`${pt.photo} ${i + 1} — ${pt.open}`}>
-            <Image src={g.src} alt={g.alt} widths={[400, 800, 1200]}
-                   sizes={i === 0 ? '(max-width: 640px) 100vw, 66vw' : '(max-width: 640px) 50vw, 33vw'} />
-          </button>
-        ))}
-      </div>
-    </section>
-  )}
 
   {d.once && d.sonra && (
     <section class="detail-sec reveal">

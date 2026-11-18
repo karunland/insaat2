@@ -1,207 +1,731 @@
 ---
 import { useT, type Lang } from '../i18n/ui';
-interface Props { lang: Lang }
-const t = useT(Astro.props.lang);
-const d = t.home.drawing;
----
-<figure class="hero-drawing" aria-label={t.home.drawingAria}>
-  <svg viewBox="0 0 560 520" class="frame-svg" aria-hidden="true">
-    <defs>
-      <pattern id="soil" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <line x1="0" y1="0" x2="0" y2="14" class="hatch-line" />
-      </pattern>
-      <pattern id="concrete" width="22" height="22" patternUnits="userSpaceOnUse">
-        <circle cx="4" cy="5" r="1" class="dot" /><circle cx="15" cy="12" r="1.4" class="dot" /><path d="M8 17 l3 -2 l1 3z" class="dot" />
-      </pattern>
-      <linearGradient id="concrete-front" x1="0" x2="1" y1="0" y2="0">
-        <stop offset="0" stop-color="#d9e7f4" />
-        <stop offset=".52" stop-color="#8ca8c2" />
-        <stop offset="1" stop-color="#526d89" />
-      </linearGradient>
-      <linearGradient id="concrete-side" x1="0" x2="1">
-        <stop offset="0" stop-color="#66819c" />
-        <stop offset="1" stop-color="#304a65" />
-      </linearGradient>
-      <linearGradient id="floor-fill" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#71cfff" stop-opacity=".18" />
-        <stop offset="1" stop-color="#71cfff" stop-opacity=".025" />
-      </linearGradient>
-      <linearGradient id="scene-gradient" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#0b2037" />
-        <stop offset=".58" stop-color="#07172a" />
-        <stop offset="1" stop-color="#04101e" />
-      </linearGradient>
-      <filter id="frame-glow" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="2.4" result="blur" />
-        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-      </filter>
-    </defs>
-    <rect class="scene-bg" width="560" height="520" rx="3" />
-    <g class="blueprint">
-    <g>
-      {[100, 220, 340, 460].map((x, i) => (
-        <line x1={x} y1="44" x2={x} y2="500" class="axis draw" pathLength="1" style={`--d:${0.1 + i * 0.1}s`} />
-      ))}
-      <g class="fade" style="--d:.5s">
-        {['A', 'B', 'C', 'D'].map((l, i) => (
-          <>
-            <circle cx={100 + i * 120} cy="30" r="14" class="bubble" />
-            <text x={100 + i * 120} y="35" class="bubble-t">{l}</text>
-          </>
-        ))}
-      </g>
-    </g>
-    <g class="fade" style="--d:2.9s">
-      <line x1="100" y1="78" x2="460" y2="78" class="dim" />
-      <path d="M96 82 l8 -8 M216 82 l8 -8 M336 82 l8 -8 M456 82 l8 -8" class="dim" />
-      <text x="160" y="72" class="dim-t">6.00</text><text x="280" y="72" class="dim-t">6.00</text><text x="400" y="72" class="dim-t">6.00</text>
-    </g>
-    <rect x="20" y="430" width="520" height="70" fill="url(#soil)" class="fade" style="--d:.6s" />
-    <line x1="20" y1="430" x2="540" y2="430" class="ground draw" pathLength="1" style="--d:.5s" />
-    <rect x="78" y="408" width="404" height="22" class="found draw" pathLength="1" style="--d:.8s" />
-    <rect x="78" y="408" width="404" height="22" fill="url(#concrete)" class="fade" style="--d:1.2s" />
-    {[100, 220, 340, 460].map((x, i) => (
-      <line x1={x} y1="408" x2={x} y2="110" class="col draw" pathLength="1" style={`--d:${1 + i * 0.1}s`} />
-    ))}
-    {[350, 290, 230, 170, 110].map((y, i) => (
-      <line x1="86" y1={y} x2="474" y2={y} class="slab draw" pathLength="1" style={`--d:${1.6 + i * 0.2}s`} />
-    ))}
-    <path d="M86 110 v-14 M474 110 v-14" class="slab-thin draw" pathLength="1" style="--d:2.6s" />
-    <rect x="214" y="110" width="12" height="298" class="shear fade" style="--d:2.7s" />
-    <g class="fade" style="--d:3.0s">
-      <line x1="508" y1="110" x2="508" y2="408" class="dim" />
-      <path d="M504 114 l8 -8 M504 174 l8 -8 M504 234 l8 -8 M504 294 l8 -8 M504 354 l8 -8 M504 412 l8 -8" class="dim" />
-      <text x="524" y="144" class="dim-t v">3.00</text><text x="524" y="204" class="dim-t v">3.00</text>
-      <text x="524" y="264" class="dim-t v">3.00</text><text x="524" y="324" class="dim-t v">3.00</text>
-      <text x="524" y="383" class="dim-t v">2.90</text>
-    </g>
-    <g class="fade" style="--d:3.2s">
-      <path d="M40 110 l8 -10 h-16z" class="kot" /><text x="36" y="94" class="note">+15.00</text>
-      <path d="M40 430 l8 -10 h-16z" class="kot" /><text x="36" y="414" class="note">±0.00</text>
-    </g>
-    <g class="fade" style="--d:3.3s">
-      <circle cx="300" cy="468" r="17" class="pipe" /><circle cx="300" cy="468" r="11" class="pipe-in" />
-      <rect x="324" y="459" width="108" height="18" class="label-bg" />
-      <text x="330" y="472" class="note accent">{d.pipe}</text>
-    </g>
-    <g class="fade" style="--d:3.4s">
-      <path d="M300 230 L352 200 H446" class="leader" /><circle cx="300" cy="230" r="3" class="leader-dot" />
-      <text x="354" y="195" class="note">K-301 · 30/60</text>
-      <path d="M226 320 L244 380 H346" class="leader" /><circle cx="226" cy="320" r="3" class="leader-dot" />
-      <text x="248" y="375" class="note accent">{d.wall}</text>
-    </g>
-    </g>
-    <g class="structure-3d" aria-hidden="true">
-      <path d="M82 408 L422 408 L474 374 L134 374 Z" class="frame-foundation" />
-      <path d="M105 384 L430 384 L470 354 L145 354 Z" class="floor-slab frame-trace" pathLength="1" style="--trace-delay:3.8s" />
-      <path d="M105 324 L430 324 L470 294 L145 294 Z" class="floor-slab frame-trace" pathLength="1" style="--trace-delay:4s" />
-      <path d="M105 264 L430 264 L470 234 L145 234 Z" class="floor-slab frame-trace" pathLength="1" style="--trace-delay:4.2s" />
-      <path d="M105 204 L430 204 L470 174 L145 174 Z" class="floor-slab frame-trace" pathLength="1" style="--trace-delay:4.4s" />
-      <path d="M105 144 L430 144 L470 114 L145 114 Z" class="floor-slab frame-trace" pathLength="1" style="--trace-delay:4.6s" />
 
-      <g class="concrete-frame" filter="url(#frame-glow)">
-        {[110, 216, 322, 428].map((x, i) => (
-          <>
-            <path d={`M${x} 384 V144`} class="concrete-member frame-trace" pathLength="1" style={`--trace-delay:${3.7 + i * 0.1}s`} />
-            <path d={`M${x + 40} 354 V114`} class="concrete-back frame-trace" pathLength="1" style={`--trace-delay:${4.1 + i * 0.1}s`} />
-          </>
-        ))}
-        {[384, 324, 264, 204, 144].map((y, i) => (
-          <>
-            <path d={`M110 ${y} H430`} class="concrete-member frame-trace" pathLength="1" style={`--trace-delay:${3.8 + i * 0.12}s`} />
-            <path d={`M150 ${y - 30} H470`} class="concrete-back frame-trace" pathLength="1" style={`--trace-delay:${4 + i * 0.12}s`} />
-            <path d={`M110 ${y} L150 ${y - 30} M430 ${y} L470 ${y - 30}`} class="concrete-side frame-trace" pathLength="1" style={`--trace-delay:${4.2 + i * 0.12}s`} />
-          </>
-        ))}
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const d = t.home.drawing;
+
+const isTr = lang === 'tr';
+const uiTexts = {
+  sheetTag: isTr ? 'PAFTA MK-01 · 3D DİJİTAL İKİZ ➔ 2D UYGULAMA KESİTİ' : 'SHEET MK-01 · 3D DIGITAL TWIN ➔ 2D WORKING SECTION',
+  mode3d: isTr ? '3D İZOMETRİ' : '3D ISOMETRIC',
+  mode2d: isTr ? '2D KESİT' : '2D SECTION',
+  status3d: isTr ? '3D YAPISAL MODEL (BIM)' : '3D STRUCTURAL MODEL (BIM)',
+  status2d: isTr ? '2D MİMARİ KESİT PAFTASI (A–A)' : '2D ARCHITECTURAL SECTION (A–A)',
+  liveTag: isTr ? 'DİJİTAL PAFTA SİSTEMİ' : 'DIGITAL DRAWING SYSTEM',
+  axisTitle: isTr ? 'AKSLAR' : 'AXES',
+  scale: isTr ? 'ÖLÇEK 1:100' : 'SCALE 1:100',
+  section: isTr ? 'KESİT A–A' : 'SECTION A–A',
+  soil: isTr ? 'ZEMİN KOTU ±0.00' : 'GROUND LEVEL ±0.00',
+  tbdy: 'TBDY 2018 · C35/45',
+  pipe: d.pipe,
+  wall: d.wall,
+};
+---
+
+<figure class="hero-drawing hero-drawing-card" id="heroDrawing" aria-label={t.home.drawingAria}>
+  <!-- Pafta Üst Başlık Çubuğu -->
+  <header class="card-bar top-bar">
+    <div class="bar-tag">
+      <span class="crop-mark top-left">+</span>
+      <span class="pulse-dot" aria-hidden="true"></span>
+      <span class="sheet-title">{uiTexts.sheetTag}</span>
+    </div>
+    <div class="mode-switch" role="group" aria-label="Görünüm Modu">
+      <button type="button" class="mode-btn is-active" id="btn3D" data-mode="3d">
+        <span class="btn-cube" aria-hidden="true">❖</span>
+        <span>{uiTexts.mode3d}</span>
+      </button>
+      <button type="button" class="mode-btn" id="btn2D" data-mode="2d">
+        <span class="btn-flat" aria-hidden="true">▤</span>
+        <span>{uiTexts.mode2d}</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Ana Çizim Sahnesi -->
+  <div class="stage-viewport" id="stageViewport">
+    <!-- Teknik Pafta Arka Plan Çizgileri -->
+    <div class="pafta-grid" aria-hidden="true"></div>
+
+    <!-- 3D / 2D Dönüşen Vektör Çizim Sahnesi -->
+    <svg viewBox="0 0 580 470" class="drawing-svg" aria-hidden="true">
+      <defs>
+        <!-- Zemin Tarama Deseni -->
+        <pattern id="soilHatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="12" class="hatch-line" />
+        </pattern>
+        <!-- Betonarme Nokta Deseni -->
+        <pattern id="concreteDots" width="18" height="18" patternUnits="userSpaceOnUse">
+          <circle cx="3" cy="4" r="0.8" class="dot" />
+          <circle cx="12" cy="11" r="1.1" class="dot" />
+          <path d="M6 14 l2 -1.5 l0.8 2 z" class="dot" />
+        </pattern>
+        <!-- Doğrusal Gölgelendirmeler -->
+        <linearGradient id="slabGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--ink)" stop-opacity="0.1" />
+          <stop offset="100%" stop-color="var(--ink)" stop-opacity="0.03" />
+        </linearGradient>
+        <linearGradient id="isoTopGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.22" />
+          <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.08" />
+        </linearGradient>
+      </defs>
+
+      <!-- 2D AKSLAR VE BOYUTLANDIRMALAR (2D'ye düşüşte netleşen katman) -->
+      <g class="layer-2d-annotations">
+        <!-- Düşey Aks Çizgileri -->
+        <line x1="120" y1="42" x2="120" y2="400" class="axis-line" />
+        <line x1="220" y1="42" x2="220" y2="400" class="axis-line" />
+        <line x1="330" y1="42" x2="330" y2="400" class="axis-line" />
+        <line x1="440" y1="42" x2="440" y2="400" class="axis-line" />
+
+        <!-- Aks Balonları -->
+        <g class="axis-bubbles">
+          <circle cx="120" cy="30" r="12" class="axis-bubble" />
+          <text x="120" y="34" class="axis-t">A</text>
+
+          <circle cx="220" cy="30" r="12" class="axis-bubble" />
+          <text x="220" y="34" class="axis-t">B</text>
+
+          <circle cx="330" cy="30" r="12" class="axis-bubble" />
+          <text x="330" y="34" class="axis-t">C</text>
+
+          <circle cx="440" cy="30" r="12" class="axis-bubble" />
+          <text x="440" y="34" class="axis-t">D</text>
+        </g>
+
+        <!-- Üst Boyut Zinciri (6.00m aks aralıkları) -->
+        <g class="dim-group top-dims">
+          <line x1="120" y1="62" x2="440" y2="62" class="dim-line" />
+          <path d="M116 66 L124 58 M216 66 L224 58 M326 66 L334 58 M436 66 L444 58" class="dim-tick" />
+          <text x="170" y="56" class="dim-val">6.00</text>
+          <text x="275" y="56" class="dim-val">6.60</text>
+          <text x="385" y="56" class="dim-val">6.60</text>
+        </g>
+
+        <!-- Sol Kot İşaretleri -->
+        <g class="kot-group">
+          <!-- +12.00 Çatı Kotu -->
+          <path d="M72 100 L84 100 L78 90 Z" class="kot-triangle" />
+          <line x1="68" y1="100" x2="96" y2="100" class="kot-line" />
+          <text x="64" y="86" class="kot-val">+12.00</text>
+
+          <!-- +9.00 3. Kat -->
+          <path d="M72 168 L84 168 L78 158 Z" class="kot-triangle" />
+          <line x1="68" y1="168" x2="96" y2="168" class="kot-line" />
+          <text x="64" y="154" class="kot-val">+9.00</text>
+
+          <!-- +6.00 2. Kat -->
+          <path d="M72 236 L84 236 L78 226 Z" class="kot-triangle" />
+          <line x1="68" y1="236" x2="96" y2="236" class="kot-line" />
+          <text x="64" y="222" class="kot-val">+6.00</text>
+
+          <!-- +3.00 1. Kat -->
+          <path d="M72 304 L84 304 L78 294 Z" class="kot-triangle" />
+          <line x1="68" y1="304" x2="96" y2="304" class="kot-line" />
+          <text x="64" y="290" class="kot-val">+3.00</text>
+
+          <!-- ±0.00 Zemin Kotu -->
+          <path d="M72 372 L84 372 L78 362 Z" class="kot-triangle accent" />
+          <line x1="68" y1="372" x2="96" y2="372" class="kot-line" />
+          <text x="64" y="358" class="kot-val accent">±0.00</text>
+        </g>
+
+        <!-- Sağ Düşey Boyut Zinciri (3.00m kat yükseklikleri) -->
+        <g class="dim-group right-dims">
+          <line x1="492" y1="100" x2="492" y2="372" class="dim-line" />
+          <path d="M488 104 L496 96 M488 172 L496 164 M488 240 L496 232 M488 308 L496 300 M488 376 L496 368" class="dim-tick" />
+          <text x="508" y="138" class="dim-val">3.00</text>
+          <text x="508" y="206" class="dim-val">3.00</text>
+          <text x="508" y="274" class="dim-val">3.00</text>
+          <text x="508" y="342" class="dim-val">3.00</text>
+        </g>
       </g>
-      <g class="reinforcement">
-        {[110, 216, 322, 428].map((x) => (
-          <>
-            <path d={`M${x - 3} 378 V150 M${x + 3} 378 V150`} class="rebar" />
-            {[174, 234, 294, 354].map((y) => <path d={`M${x - 5} ${y} H${x + 5}`} class="stirrup" />)}
-          </>
-        ))}
-        {[150, 256, 362, 468].map((x) => <path d={`M${x} 348 V120`} class="rebar back" />)}
+
+      <!-- ZEMİN VE ALTYAPI KATMANI -->
+      <g class="layer-foundation">
+        <!-- Zemin Tarama Bloğu -->
+        <rect x="30" y="372" width="510" height="74" fill="url(#soilHatch)" class="soil-block" />
+        <!-- Zemin Ana Çizgisi -->
+        <line x1="20" y1="372" x2="550" y2="372" class="ground-line" />
+        
+        <!-- Radye Temel -->
+        <rect x="94" y="372" width="372" height="24" class="foundation-2d" />
+        <rect x="94" y="372" width="372" height="24" fill="url(#concreteDots)" class="foundation-pattern" />
+
+        <!-- Altyapı Borusu ve Bilgi Notu -->
+        <g class="sub-pipe">
+          <circle cx="370" cy="415" r="16" class="pipe-outer" />
+          <circle cx="370" cy="415" r="10" class="pipe-inner" />
+          <path d="M370 415 L395 435 H470" class="leader-line" />
+          <circle cx="370" cy="415" r="2.5" class="leader-dot" />
+          <text x="400" y="430" class="anno-text accent">{uiTexts.pipe}</text>
+        </g>
       </g>
-      <path d="M88 414 L424 414 L484 376" class="frame-highlight" />
-      <text x="92" y="448" class="frame-label">BETONARME KARKAS · 4 KAT</text>
-      <circle cx="472" cy="448" r="3" class="frame-status" />
-      <text x="484" y="452" class="frame-status-text">TAMAMLANDI</text>
-    </g>
-  </svg>
-  <figcaption class="caption"><span>{d.section}</span><span>{d.scale}</span></figcaption>
+
+      <!-- 3D ➔ 2D DÖNÜŞEN TAŞIYICI SİSTEM (THE 3D TO 2D HYBRID RIG) -->
+      <g class="building-rig" id="buildingRig">
+        <!-- 3D İZOMETRİK DERİNLİK YÜZEYLERİ (3D Modunda Hacim Kazandırır, 2D'ye Düşüşte Katlanır) -->
+        <g class="iso-depth-group">
+          <!-- Temel 3D Prizması (Üst ve Yan Yüzler) -->
+          <path d="M94 372 L160 330 L532 330 L466 372 Z" class="iso-face iso-top" />
+          <path d="M466 372 L532 330 L532 354 L466 396 Z" class="iso-face iso-side" />
+
+          <!-- Kat Döşemeleri 3D Üst Plakaları (Isometric Slabs) -->
+          <!-- Çatı Katı 3D Tabliyesi -->
+          <path d="M102 100 L168 60 L508 60 L442 100 Z" class="iso-face iso-slab-top slab-4" />
+          <path d="M442 100 L508 60 L508 72 L442 112 Z" class="iso-face iso-slab-side" />
+
+          <!-- 3. Kat 3D Tabliyesi -->
+          <path d="M102 168 L168 128 L508 128 L442 168 Z" class="iso-face iso-slab-top slab-3" />
+          <path d="M442 168 L508 128 L508 140 L442 180 Z" class="iso-face iso-slab-side" />
+
+          <!-- 2. Kat 3D Tabliyesi -->
+          <path d="M102 236 L168 196 L508 196 L442 236 Z" class="iso-face iso-slab-top slab-2" />
+          <path d="M442 236 L508 196 L508 208 L442 248 Z" class="iso-face iso-slab-side" />
+
+          <!-- 1. Kat 3D Tabliyesi -->
+          <path d="M102 304 L168 264 L508 264 L442 304 Z" class="iso-face iso-slab-top slab-1" />
+          <path d="M442 304 L508 264 L508 276 L442 316 Z" class="iso-face iso-slab-side" />
+
+          <!-- 3D Arka Kolon Hatları (Derinlikteki Kolonlar) -->
+          <line x1="168" y1="330" x2="168" y2="60" class="iso-back-col" />
+          <line x1="268" y1="330" x2="268" y2="60" class="iso-back-col" />
+          <line x1="378" y1="330" x2="378" y2="60" class="iso-back-col" />
+          <line x1="508" y1="330" x2="508" y2="60" class="iso-back-col" />
+
+          <!-- 3D Yan Kolon Gölgeleri -->
+          <polygon points="126,372 136,365 136,105 126,112" class="iso-col-side" />
+          <polygon points="226,372 236,365 236,105 226,112" class="iso-col-side" />
+          <polygon points="345,372 355,365 355,105 345,112" class="iso-col-side" />
+          <polygon points="446,372 456,365 456,105 446,112" class="iso-col-side" />
+        </g>
+
+        <!-- TAŞIYICI ELEMANLAR (HEM 3D ÖN YÜZÜ HEM 2D KESİTİ OLUŞTURUR) -->
+        <g class="structural-frames">
+          <!-- Taşıyıcı Kolonlar (Düşey Çelik & Betonarme Karkas) -->
+          <rect x="114" y="100" width="12" height="272" class="col-member col-a" />
+          <rect x="214" y="100" width="12" height="272" class="col-member col-b" />
+          <!-- Güçlendirilmiş Betonarme Perde Duvar (Aks C Çekirdeği) -->
+          <rect x="322" y="100" width="18" height="272" class="col-member shear-wall" />
+          <rect x="434" y="100" width="12" height="272" class="col-member col-d" />
+
+          <!-- Kat Kirişleri ve Döşeme Plakaları (Slabs) -->
+          <!-- Çatı Katı Döşemesi -->
+          <rect x="102" y="100" width="340" height="12" class="slab-member slab-4" />
+          <!-- 3. Kat Döşemesi -->
+          <rect x="102" y="168" width="340" height="12" class="slab-member slab-3" />
+          <!-- 2. Kat Döşemesi -->
+          <rect x="102" y="236" width="340" height="12" class="slab-member slab-2" />
+          <!-- 1. Kat Döşemesi -->
+          <rect x="102" y="304" width="340" height="12" class="slab-member slab-1" />
+
+          <!-- Donatı ve Etriye İnce Çizgileri (Teknik Kesit Ruhu) -->
+          <g class="rebar-details">
+            <line x1="120" y1="104" x2="120" y2="368" class="rebar-line" />
+            <line x1="220" y1="104" x2="220" y2="368" class="rebar-line" />
+            <line x1="331" y1="104" x2="331" y2="368" class="rebar-line" />
+            <line x1="440" y1="104" x2="440" y2="368" class="rebar-line" />
+          </g>
+        </g>
+
+        <!-- TEKNİK KESİT NOTLARI VE İŞARETÇİLER (LEADERS) -->
+        <g class="leader-notes">
+          <!-- Perde Duvar Notu -->
+          <path d="M331 200 L360 180 H430" class="leader-line" />
+          <circle cx="331" cy="200" r="2.5" class="leader-dot" />
+          <text x="365" y="174" class="anno-text accent">{uiTexts.wall}</text>
+
+          <!-- Kiriş Notu -->
+          <path d="M180 236 L150 216 H90" class="leader-line" />
+          <circle cx="180" cy="236" r="2.5" class="leader-dot" />
+          <text x="92" y="210" class="anno-text">K-201 · 25/50</text>
+        </g>
+      </g>
+
+      <!-- 2D'ye İniş Tarama Işını (Scan Beam Effect) -->
+      <line x1="0" y1="0" x2="580" y2="0" class="scan-beam" id="scanBeam" />
+    </svg>
+  </div>
+
+  <!-- Pafta Alt Bilgi Çubuğu (Title Block) -->
+  <footer class="card-bar bottom-bar">
+    <div class="bar-info">
+      <span class="info-cell"><strong>{uiTexts.section}</strong></span>
+      <span class="info-cell">{uiTexts.scale}</span>
+      <span class="info-cell">{uiTexts.tbdy}</span>
+    </div>
+    <div class="bar-status">
+      <span class="status-indicator"></span>
+      <span class="status-text" id="statusText">{uiTexts.status3d}</span>
+      <span class="crop-mark bottom-right">+</span>
+    </div>
+  </footer>
 </figure>
 
+<script>
+  function setupHeroDrawing() {
+    const card = document.getElementById('heroDrawing');
+    const viewport = document.getElementById('stageViewport');
+    const btn3D = document.getElementById('btn3D');
+    const btn2D = document.getElementById('btn2D');
+    const statusText = document.getElementById('statusText');
+
+    if (!card || !viewport || !btn3D || !btn2D || !statusText) return;
+
+    // Metinler
+    const lang = document.documentElement.lang || 'tr';
+    const text3D = lang === 'tr' ? '3D YAPISAL MODEL (BIM)' : '3D STRUCTURAL MODEL (BIM)';
+    const text2D = lang === 'tr' ? '2D MİMARİ KESİT PAFTASI (A–A)' : '2D ARCHITECTURAL SECTION (A–A)';
+
+    let currentMode = '3d';
+    let autoTimer: any = null;
+
+    function setMode(mode: '3d' | '2d') {
+      currentMode = mode;
+      if (mode === '2d') {
+        card?.classList.add('mode-2d');
+        card?.classList.remove('mode-3d');
+        btn2D?.classList.add('is-active');
+        btn3D?.classList.remove('is-active');
+        statusText.textContent = text2D;
+      } else {
+        card?.classList.add('mode-3d');
+        card?.classList.remove('mode-2d');
+        btn3D?.classList.add('is-active');
+        btn2D?.classList.remove('is-active');
+        statusText.textContent = text3D;
+      }
+    }
+
+    // Başlangıç: 3D modunda başla
+    setMode('3d');
+
+    // 2.6 saniye sonra otomatik olarak 2 boyuta düş
+    autoTimer = setTimeout(() => {
+      setMode('2d');
+    }, 2600);
+
+    // Düğme etkileşimleri
+    btn3D.addEventListener('click', () => {
+      clearTimeout(autoTimer);
+      setMode('3d');
+    });
+
+    btn2D.addEventListener('click', () => {
+      clearTimeout(autoTimer);
+      setMode('2d');
+    });
+
+    // 3D modundayken hafif fare takibi (Parallaks)
+    viewport.addEventListener('mousemove', (e) => {
+      if (currentMode !== '3d') return;
+      const rect = viewport.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      
+      const rig = document.getElementById('buildingRig');
+      if (rig) {
+        rig.style.transform = `perspective(1000px) rotateX(${56 - y * 16}deg) rotateZ(${-36 + x * 20}deg) translateY(-8px)`;
+      }
+    });
+
+    viewport.addEventListener('mouseleave', () => {
+      const rig = document.getElementById('buildingRig');
+      if (rig) rig.style.transform = '';
+    });
+  }
+
+  // İlk yüklemede ve sayfa geçişlerinde çalıştır
+  setupHeroDrawing();
+  document.addEventListener('astro:page-load', setupHeroDrawing);
+</script>
+
 <style>
-  .hero-drawing {
-    --paper: #07172a;
-    --paper-2: #0a2037;
-    --ink: #e8f4ff;
-    --ink-soft: #a3bdd5;
-    --muted: #8ca8c2;
-    --line: rgba(126, 190, 235, .28);
-    --line-strong: rgba(152, 207, 245, .55);
-    --accent: #66d1ff;
-    --accent-ink: #07172a;
+  /* =========================================================
+     MAKSEF PAFTA MİMARİSİ İLE BÜTÜNLEŞEN HERO DRAWING KARTI
+     ========================================================= */
+
+  .hero-drawing-card {
     position: relative;
     margin: 0;
-    padding: clamp(8px, 1.5vw, 14px);
+    padding: 0;
+    width: 100%;
+    max-width: 580px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink);
     overflow: hidden;
-    border: 1px solid rgba(141, 194, 231, .24);
-    background: #07172a;
-    box-shadow: 0 24px 64px rgba(6, 22, 39, .2), inset 0 0 42px rgba(75, 160, 218, .08);
+    user-select: none;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
-  .hero-drawing::before {
+  .hero-drawing-card:hover {
+    box-shadow: 12px 12px 0 var(--ink);
+  }
+
+  /* Kırpma / Pafta Kros İşaretleri */
+  .crop-mark {
+    font: 700 13px var(--f-mono);
+    color: var(--accent);
+    line-height: 1;
+    display: inline-block;
+  }
+
+  /* Üst ve Alt Bilgi Çubukları */
+  .card-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 14px;
+    background: var(--paper-2);
+    font: 500 11px/1.3 var(--f-mono);
+    letter-spacing: 0.1em;
+    border-color: var(--ink);
+  }
+
+  .top-bar {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .bottom-bar {
+    border-top: 1.5px solid var(--ink);
+    font-size: 10px;
+  }
+
+  .bar-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(232, 89, 12, 0.6);
+    animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(232, 89, 12, 0.7); }
+    70% { box-shadow: 0 0 0 7px rgba(232, 89, 12, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(232, 89, 12, 0); }
+  }
+
+  /* 3D / 2D Mod Seçici Buton Grubu */
+  .mode-switch {
+    display: flex;
+    gap: 4px;
+    background: var(--paper);
+    padding: 2px;
+    border: 1px solid var(--ink);
+  }
+
+  .mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font: 600 10px var(--f-mono);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .mode-btn:hover {
+    color: var(--ink);
+  }
+
+  .mode-btn.is-active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-cube, .btn-flat {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  /* Çizim Sahnesi ve Izgara */
+  .stage-viewport {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 580 / 470;
+    background: var(--paper);
+    overflow: hidden;
+    cursor: crosshair;
+  }
+
+  .pafta-grid {
     position: absolute;
     inset: 0;
-    background: linear-gradient(112deg, transparent 35%, rgba(107, 202, 255, .09) 50%, transparent 65%);
-    content: "";
     pointer-events: none;
-    animation: light-sweep 2.4s ease-in-out 3.8s both;
+    background-image:
+      linear-gradient(var(--grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+    opacity: 0.85;
   }
 
-  .frame-svg { position: relative; z-index: 1; width: 100%; height: auto; overflow: visible; }
-  .scene-bg { fill: url(#scene-gradient); }
-  .caption { position: relative; z-index: 1; color: #91abc5; border-color: rgba(152, 207, 245, .35); }
-  .blueprint { animation: blueprint-exit .8s ease-in 4.6s forwards; }
-  .structure-3d {
+  .drawing-svg {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* Alt Bar Bilgileri */
+  .bar-info {
+    display: flex;
+    gap: 14px;
+    color: var(--muted);
+  }
+
+  .info-cell strong {
+    color: var(--ink);
+  }
+
+  .bar-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .status-indicator {
+    width: 6px;
+    height: 6px;
+    background: var(--ok);
+    border-radius: 50%;
+  }
+
+  /* =========================================================
+     VEKTÖR ÇİZİM STİLLERİ (MİMARİ & STATİK TEKNİK DETAYLAR)
+     ========================================================= */
+
+  /* Akslar */
+  .axis-line {
+    stroke: var(--line);
+    stroke-width: 1;
+    stroke-dasharray: 8 4 2 4;
+    transition: stroke 0.4s ease;
+  }
+
+  .axis-bubble {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 1.2;
+  }
+
+  .axis-t {
+    font: 600 11px var(--f-mono);
+    fill: var(--ink);
+    text-anchor: middle;
+  }
+
+  /* Boyutlandırma */
+  .dim-line { stroke: var(--ink-soft); stroke-width: 1; fill: none; }
+  .dim-tick { stroke: var(--ink); stroke-width: 1.2; fill: none; }
+  .dim-val { font: 500 10px var(--f-mono); fill: var(--ink-soft); text-anchor: middle; }
+
+  /* Kotlar */
+  .kot-triangle { fill: var(--ink); }
+  .kot-triangle.accent { fill: var(--accent); }
+  .kot-line { stroke: var(--ink); stroke-width: 1.2; }
+  .kot-val { font: 600 10px var(--f-mono); fill: var(--ink); }
+  .kot-val.accent { fill: var(--accent); }
+
+  /* Zemin ve Altyapı */
+  .hatch-line { stroke: var(--line-strong); stroke-width: 1; }
+  .ground-line { stroke: var(--ink); stroke-width: 2.2; }
+  .foundation-2d { fill: var(--paper-2); stroke: var(--ink); stroke-width: 2; }
+  .dot { fill: var(--ink-soft); opacity: 0.55; }
+  .pipe-outer { fill: var(--paper); stroke: var(--accent); stroke-width: 1.8; }
+  .pipe-inner { fill: none; stroke: var(--accent); stroke-width: 1.2; stroke-dasharray: 3 2; }
+  .leader-line { fill: none; stroke: var(--ink-soft); stroke-width: 1; }
+  .leader-dot { fill: var(--accent); }
+  .anno-text { font: 500 9.5px var(--f-mono); fill: var(--ink-soft); }
+  .anno-text.accent { fill: var(--accent); font-weight: 600; }
+
+  /* Taşıyıcı Çerçeve */
+  .col-member {
+    fill: var(--paper-2);
+    stroke: var(--ink);
+    stroke-width: 1.8;
+    transition: fill 0.3s ease;
+  }
+
+  .col-member.shear-wall {
+    fill: var(--ink-soft);
+    stroke: var(--ink);
+  }
+
+  .slab-member {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+
+  .rebar-line {
+    stroke: var(--accent);
+    stroke-width: 1;
+    stroke-dasharray: 4 2;
+    opacity: 0.7;
+  }
+
+  /* =========================================================
+     3D ➔ 2D DÖNÜŞÜM DİNAMİĞİ (THE 3D-TO-2D TRANSFORMATION ENGINE)
+     ========================================================= */
+
+  .building-rig {
+    transform-origin: 290px 240px;
+    transform-box: fill-box;
+    transition: transform 1.35s cubic-bezier(0.25, 1, 0.35, 1);
+  }
+
+  .iso-depth-group {
+    transition: opacity 1.1s cubic-bezier(0.25, 1, 0.35, 1), transform 1.35s cubic-bezier(0.25, 1, 0.35, 1);
+    transform-origin: 290px 372px;
+  }
+
+  .iso-face {
+    stroke: var(--ink);
+    stroke-width: 1.2;
+    transition: all 0.8s ease;
+  }
+
+  .iso-top {
+    fill: url(#isoTopGrad);
+  }
+
+  .iso-side {
+    fill: var(--paper-2);
+  }
+
+  .iso-slab-top {
+    fill: url(#isoTopGrad);
+    opacity: 0.85;
+  }
+
+  .iso-slab-side {
+    fill: var(--ink-soft);
+    opacity: 0.45;
+  }
+
+  .iso-back-col {
+    stroke: var(--line);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 3;
+  }
+
+  .iso-col-side {
+    fill: var(--ink);
+    opacity: 0.28;
+  }
+
+  .layer-2d-annotations {
+    transition: opacity 0.9s ease 0.4s, transform 0.9s cubic-bezier(0.25, 1, 0.35, 1) 0.3s;
+    transform-origin: 290px 240px;
+  }
+
+  .leader-notes {
+    transition: opacity 0.8s ease 0.3s;
+  }
+
+  /* Scan Beam (2D'ye düşüş esnasında geçen mimari lazer tarama çizgisi) */
+  .scan-beam {
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-dasharray: 8 6;
     opacity: 0;
-    transform-box: view-box;
-    transform-origin: 50% 50%;
-    animation: frame-appear 1.1s cubic-bezier(.2, .7, .1, 1) 3.65s forwards;
-  }
-  .frame-foundation { fill: #152f49; stroke: #8ba8c2; stroke-width: 1.5; }
-  .floor-slab { fill: url(#floor-fill); stroke: rgba(131, 210, 255, .82); stroke-width: 1.4; }
-  .concrete-member { fill: none; stroke: url(#concrete-front); stroke-width: 8; stroke-linecap: square; }
-  .concrete-back { fill: none; stroke: #7090ac; stroke-width: 6; stroke-linecap: square; }
-  .concrete-side { fill: none; stroke: #4f6a85; stroke-width: 5; stroke-linecap: square; }
-  .reinforcement { opacity: .9; }
-  .rebar { fill: none; stroke: #ffad71; stroke-width: 1.5; }
-  .rebar.back { stroke: #ffcb9e; stroke-width: 1.1; opacity: .7; }
-  .stirrup { fill: none; stroke: #ffad71; stroke-width: 1.2; opacity: .82; }
-  .frame-highlight { fill: none; stroke: #83d6ff; stroke-width: 1.2; opacity: .85; }
-  .frame-label, .frame-status-text { fill: #a9c4dc; font: 500 10px var(--f-mono); letter-spacing: .12em; }
-  .frame-status { fill: #73e0b1; }
-  .frame-status-text { fill: #73e0b1; font-size: 8px; }
-  .frame-trace { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace-frame 1.25s ease-out var(--trace-delay, 3.8s) forwards; }
-
-  @keyframes trace-frame { to { stroke-dashoffset: 0; } }
-  @keyframes blueprint-exit { to { opacity: 0; } }
-  @keyframes frame-appear {
-    from { opacity: 0; transform: perspective(900px) rotateY(-9deg) rotateX(5deg) translateY(14px); }
-    to { opacity: 1; transform: perspective(900px) rotateY(0) rotateX(0) translateY(0); }
-  }
-  @keyframes light-sweep {
-    from { transform: translateX(-100%); opacity: 0; }
-    20%, 80% { opacity: 1; }
-    to { transform: translateX(100%); opacity: 0; }
+    pointer-events: none;
   }
 
+  /* =========================================================
+     MOD DURUMLARI (3D VE 2D)
+     ========================================================= */
+
+  /* 3D MODU: Model izometrik uzayda hacimle yükselir */
+  .hero-drawing-card.mode-3d .building-rig {
+    transform: perspective(1000px) rotateX(56deg) rotateZ(-36deg) translateY(-14px) scale(0.92);
+  }
+
+  .hero-drawing-card.mode-3d .iso-depth-group {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  .hero-drawing-card.mode-3d .layer-2d-annotations {
+    opacity: 0.22;
+    transform: scale(0.96);
+  }
+
+  .hero-drawing-card.mode-3d .leader-notes {
+    opacity: 0.3;
+  }
+
+  /* 2D MODU: 3D model katlanır ve 2D mimari kesit paftasına kilitlenir */
+  .hero-drawing-card.mode-2d .building-rig {
+    transform: perspective(1000px) rotateX(0deg) rotateZ(0deg) translateY(0) scale(1);
+  }
+
+  .hero-drawing-card.mode-2d .iso-depth-group {
+    opacity: 0;
+    transform: scaleY(0.05) translateY(10px);
+    pointer-events: none;
+  }
+
+  .hero-drawing-card.mode-2d .layer-2d-annotations {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .hero-drawing-card.mode-2d .leader-notes {
+    opacity: 1;
+  }
+
+  /* 2D geçişinde tarama lazer animasyonu */
+  .hero-drawing-card.mode-2d .scan-beam {
+    animation: beam-scan 1.2s cubic-bezier(0.2, 0.7, 0.1, 1) 0.1s forwards;
+  }
+
+  @keyframes beam-scan {
+    0% { transform: translateY(40px); opacity: 1; }
+    90% { transform: translateY(440px); opacity: 0.9; }
+    100% { transform: translateY(450px); opacity: 0; }
+  }
+
+  /* Erişilebilirlik - Azaltılmış Hareket */
   @media (prefers-reduced-motion: reduce) {
-    .hero-drawing::before { animation: none; }
-    .blueprint { animation: none; opacity: 0; }
-    .structure-3d { animation: none; opacity: 1; transform: none; }
-    .frame-trace { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+    .building-rig, .iso-depth-group, .layer-2d-annotations {
+      transition: none !important;
+      transform: none !important;
+    }
+    .scan-beam, .pulse-dot {
+      animation: none !important;
+    }
+  }
+
+  /* Mobil Düzen */
+  @media (max-width: 640px) {
+    .card-bar { padding: 6px 10px; font-size: 9.5px; }
+    .sheet-title { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bar-info { gap: 8px; }
+    .hero-drawing-card { box-shadow: 5px 5px 0 var(--ink); }
   }
 </style>
