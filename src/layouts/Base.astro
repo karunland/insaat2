@@ -105,6 +105,18 @@ const footKeys: RouteKey[] = ['home', 'about', 'taahhut', 'kentsel', 'contact'];
       if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
     } catch (e) {}
   </script>
+  {page === 'home' && (
+    <script is:inline>
+      try {
+        var r = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var seen = sessionStorage.getItem('maksef-intro-seen') === '1';
+        var hasHash = !!window.location.hash;
+        document.documentElement.setAttribute('data-intro', (seen || r || hasHash) ? 'docked' : 'splash');
+      } catch (e) {
+        document.documentElement.setAttribute('data-intro', 'docked');
+      }
+    </script>
+  )}
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
 </head>
 <body data-page={page}>

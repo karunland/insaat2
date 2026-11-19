@@ -18,6 +18,11 @@ const pairByPath = new Map(pairs.flatMap((p) => [[p.tr, p], [p.en, p]]));
 export default defineConfig({
   site: SITE.url,
   trailingSlash: 'always',
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+    allowedHosts: true,
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/404'),
