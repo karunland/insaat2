@@ -1,0 +1,167 @@
+---
+interface Props {
+  lat: number;
+  lon: number;
+  title: string;
+  firmName: string;
+  addressLine: string;
+  startZoom?: number;
+  endZoom?: number;
+}
+
+const {
+  lat,
+  lon,
+  title,
+  firmName,
+  addressLine,
+  startZoom = 18,
+  endZoom = 14,
+} = Astro.props;
+---
+
+<div
+  class="map-canvas"
+  data-office-map
+  data-lat={String(lat)}
+  data-lon={String(lon)}
+  data-firm={firmName}
+  data-address={addressLine}
+  data-start-zoom={String(startZoom)}
+  data-end-zoom={String(endZoom)}
+  role="region"
+  aria-label={title}
+></div>
+
+<script>
+  import L from 'leaflet';
+  import 'leaflet/dist/leaflet.css';
+
+  function initOfficeMaps() {
+    document.querySelectorAll<HTMLElement>('[data-office-map]').forEach((el) => {
+      if (el.dataset.mapReady === '1') return;
+      el.dataset.mapReady = '1';
+
+      const lat = Number(el.dataset.lat);
+      const lon = Number(el.dataset.lon);
+      const startZoom = Number(el.dataset.startZoom ?? 18);
+      const endZoom = Number(el.dataset.endZoom ?? 14);
+      const firm = el.dataset.firm ?? 'MAKSEF';
+      const address = el.dataset.address ?? '';
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const initialZoom = reducedMotion ? endZoom : startZoom;
+
+      const map = L.map(el, {
+        center: [lat, lon],
+        zoom: initialZoom,
+        minZoom: 11,
+        maxZoom: 18,
+        scrollWheelZoom: false,
+        zoomControl: true,
+        attributionControl: true,
+      });
+
+      // Free OpenStreetMap public transit tile layer (ÖPNVKarte / memomaps.de)
+      const transitLayer = L.tileLayer('https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        keepBuffer: 4,
+        attribution:
+          'Map <a href="https://memomaps.de/" target="_blank" rel="noopener">memomaps.de</a> CC-BY-SA, &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+      }).addTo(map);
+
+      // Automatic fallback to standard OSM tiles if transit tile server fails
+      let tileErrors = 0;
+      let fellBack = false;
+      transitLayer.on('tileerror', () => {
+        tileErrors += 1;
+        if (!fellBack && tileErrors >= 4) {
+          fellBack = true;
+          map.removeLayer(transitLayer);
+          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            keepBuffer: 4,
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+          }).addTo(map);
+        }
+      });
+
+      // High-contrast crisp architectural pin on Safir Sitesi B Blok
+      const pinIcon = L.divIcon({
+        className: 'map-pin-wrap',
+        iconSize: [32, 42],
+        iconAnchor: [16, 40],
+        popupAnchor: [0, -38],
+        html: `
+          <svg class="map-pin-svg" width="32" height="42" viewBox="0 0 32 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <ellipse cx="16" cy="39" rx="7" ry="2.5" fill="rgba(17,17,17,0.28)" />
+            <path d="M16 2C8.82 2 3 7.82 3 15C3 24.25 16 39 16 39C16 39 29 24.25 29 15C29 7.82 23.18 2 16 2Z" fill="#C84B24" stroke="#111111" stroke-width="2" />
+            <circle cx="16" cy="15" r="5" fill="#FFFFFF" stroke="#111111" stroke-width="1.6" />
+          </svg>
+        `,
+      });
+
+      const marker = L.marker([lat, lon], { icon: pinIcon, title: firm }).addTo(map);
+      if (address) {
+        marker.bindPopup(`<strong>${firm}</strong><br><span>${address}</span>`, {
+          closeButton: false,
+          offset: [0, -2],
+        });
+      }
+
+      if (reducedMotion || initialZoom === endZoom) return;
+
+      let hasAnimated = false;
+      let userInteracted = false;
+      let timerId: number | null = null;
+
+      const cancelAutoZoom = () => {
+        userInteracted = true;
+        if (timerId !== null) {
+          window.clearTimeout(timerId);
+          timerId = null;
+        }
+      };
+
+      // Respect manual user interaction before auto zoom-out triggers
+      el.addEventListener('pointerdown', cancelAutoZoom, { once: true, passive: true });
+      map.on('dragstart', cancelAutoZoom);
+
+      const triggerZoomOut = () => {
+        if (hasAnimated || userInteracted) return;
+        hasAnimated = true;
+        timerId = window.setTimeout(() => {
+          timerId = null;
+          if (userInteracted) return;
+          map.invalidateSize();
+          map.flyTo([lat, lon], endZoom, {
+            duration: 2.3,
+            easeLinearity: 0.22,
+          });
+        }, 700);
+      };
+
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                io.disconnect();
+                triggerZoomOut();
+                break;
+              }
+            }
+          },
+          { threshold: 0.35 },
+        );
+        io.observe(el);
+      } else {
+        triggerZoomOut();
+      }
+    });
+  }
+
+  initOfficeMaps();
+  document.addEventListener('astro:page-load', initOfficeMaps);
+</script>

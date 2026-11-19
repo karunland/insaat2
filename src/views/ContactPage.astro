@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import FormHidden from '../components/FormHidden.astro';
+import OfficeMap from '../components/OfficeMap.astro';
 import { SITE } from '../config/site.mjs';
 import { ROUTES, useT, type Lang } from '../i18n/ui';
 import { getProjects } from '../lib/projects';
@@ -17,10 +18,9 @@ const projectMap = Object.fromEntries(
   (await getProjects(lang)).map((p) => [p.id, { title: p.text.baslik, cat: p.data.kategori }]),
 );
 const { lat, lon } = SITE.geo;
-const d = 0.012;
-const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - d},${lat - d * 0.6},${lon + d},${lat + d * 0.6}&layer=mapnik&marker=${lat},${lon}`;
-const directions = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+const directions = SITE.mapsUrl || `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
 const coord = `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'} · ${Math.abs(lon).toFixed(4)}° ${lon >= 0 ? 'E' : 'W'}`;
+const fullAddress = `${SITE.address.building} · ${SITE.address.street}, ${SITE.address.neighborhood}`;
 ---
 <Base lang={lang} page="contact" title={t.meta.contact.title} description={t.meta.contact.desc} alternates={ROUTES.contact}>
   <header class="page-head">
@@ -53,7 +53,7 @@ const coord = `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'} · ${Math.a
 
       <aside class="contact-info reveal">
         <dl>
-          <div><dt>{c.info.addr}</dt><dd>{SITE.address.street}<br>{SITE.address.postalCode} {SITE.address.city}</dd></div>
+          <div><dt>{c.info.addr}</dt><dd>{SITE.address.street}<br>{SITE.address.building}<br>{SITE.address.neighborhood}, {SITE.address.postalCode} {SITE.address.district}/{SITE.address.city}</dd></div>
           <div><dt>{c.info.phone}</dt><dd><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></dd></div>
           <div><dt>{c.info.mail}</dt><dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd></div>
           <div><dt>{c.info.hours}</dt><dd>{c.info.hoursValue}</dd></div>
@@ -66,7 +66,15 @@ const coord = `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'} · ${Math.a
     </div>
 
     <figure class="map reveal">
-      <iframe src={mapSrc} title={c.mapTitle} loading="lazy" referrerpolicy="no-referrer"></iframe>
+      <OfficeMap
+        lat={lat}
+        lon={lon}
+        title={c.mapTitle}
+        firmName={SITE.legalName}
+        addressLine={fullAddress}
+        startZoom={18}
+        endZoom={14}
+      />
       <figcaption class="caption"><span>{c.mapCaption}</span><span>{coord}</span></figcaption>
     </figure>
   </section>

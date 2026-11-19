@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ProjectList from '../components/ProjectList.astro';
 import Quake from '../components/Quake.astro';
+import RenovationDisciplines from '../components/RenovationDisciplines.astro';
 import FormHidden from '../components/FormHidden.astro';
 import { SITE } from '../config/site.mjs';
 import { ROUTES, useT, type Lang } from '../i18n/ui';
@@ -36,6 +37,7 @@ const endpoint = SITE.forms.kentsel;
         <li class="lp-step reveal"><span class="lp-kot">{kots[i]}</span><h3>{h}</h3><p>{p}</p></li>
       ))}
     </ol>
+    <RenovationDisciplines lang={lang} />
   </section>
 
   <Quake lang={lang} />

@@ -43,8 +43,9 @@ const org = {
   foundingDate: String(SITE.foundedYear),
   address: {
     '@type': 'PostalAddress',
-    streetAddress: SITE.address.street,
-    addressLocality: SITE.address.city,
+    streetAddress: `${SITE.address.street}, ${SITE.address.building}, ${SITE.address.neighborhood}`,
+    addressLocality: SITE.address.district,
+    addressRegion: SITE.address.city,
     postalCode: SITE.address.postalCode,
     addressCountry: SITE.address.country,
   },

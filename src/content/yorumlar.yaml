@@ -1,0 +1,72 @@
+# =========================================================
+# MAKSEF — MÜŞTERİ & İDARE GÖRÜŞLERİ (ŞABLON)
+# Gerçek veriler elinize ulaştığında aşağıdaki metin, isim, unvan,
+# kurum/proje ve opsiyonel "foto" (ör. "/testimonials/kisi-1.jpg")
+# alanlarını düzenlemeniz yeterlidir. "foto" boş bırakılırsa minimal
+# yuvarlak boş profil yer tutucusu gösterilir.
+# =========================================================
+
+- id: y-01
+  kategori: taahhut
+  yil: 2024
+  foto: ""
+  tr:
+    soz: "İş programına ve teknik şartnameye harfiyen uyularak teslim edildi. Şantiyedeki mühendis ekibin düzenli raporlaması süreci baştan sona öngörülebilir kıldı."
+    isim: "Yetkili Adı Soyadı"
+    unvan: "Kontrol Mühendisi · Kamu Kurumu"
+  en:
+    soz: "Delivered strictly in line with the works schedule and technical specification. Regular reporting from the on-site engineering team kept the entire process predictable."
+    isim: "Contact Full Name"
+    unvan: "Supervising Engineer · Public Authority"
+
+- id: y-02
+  kategori: kentsel
+  yil: 2024
+  foto: ""
+  tr:
+    soz: "Riskli yapı tespitinden anahtar teslime kadar tüm malikler düzenli bilgilendirildi. Sözleşmede konuşulan her detay eksiksiz şekilde hayata geçirildi."
+    isim: "Yetkili Adı Soyadı"
+    unvan: "Apartman Yöneticisi · Kadıköy"
+  en:
+    soz: "Every homeowner was kept informed from risk assessment through turnkey handover. Every detail agreed in the contract was delivered without compromise."
+    isim: "Contact Full Name"
+    unvan: "Building Representative · Kadıköy"
+
+- id: y-03
+  kategori: taahhut
+  yil: 2023
+  foto: ""
+  tr:
+    soz: "Aktif kullanılan okul ve spor tesislerinde yürütülen bakım-onarım işleri, eğitim takvimini aksatmadan ve yüksek işçilik standardıyla tamamlandı."
+    isim: "Yetkili Adı Soyadı"
+    unvan: "Tesis Bakım Sorumlusu · Belediye"
+  en:
+    soz: "Renovation works across active school and sports facilities were completed without disrupting the academic calendar and to a consistently high standard of workmanship."
+    isim: "Contact Full Name"
+    unvan: "Facilities Manager · Municipality"
+
+- id: y-04
+  kategori: taahhut
+  yil: 2023
+  foto: ""
+  tr:
+    soz: "Altyapı ve üstyapı koordinasyonunda saha disiplini güçlü bir ekip. Hakediş, geçici kabul ve dokümantasyon aşamaları zamanında ve eksiksiz ilerledi."
+    isim: "Yetkili Adı Soyadı"
+    unvan: "Proje Koordinatörü · Yapı İşleri"
+  en:
+    soz: "A team with strong site discipline across both infrastructure and superstructure works. Progress payments, provisional acceptance and documentation stayed on schedule."
+    isim: "Contact Full Name"
+    unvan: "Project Coordinator · Construction Dept."
+
+- id: y-05
+  kategori: kentsel
+  yil: 2025
+  foto: ""
+  tr:
+    soz: "Hem statik güvenliği hem de iç mekân işçiliğiyle beklentimizin üzerinde bir yapı teslim aldık. Süreç boyunca tek bir muhatapla şeffaf iletişim kurabildik."
+    isim: "Yetkili Adı Soyadı"
+    unvan: "Kat Maliki Temsilcisi · Bostancı"
+  en:
+    soz: "We received a building that exceeded our expectations in both structural safety and interior craftsmanship, with transparent single-point communication throughout."
+    isim: "Contact Full Name"
+    unvan: "Homeowners' Representative · Bostancı"

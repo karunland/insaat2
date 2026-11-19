@@ -1,0 +1,254 @@
+---
+import { getCollection } from 'astro:content';
+import { useT, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const h = t.home;
+
+const entries = await getCollection('yorumlar');
+const items = entries.map((entry, i) => ({
+  code: `G-${String(i + 1).padStart(2, '0')}`,
+  cat: t.common.cat[entry.data.kategori],
+  year: entry.data.yil,
+  foto: entry.data.foto?.trim() || '',
+  ...entry.data[lang],
+}));
+---
+
+{items.length > 0 && (
+  <section class="tm-section" aria-label={h.testimonialsAria}>
+    <div class="tm-header reveal">
+      <header class="section-head">
+        <h2>{h.testimonialsH}</h2>
+      </header>
+    </div>
+
+    <div class="tm-viewport" tabindex="0" aria-label={h.testimonialsAria}>
+      <div class="tm-track">
+        {[false, true].map((isClone) => (
+          <div class="tm-group" aria-hidden={isClone ? 'true' : undefined}>
+            {items.map((item) => (
+              <figure class="tm-card">
+                <div class="tm-meta">
+                  <span>{item.code} · {item.cat}</span>
+                  <span class="tm-year">{item.year}</span>
+                </div>
+                <blockquote class="tm-quote">
+                  <p>{item.soz}</p>
+                </blockquote>
+                <figcaption class="tm-author">
+                  <span class="tm-avatar" aria-hidden={item.foto ? undefined : 'true'}>
+                    {item.foto ? (
+                      <img src={item.foto} alt={item.isim} loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+                    ) : (
+                      <svg viewBox="0 0 40 40" class="tm-avatar-empty" aria-hidden="true">
+                        <circle cx="20" cy="15.5" r="5.5" />
+                        <path d="M9.5 34.5 C10.8 27.8 14.8 24.5 20 24.5 C25.2 24.5 29.2 27.8 30.5 34.5" />
+                      </svg>
+                    )}
+                  </span>
+                  <div class="tm-author-info">
+                    <strong>{item.isim}</strong>
+                    <span>{item.unvan}</span>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .tm-section {
+    padding-top: clamp(64px, 9vw, 120px);
+  }
+
+  .tm-header {
+    max-width: var(--maxw);
+    margin: 0 auto clamp(28px, 4vw, 44px);
+    padding: 0 var(--gutter);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .tm-header .section-head {
+    margin-bottom: 0;
+  }
+
+  .tm-viewport {
+    position: relative;
+    overflow: hidden;
+    border-block: 1.5px solid var(--ink);
+    background: var(--card);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+  }
+  .tm-viewport:focus-visible {
+    outline: 2px dashed var(--accent);
+    outline-offset: 2px;
+  }
+
+  .tm-track {
+    display: flex;
+    width: max-content;
+    animation: tm-marquee 48s linear infinite;
+    will-change: transform;
+  }
+
+  /* Pause smoothly whenever the pointer hovers or keyboard focus enters */
+  .tm-viewport:hover .tm-track,
+  .tm-viewport:focus-within .tm-track {
+    animation-play-state: paused;
+  }
+
+  .tm-group {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .tm-card {
+    margin: 0;
+    width: clamp(300px, 32vw, 430px);
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(22px, 2.6vw, 32px);
+    border-right: 1px solid var(--line-strong);
+    transition: background 0.25s var(--ease);
+  }
+  .tm-card:hover {
+    background: color-mix(in srgb, var(--accent) 5.5%, transparent);
+  }
+
+  .tm-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    font: 500 11px/1 var(--f-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tm-year {
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .tm-quote {
+    position: relative;
+    margin: 0 0 24px;
+    padding-top: 12px;
+    flex: 1;
+  }
+  .tm-quote::before {
+    content: "“";
+    position: absolute;
+    top: -12px;
+    left: -2px;
+    font: 800 32px/1 var(--f-display);
+    color: var(--accent);
+    opacity: 0.85;
+  }
+  .tm-quote p {
+    margin: 0;
+    font-size: clamp(15px, 1.15vw, 17px);
+    line-height: 1.58;
+    color: var(--ink);
+  }
+
+  .tm-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .tm-avatar {
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    background: var(--paper-2);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+  }
+  .tm-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .tm-avatar-empty {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tm-author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .tm-author-info strong {
+    font: 700 15px/1.2 var(--f-display);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .tm-author-info span {
+    font: 500 11px/1.3 var(--f-mono);
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  @keyframes tm-marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @media (max-width: 640px) {
+    .tm-viewport {
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 2%, #000 98%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, #000 2%, #000 98%, transparent 100%);
+    }
+    .tm-card {
+      width: min(82vw, 330px);
+    }
+    .tm-track {
+      animation-duration: 38s;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tm-viewport {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+      scroll-snap-type: x proximity;
+    }
+    .tm-track {
+      animation: none;
+    }
+    .tm-group[aria-hidden="true"] {
+      display: none;
+    }
+    .tm-card {
+      scroll-snap-align: start;
+    }
+  }
+</style>

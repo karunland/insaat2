@@ -47,4 +47,16 @@ const projelerEn = defineCollection({
   schema: z.object(metin),
 });
 
-export const collections = { kurumlar, projeler, projelerEn };
+const yorumMetin = z.object({ soz: z.string(), isim: z.string(), unvan: z.string() });
+const yorumlar = defineCollection({
+  loader: file('src/content/yorumlar.yaml'),
+  schema: z.object({
+    kategori: z.enum(['taahhut', 'kentsel']),
+    yil: z.number().int().min(2000).max(2100),
+    foto: z.string().optional(),
+    tr: yorumMetin,
+    en: yorumMetin,
+  }),
+});
+
+export const collections = { kurumlar, projeler, projelerEn, yorumlar };

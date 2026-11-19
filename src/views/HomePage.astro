@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import HeroDrawing from '../components/HeroDrawing.astro';
 import Areas from '../components/Areas.astro';
+import RenovationDisciplines from '../components/RenovationDisciplines.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import Testimonials from '../components/Testimonials.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { SITE } from '../config/site.mjs';
 import { ROUTES, useT, type Lang } from '../i18n/ui';
@@ -49,6 +51,7 @@ const fmt = (v: number) => v.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
       <h2 set:html={h.areasH} />
     </header>
     <Areas lang={lang} />
+    <RenovationDisciplines lang={lang} attached />
   </section>
 
   {n > 0 && (
@@ -74,6 +77,8 @@ const fmt = (v: number) => v.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
       <div class="num reveal"><b data-count={x.v} data-suffix={x.s}>{fmt(x.v)}{x.s}</b><span>{x.label}</span></div>
     ))}
   </section>
+
+  <Testimonials lang={lang} />
 
   <CtaBand lang={lang} />
 </Base>

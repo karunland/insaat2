@@ -16,13 +16,17 @@ export const SITE = {
   phoneHref: '+902120000000',
   email: 'info@maksef.com.tr',
   address: {
-    street: 'Örnek Mah. Örnek Cad. No: 1',
+    street: 'Dar Yol Sk. 7-5',
+    building: 'Safir Sitesi B Blok, Kat 8, Daire 29',
+    neighborhood: 'Bostancı',
+    district: 'Kadıköy',
     city: 'İstanbul',
-    postalCode: '34000',
+    postalCode: '34744',
     country: 'TR',
   },
-  // Harita ve yapılandırılmış veri için ofis konumu
-  geo: { lat: 40.9903, lon: 29.0275 }, // Kadıköy
+  // Harita ve yapılandırılmış veri için ofis konumu (Safir Sitesi B Blok)
+  geo: { lat: 40.958553, lon: 29.091013 }, // Bostancı, Kadıköy
+  mapsUrl: 'https://maps.app.goo.gl/wyG2xw2ABFAQqRUYA',
   hours: { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], open: '08:30', close: '18:00' },
 
   // Sosyal medya / harici profiller (LinkedIn vb.) — yapılandırılmış veride "sameAs" olarak kullanılır

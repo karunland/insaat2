@@ -59,7 +59,6 @@ const tr = {
       captionLeft: 'İZOMETRİK DÖNÜŞÜM · 2.5D',
       skip: 'Atla',
       skipAria: 'Giriş animasyonunu atla ve ana sayfaya geç',
-      scrollHint: 'Geçmek için kaydırın',
       replay: 'Tekrar Oynat',
       replayAria: 'Yenileme videosunu tekrar oynat',
       phases: ['Söküm & Hazırlık', 'Zemin & Altyapı', 'Tavan & Sistemler', 'İnce İşler & Teslim'],
@@ -73,6 +72,37 @@ const tr = {
     allKentsel: 'Tüm kentsel dönüşüm projeleri',
     numbersAria: 'Rakamlarla MAKSEF',
     numbers: { years: 'yıllık deneyim', projects: 'tamamlanan proje', km: 'altyapı hattı', units: 'teslim edilen bağımsız bölüm' },
+    disciplinesTag: 'UYGULAMA & RESTORASYON',
+    testimonialsH: 'Görüşler',
+    testimonialsAria: 'Müşteri ve işveren görüşleri',
+  },
+
+  miniIcons: {
+    replayTitle: 'Animasyonu tekrar oynat',
+    plaster: {
+      code: '01',
+      title: 'Yüzey & Sıva Restorasyonu',
+      desc: 'Çatlak onarımı, yüzey tesviyesi ve pürüzsüz ince sıva uygulaması.',
+      aria: 'Duvar çatlağını mala ile onaran minimal mimari animasyon',
+    },
+    flooring: {
+      code: '02',
+      title: 'Zemin & Kaplama',
+      desc: 'Lazer kotunda şap, mermer ve modüler zemin kaplama dizilimi.',
+      aria: 'İzometrik zemin karolarının sırayla yerleştiği minimal mimari animasyon',
+    },
+    lighting: {
+      code: '03',
+      title: 'Tavan & Aydınlatma',
+      desc: 'Asma tavan karkası, akustik ızgara ve mimari sarkıt aydınlatma.',
+      aria: 'Tavan ızgarası ve sarkıt lambaların devreye girdiği minimal mimari animasyon',
+    },
+    glazing: {
+      code: '04',
+      title: 'Bölme & Doğrama',
+      desc: 'Tam boy alüminyum doğrama, cam bölme sistemleri ve cephe detayları.',
+      aria: 'Tam boy cam bölme ve doğrama çerçevesinin çizildiği minimal mimari animasyon',
+    },
   },
 
   areas: {
@@ -201,7 +231,7 @@ const tr = {
     client: 'İşveren / İdare', year: 'Yıl', yearOngoing: 'Başlangıç', location: 'Konum', category: 'Kategori', state: 'Durum', scale: 'Ölçek',
     scope: 'İş kapsamı', photos: 'Fotoğraflar', gallery: 'Fotoğraf galerisi', photo: 'Fotoğraf', open: 'Büyüt',
     beforeAfter: 'Önce / Sonra', before: 'ÖNCE', after: 'SONRA',
-    baHint: 'Karşılaştırmak için çizgiyi sürükleyin.', baLabel: 'Önce ve sonra görselleri arasında geçiş',
+    baLabel: 'Önce ve sonra görselleri arasında geçiş',
     breadcrumb: 'Sayfa konumu',
     ctaH: 'Benzer bir projeniz mi var? <em>Konuşalım.</em>',
     ctaP: 'Bu proje hakkında bilgi almak ya da benzer bir iş için görüşmek isterseniz bize yazın.',
@@ -281,7 +311,6 @@ const en: typeof tr = {
       captionLeft: 'ISOMETRIC RENOVATION · 2.5D',
       skip: 'Skip',
       skipAria: 'Skip intro animation and go to homepage',
-      scrollHint: 'Scroll to enter',
       replay: 'Replay',
       replayAria: 'Replay renovation video',
       phases: ['Site Clearing', 'Flooring & Base', 'Ceiling & Systems', 'Finishing & Handover'],
@@ -295,6 +324,37 @@ const en: typeof tr = {
     allKentsel: 'All urban renewal projects',
     numbersAria: 'MAKSEF in numbers',
     numbers: { years: 'years of experience', projects: 'completed projects', km: 'of infrastructure lines', units: 'units handed over' },
+    disciplinesTag: 'RESTORATION & FIT-OUT',
+    testimonialsH: 'Testimonials',
+    testimonialsAria: 'Client and homeowner testimonials',
+  },
+
+  miniIcons: {
+    replayTitle: 'Replay animation',
+    plaster: {
+      code: '01',
+      title: 'Surface & Plaster',
+      desc: 'Crack remediation, substrate levelling and smooth architectural finish.',
+      aria: 'Minimal architectural animation of a trowel restoring a cracked plaster wall',
+    },
+    flooring: {
+      code: '02',
+      title: 'Flooring & Tiling',
+      desc: 'Laser-levelled screeds, veined stone and modular isometric floor grids.',
+      aria: 'Minimal architectural animation of isometric floor tiles dropping into place',
+    },
+    lighting: {
+      code: '03',
+      title: 'Lighting & Ceiling Grid',
+      desc: 'Suspended ceiling framing, baffle grids and architectural pendant fixtures.',
+      aria: 'Minimal architectural animation of ceiling grid lines and pendant lamps lighting up',
+    },
+    glazing: {
+      code: '04',
+      title: 'Partition & Glazing',
+      desc: 'Floor-to-ceiling black-framed glazing, partitions and facade mullions.',
+      aria: 'Minimal architectural animation of floor-to-ceiling glass partition drawing itself',
+    },
   },
 
   areas: {
@@ -422,7 +482,7 @@ const en: typeof tr = {
     client: 'Client / Authority', year: 'Year', yearOngoing: 'Started', location: 'Location', category: 'Category', state: 'Status', scale: 'Scale',
     scope: 'Scope of work', photos: 'Photos', gallery: 'Photo gallery', photo: 'Photo', open: 'Enlarge',
     beforeAfter: 'Before / After', before: 'BEFORE', after: 'AFTER',
-    baHint: 'Drag the line to compare.', baLabel: 'Slide between before and after images',
+    baLabel: 'Slide between before and after images',
     breadcrumb: 'Breadcrumb',
     ctaH: "Have a similar project? <em>Let's talk.</em>",
     ctaP: 'Write to us for more information about this project or to discuss similar work.',

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Areas from '../components/Areas.astro';
 import CtaBand from '../components/CtaBand.astro';
+import MiniRenovationIcons, { type RenovationScene } from '../components/MiniRenovationIcons.astro';
 import { ROUTES, useT, type Lang } from '../i18n/ui';
 import { getReferences } from '../lib/projects';
 
@@ -10,6 +11,7 @@ const { lang } = Astro.props;
 const t = useT(lang);
 const a = t.about;
 const refs = await getReferences(lang);
+const principleScenes: RenovationScene[] = ['glazing', 'plaster', 'flooring'];
 ---
 <Base lang={lang} page="about" title={t.meta.about.title} description={t.meta.about.desc} alternates={ROUTES.about}>
   <header class="page-head">
@@ -34,7 +36,14 @@ const refs = await getReferences(lang);
     <header class="section-head reveal"><p class="sheet-tag">{a.expTag}</p><h2 set:html={a.expH} /></header>
     <div class="principles stagger">
       {a.principles.map(([h, p], i) => (
-        <div class="principle reveal"><b>0{i + 1}</b><h3>{h}</h3><p>{p}</p></div>
+        <div class="principle reveal">
+          <div class="principle-head">
+            <b>0{i + 1}</b>
+            <MiniRenovationIcons scene={principleScenes[i] ?? 'plaster'} lang={lang} size="sm" />
+          </div>
+          <h3>{h}</h3>
+          <p>{p}</p>
+        </div>
       ))}
     </div>
   </section>

@@ -1,0 +1,184 @@
+---
+import MiniRenovationIcons, { type RenovationScene } from './MiniRenovationIcons.astro';
+import { useT, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  attached?: boolean;
+}
+
+const { lang, attached = false } = Astro.props;
+const t = useT(lang);
+const scenes: RenovationScene[] = ['plaster', 'flooring', 'lighting', 'glazing'];
+---
+
+<div class:list={['disciplines-block reveal', { 'is-attached': attached }]} data-disciplines>
+  <div class="disciplines-bar">
+    <span class="disciplines-tag">{t.home.disciplinesTag}</span>
+  </div>
+  <div class="disciplines-grid">
+    {scenes.map((scene) => {
+      const item = t.miniIcons[scene];
+      return (
+        <article class="discipline-cell" data-discipline-card>
+          <div class="discipline-head">
+            <span class="discipline-code">{item.code}</span>
+            <span class="discipline-replay-mark" aria-hidden="true">↻</span>
+          </div>
+          <div class="discipline-visual">
+            <MiniRenovationIcons scene={scene} lang={lang} size="lg" />
+          </div>
+          <h3 class="discipline-title">{item.title}</h3>
+          <p class="discipline-desc">{item.desc}</p>
+        </article>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  (function () {
+    const win = window as unknown as { __discInit?: boolean };
+    if (win.__discInit) return;
+    win.__discInit = true;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    document.querySelectorAll<HTMLElement>('[data-discipline-card]').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        // Avoid double-triggering when user directly clicked the inner [data-mri] button
+        if ((e.target as HTMLElement | null)?.closest('[data-mri]')) return;
+        const box = card.querySelector<HTMLElement>('[data-mri]');
+        if (!box) return;
+        box.classList.remove('is-playing');
+        void box.offsetWidth;
+        box.classList.add('is-playing');
+      });
+    });
+  })();
+</script>
+
+<style>
+  .disciplines-block {
+    margin-top: clamp(28px, 3.5vw, 44px);
+    border: 1.5px solid var(--ink);
+    background: var(--card);
+  }
+  .disciplines-block.is-attached {
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  .disciplines-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px clamp(16px, 2.2vw, 26px);
+    border-bottom: 1px solid var(--line-strong);
+    font: 500 11px/1.2 var(--f-mono);
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+  .disciplines-tag {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .disciplines-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .discipline-cell {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(18px, 2.2vw, 26px);
+    border-right: 1px solid var(--line-strong);
+    cursor: pointer;
+    transition: background 0.2s var(--ease);
+  }
+  .discipline-cell:last-child {
+    border-right: 0;
+  }
+  .discipline-cell:hover {
+    background: color-mix(in srgb, var(--ink) 3.5%, transparent);
+  }
+
+  .discipline-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font: 600 11px/1 var(--f-mono);
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .discipline-code {
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+  .discipline-replay-mark {
+    font-size: 13px;
+    opacity: 0.45;
+    transition: opacity 0.2s var(--ease), transform 0.25s var(--ease);
+  }
+  .discipline-cell:hover .discipline-replay-mark {
+    opacity: 1;
+    color: var(--ink);
+    transform: rotate(-45deg);
+  }
+
+  .discipline-visual {
+    display: grid;
+    place-items: center;
+    padding: 6px 0 14px;
+  }
+
+  .discipline-title {
+    margin: 0 0 8px;
+    font-size: clamp(16px, 1.35vw, 19px);
+    font-weight: 800;
+    font-stretch: 92%;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .discipline-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 980px) {
+    .disciplines-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .discipline-cell:nth-child(2n) {
+      border-right: 0;
+    }
+    .discipline-cell:nth-child(-n+2) {
+      border-bottom: 1px solid var(--line-strong);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .disciplines-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    .disciplines-grid {
+      grid-template-columns: 1fr;
+    }
+    .discipline-cell {
+      border-right: 0;
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .discipline-cell:last-child {
+      border-bottom: 0;
+    }
+  }
+</style>

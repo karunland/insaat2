@@ -1,0 +1,760 @@
+---
+import { useT, type Lang } from '../i18n/ui';
+
+export type RenovationScene = 'plaster' | 'flooring' | 'lighting' | 'glazing';
+
+interface Props {
+  scene: RenovationScene;
+  lang?: Lang;
+  size?: 'sm' | 'md' | 'lg';
+  interactive?: boolean;
+  label?: string;
+}
+
+const { scene, lang = 'tr', size = 'md', interactive = true, label } = Astro.props;
+const t = useT(lang);
+const meta = t.miniIcons[scene];
+const ariaLabel = label ?? meta.aria;
+const uid = `mri-${scene}-${Math.random().toString(36).slice(2, 8)}`;
+
+// Isometric 3x3 flooring tile coordinates (ordered back-to-front for clean overlap)
+const isoTiles: { cx: number; cy: number; order: number; vein: string }[] = [];
+const veins = [
+  'M-8 -1 L4 3',
+  'M-6 2 L7 -3',
+  'M-9 -2 L2 4 M3 -4 L9 -1',
+  'M-7 1 L6 -2',
+  'M-5 -4 L7 2',
+  'M-8 0 L5 3 M-2 -5 L6 -1',
+  'M-6 -2 L8 1',
+  'M-7 3 L6 -3',
+  'M-8 -1 L6 2',
+];
+let tileOrder = 0;
+for (let sum = 0; sum <= 4; sum++) {
+  for (let r = 0; r < 3; r++) {
+    const c = sum - r;
+    if (c >= 0 && c < 3) {
+      isoTiles.push({
+        cx: 80 + (c - r) * 20,
+        cy: 63 + (c + r) * 11.5,
+        order: tileOrder,
+        vein: veins[tileOrder],
+      });
+      tileOrder++;
+    }
+  }
+}
+---
+
+<div
+  class:list={['mri-box', `mri-${size}`, { 'mri-interactive': interactive }]}
+  data-mri={scene}
+  data-mri-interactive={interactive ? '1' : undefined}
+  role={interactive ? 'button' : 'img'}
+  tabindex={interactive ? 0 : undefined}
+  aria-label={ariaLabel}
+  title={interactive ? t.miniIcons.replayTitle : undefined}
+>
+  {scene === 'plaster' && (
+    <svg viewBox="0 0 160 160" class="mri-svg mri-plaster" aria-hidden="true">
+      {/* Ground & top architectural datum hairlines */}
+      <line x1="12" y1="138" x2="148" y2="138" class="mri-stroke-soft mri-thin" />
+      <line x1="12" y1="22" x2="20" y2="22" class="mri-stroke-mid mri-thin" />
+      <line x1="140" y1="22" x2="148" y2="22" class="mri-stroke-mid mri-thin" />
+
+      {/* Wall panel base */}
+      <rect x="20" y="22" width="120" height="116" class="mri-wall-base" />
+      {/* Architectural cornice & skirting lines */}
+      <line x1="20" y1="31" x2="140" y2="31" class="mri-stroke-soft mri-thin" />
+      <line x1="20" y1="129" x2="140" y2="129" class="mri-stroke-soft mri-thin" />
+
+      {/* Existing crack network (smoothly erased behind the gliding trowel) */}
+      <g class="mri-crack-group">
+        <path d="M32 104 L48 90 L59 95 L77 73 L91 79 L111 56 L128 48" class="mri-crack-main" />
+        <path d="M59 95 L68 112 M77 73 L69 55 M91 79 L106 94 M48 90 L38 78" class="mri-crack-sub" />
+      </g>
+
+      {/* Freshly restored solid plaster skim coat sweeping left-to-right */}
+      <rect x="21" y="32" width="118" height="96" class="mri-plaster-coat" />
+
+      {/* Subtle clean finish ticks appearing after plastering */}
+      <g class="mri-plaster-finish">
+        <line x1="42" y1="62" x2="54" y2="50" class="mri-stroke-soft mri-thin" />
+        <line x1="48" y1="66" x2="56" y2="58" class="mri-stroke-soft mri-thin" />
+        <line x1="102" y1="108" x2="116" y2="94" class="mri-stroke-soft mri-thin" />
+      </g>
+
+      {/* Outer crisp wall outline on top */}
+      <rect x="20" y="22" width="120" height="116" class="mri-wall-frame" />
+
+      {/* Minimalist architectural trowel / spatula gliding across */}
+      <g class="mri-trowel">
+        <path d="M22 40 L33 40 L27 118 L16 118 Z" class="mri-trowel-blade" />
+        <line x1="25" y1="50" x2="21" y2="108" class="mri-stroke-mid mri-thin" />
+        <rect x="7" y="68" width="13" height="22" rx="1" class="mri-trowel-handle" />
+      </g>
+    </svg>
+  )}
+
+  {scene === 'flooring' && (
+    <svg viewBox="0 0 160 160" class="mri-svg mri-flooring" aria-hidden="true">
+      {/* Subfloor isometric dashed blueprint grid */}
+      <polygon points="80,51.5 140,86 80,120.5 20,86" class="mri-iso-guide" />
+      <line x1="40" y1="74.5" x2="100" y2="109" class="mri-iso-subgrid" />
+      <line x1="60" y1="63" x2="120" y2="97.5" class="mri-iso-subgrid" />
+      <line x1="100" y1="63" x2="40" y2="97.5" class="mri-iso-subgrid" />
+      <line x1="120" y1="74.5" x2="60" y2="109" class="mri-iso-subgrid" />
+
+      {/* Slab depth thickness lip */}
+      <path d="M20 86 L20 94 L80 128.5 L140 94 L140 86" class="mri-slab-lip" />
+      <line x1="80" y1="120.5" x2="80" y2="128.5" class="mri-slab-lip" />
+
+      {/* Sequential isometric diamond tiles dropping into place */}
+      {isoTiles.map((tile) => (
+        <g class="mri-tile-slot" transform={`translate(${tile.cx} ${tile.cy})`}>
+          <g class="mri-tile" style={`--ti:${tile.order}`}>
+            <polygon points="0,-11.5 20,0 0,11.5 -20,0" class="mri-tile-face" />
+            <path d={tile.vein} class="mri-tile-vein" />
+          </g>
+        </g>
+      ))}
+    </svg>
+  )}
+
+  {scene === 'lighting' && (
+    <svg viewBox="0 0 160 160" class="mri-svg mri-lighting" aria-hidden="true">
+      {/* Subtle floor datum & theme-reactive illumination pools */}
+      <line x1="18" y1="138" x2="142" y2="138" class="mri-stroke-soft mri-thin" />
+      <g class="mri-light-emit" style="--li:0"><line x1="30" y1="138" x2="58" y2="138" class="mri-light-pool" /></g>
+      <g class="mri-light-emit" style="--li:1"><line x1="60" y1="138" x2="100" y2="138" class="mri-light-pool" /></g>
+      <g class="mri-light-emit" style="--li:2"><line x1="102" y1="138" x2="130" y2="138" class="mri-light-pool" /></g>
+
+      {/* Architectural ceiling grid drawing across the top */}
+      <g class="mri-ceiling">
+        <line x1="16" y1="22" x2="144" y2="22" pathLength="1" class="mri-ceil-main" style="--cd:0s" />
+        <line x1="22" y1="32" x2="138" y2="32" pathLength="1" class="mri-ceil-rail" style="--cd:0.12s" />
+        <line x1="28" y1="42" x2="132" y2="42" pathLength="1" class="mri-ceil-sub" style="--cd:0.24s" />
+        <line x1="34" y1="22" x2="34" y2="42" pathLength="1" class="mri-ceil-tick" style="--cd:0.32s" />
+        <line x1="57" y1="22" x2="57" y2="42" pathLength="1" class="mri-ceil-tick" style="--cd:0.38s" />
+        <line x1="80" y1="22" x2="80" y2="42" pathLength="1" class="mri-ceil-tick" style="--cd:0.44s" />
+        <line x1="103" y1="22" x2="103" y2="42" pathLength="1" class="mri-ceil-tick" style="--cd:0.50s" />
+        <line x1="126" y1="22" x2="126" y2="42" pathLength="1" class="mri-ceil-tick" style="--cd:0.56s" />
+      </g>
+
+      {/* Pendant 1 (left) */}
+      <g class="mri-pendant mri-sway-a" style="--li:0; --px:44px; --py:32px">
+        <line x1="44" y1="32" x2="44" y2="78" pathLength="1" class="mri-cord" />
+        <g class="mri-lamp-head">
+          <g class="mri-light-emit" style="--li:0">
+            <path d="M37 86 L28 136 M51 86 L60 136" class="mri-light-cone" />
+          </g>
+          <g class="mri-lamp-aura">
+            <circle cx="44" cy="91" r="15" class="mri-glow-outer" />
+            <circle cx="44" cy="90" r="8.5" class="mri-glow-inner" />
+          </g>
+          <path d="M35 86 C35 79 53 79 53 86 Z" class="mri-shade" />
+          <circle cx="44" cy="88" r="2.8" class="mri-bulb" />
+        </g>
+      </g>
+
+      {/* Pendant 2 (center hero) */}
+      <g class="mri-pendant mri-sway-b" style="--li:1; --px:80px; --py:42px">
+        <line x1="80" y1="42" x2="80" y2="92" pathLength="1" class="mri-cord" />
+        <g class="mri-lamp-head">
+          <g class="mri-light-emit" style="--li:1">
+            <path d="M70 102 L58 136 M90 102 L102 136" class="mri-light-cone" />
+          </g>
+          <g class="mri-lamp-aura">
+            <circle cx="80" cy="107" r="19" class="mri-glow-outer" />
+            <circle cx="80" cy="106" r="11" class="mri-glow-inner" />
+          </g>
+          <path d="M68 102 C68 93 92 93 92 102 Z" class="mri-shade" />
+          <circle cx="80" cy="104" r="3.4" class="mri-bulb" />
+        </g>
+      </g>
+
+      {/* Pendant 3 (right) */}
+      <g class="mri-pendant mri-sway-c" style="--li:2; --px:116px; --py:32px">
+        <line x1="116" y1="32" x2="116" y2="72" pathLength="1" class="mri-cord" />
+        <g class="mri-lamp-head">
+          <g class="mri-light-emit" style="--li:2">
+            <path d="M109 80 L100 136 M123 80 L132 136" class="mri-light-cone" />
+          </g>
+          <g class="mri-lamp-aura">
+            <circle cx="116" cy="85" r="15" class="mri-glow-outer" />
+            <circle cx="116" cy="84" r="8.5" class="mri-glow-inner" />
+          </g>
+          <path d="M107 80 C107 73 125 73 125 80 Z" class="mri-shade" />
+          <circle cx="116" cy="82" r="2.8" class="mri-bulb" />
+        </g>
+      </g>
+    </svg>
+  )}
+
+  {scene === 'glazing' && (
+    <svg viewBox="0 0 160 160" class="mri-svg mri-glazing" aria-hidden="true">
+      <defs>
+        <clipPath id={`${uid}-panes`}>
+          <rect x="28" y="26" width="104" height="108" />
+        </clipPath>
+      </defs>
+
+      {/* Floor & ceiling architectural datum lines */}
+      <line x1="10" y1="20" x2="150" y2="20" class="mri-stroke-soft mri-thin" />
+      <line x1="10" y1="140" x2="150" y2="140" class="mri-stroke-mid mri-thin" />
+
+      {/* Subtle glass tint fill */}
+      <rect x="27" y="25" width="106" height="110" class="mri-glass-fill" />
+
+      {/* Sleek diagonal grey glass reflection lines slowly drifting across panes */}
+      <g clip-path={`url(#${uid}-panes)`}>
+        <g class="mri-sheen-group">
+          <line x1="16" y1="92" x2="72" y2="36" class="mri-sheen-bold" />
+          <line x1="24" y1="102" x2="80" y2="46" class="mri-sheen-fine" />
+          <line x1="58" y1="128" x2="124" y2="62" class="mri-sheen-bold" />
+          <line x1="66" y1="136" x2="132" y2="70" class="mri-sheen-fine" />
+          <line x1="98" y1="136" x2="148" y2="86" class="mri-sheen-fine" />
+        </g>
+      </g>
+
+      {/* Black-framed floor-to-ceiling partition & mullions drawing via stroke-dashoffset */}
+      <rect x="22" y="20" width="116" height="120" pathLength="1" class="mri-frame-outer" />
+      <rect x="27" y="25" width="106" height="110" pathLength="1" class="mri-frame-inner" />
+      <line x1="62" y1="25" x2="62" y2="135" pathLength="1" class="mri-mullion" style="--md:0.38s" />
+      <line x1="98" y1="25" x2="98" y2="135" pathLength="1" class="mri-mullion" style="--md:0.50s" />
+      <line x1="27" y1="52" x2="133" y2="52" pathLength="1" class="mri-transom" style="--md:0.62s" />
+      {/* Minimalist vertical door pull handle */}
+      <line x1="92" y1="84" x2="92" y2="104" pathLength="1" class="mri-handle" />
+    </svg>
+  )}
+</div>
+
+<script>
+  (function () {
+    const win = window as unknown as { __mriInit?: boolean };
+    if (win.__mriInit) return;
+    win.__mriInit = true;
+
+    const boxes = Array.from(document.querySelectorAll<HTMLElement>('[data-mri]'));
+    if (!boxes.length) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function replay(el: HTMLElement) {
+      if (reduceMotion) return;
+      el.classList.remove('is-playing');
+      void el.offsetWidth;
+      el.classList.add('is-playing');
+    }
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      boxes.forEach((b) => b.classList.add('is-playing'));
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-playing');
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.22, rootMargin: '0px 0px -24px 0px' }
+      );
+      boxes.forEach((b) => observer.observe(b));
+    }
+
+    boxes.forEach((box) => {
+      if (!box.hasAttribute('data-mri-interactive')) return;
+      box.addEventListener('click', (e) => {
+        if (box.closest('a')) return;
+        e.stopPropagation();
+        replay(box);
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          replay(box);
+        }
+      });
+    });
+  })();
+</script>
+
+<style is:global>
+  /* ---------- Strict 3-color minimalist palette (Black, Grey, White/Transparent) ---------- */
+  :root {
+    --mri-ink: #111111;
+    --mri-grey: #8E8E93;
+    --mri-grey-light: #D1D1D6;
+    --mri-surface: #FFFFFF;
+    --mri-glow: #FFFFFF;
+
+    /* Theme-reactive Lighting states — Light mode = daytime (subtle/off architectural luminaire) */
+    --mri-bulb-fill: #D1D1D6;
+    --mri-glow-inner-op: 0.16;
+    --mri-glow-outer-op: 0.28;
+    --mri-cone-op: 0;
+    --mri-pool-op: 0.16;
+    --mri-aura-scale-min: 0.96;
+    --mri-aura-scale-max: 1.02;
+  }
+
+  /* Dark "Ozalit" blueprint mode (#0D3466) = nighttime illuminated pendants! */
+  :root[data-theme="dark"] {
+    --mri-ink: #FFFFFF;
+    --mri-grey: #8E8E93;
+    --mri-grey-light: #D1D1D6;
+    --mri-surface: #0D3466;
+    --mri-glow: #FFFFFF;
+
+    --mri-bulb-fill: #FFFFFF;
+    --mri-glow-inner-op: 0.34;
+    --mri-glow-outer-op: 0.85;
+    --mri-cone-op: 0.28;
+    --mri-pool-op: 0.85;
+    --mri-aura-scale-min: 0.92;
+    --mri-aura-scale-max: 1.1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --mri-ink: #FFFFFF;
+      --mri-grey: #8E8E93;
+      --mri-grey-light: #D1D1D6;
+      --mri-surface: #0D3466;
+      --mri-glow: #FFFFFF;
+
+      --mri-bulb-fill: #FFFFFF;
+      --mri-glow-inner-op: 0.34;
+      --mri-glow-outer-op: 0.85;
+      --mri-cone-op: 0.28;
+      --mri-pool-op: 0.85;
+      --mri-aura-scale-min: 0.92;
+      --mri-aura-scale-max: 1.1;
+    }
+  }
+
+  /* ---------- Square 1:1 container ---------- */
+  .mri-box {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    background: transparent;
+    user-select: none;
+  }
+  .mri-sm { width: 68px; flex: none; }
+  .mri-md { width: 108px; max-width: 100%; }
+  .mri-lg { width: 148px; max-width: 100%; }
+
+  .mri-interactive {
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mri-interactive:hover {
+    transform: translateY(-2px);
+  }
+  .mri-interactive:active {
+    transform: scale(0.98);
+  }
+
+  .mri-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* Shared technical line-art helpers */
+  .mri-thin { stroke-width: 1; fill: none; }
+  .mri-stroke-mid { stroke: var(--mri-grey); }
+  .mri-stroke-soft { stroke: var(--mri-grey-light); }
+
+  /* =========================================================
+     1. SURFACE & PLASTER RESTORATION (slow 8.8s continuous craft cycle)
+     ========================================================= */
+  .mri-wall-base {
+    fill: transparent;
+    stroke: none;
+  }
+  .mri-wall-frame {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 1.75;
+  }
+  .mri-crack-main {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .mri-crack-sub {
+    fill: none;
+    stroke: var(--mri-grey);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+  }
+  .mri-plaster-coat {
+    fill: var(--mri-surface);
+    transform-box: fill-box;
+    transform-origin: left center;
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  .mri-plaster-finish {
+    opacity: 0;
+  }
+  .mri-trowel {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  .mri-trowel-blade {
+    fill: var(--mri-surface);
+    stroke: var(--mri-ink);
+    stroke-width: 1.75;
+    stroke-linejoin: miter;
+  }
+  .mri-trowel-handle {
+    fill: var(--mri-ink);
+  }
+
+  .mri-box.is-playing .mri-plaster-coat {
+    animation: mri-plaster-cycle 8.8s cubic-bezier(0.37, 0, 0.25, 1) 0.15s infinite;
+  }
+  .mri-box.is-playing .mri-trowel {
+    animation: mri-trowel-cycle 8.8s cubic-bezier(0.37, 0, 0.25, 1) 0.15s infinite;
+  }
+  .mri-box.is-playing .mri-plaster-finish {
+    animation: mri-finish-cycle 8.8s ease 0.15s infinite;
+  }
+
+  @keyframes mri-plaster-cycle {
+    0%, 10% { transform: scaleX(0); opacity: 1; }
+    38%, 84% { transform: scaleX(1); opacity: 1; }
+    93% { transform: scaleX(1); opacity: 0; }
+    94%, 100% { transform: scaleX(0); opacity: 0; }
+  }
+  @keyframes mri-trowel-cycle {
+    0%, 6% { opacity: 0; transform: translateX(-8px); }
+    10% { opacity: 1; transform: translateX(0); }
+    38% { opacity: 1; transform: translateX(112px); }
+    44%, 100% { opacity: 0; transform: translateX(120px); }
+  }
+  @keyframes mri-finish-cycle {
+    0%, 34% { opacity: 0; }
+    42%, 82% { opacity: 1; }
+    92%, 100% { opacity: 0; }
+  }
+
+  /* =========================================================
+     2. FLOORING & TILING (permanent architectural tile assembly; click to replay)
+     ========================================================= */
+  .mri-iso-guide {
+    fill: none;
+    stroke: var(--mri-grey);
+    stroke-width: 1.25;
+    stroke-dasharray: 3 3;
+  }
+  .mri-iso-subgrid {
+    fill: none;
+    stroke: var(--mri-grey-light);
+    stroke-width: 1;
+    stroke-dasharray: 2 3;
+  }
+  .mri-slab-lip {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .mri-tile {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  .mri-tile-face {
+    fill: var(--mri-surface);
+    stroke: var(--mri-ink);
+    stroke-width: 1.5;
+    stroke-linejoin: miter;
+  }
+  .mri-tile-vein {
+    fill: none;
+    stroke: var(--mri-grey);
+    stroke-width: 1;
+    stroke-linecap: round;
+    opacity: 0.72;
+  }
+
+  .mri-box.is-playing .mri-tile {
+    animation: mri-tile-drop 0.52s cubic-bezier(0.22, 1, 0.36, 1) calc(0.12s + var(--ti) * 0.095s) forwards;
+  }
+
+  @keyframes mri-tile-drop {
+    0% { opacity: 0; transform: translateY(-22px); }
+    75% { opacity: 1; transform: translateY(1px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* =========================================================
+     3. LIGHTING & CEILING GRID (Theme-reactive Light=Day / Dark=Lit + slow ambient sway & breath)
+     ========================================================= */
+  .mri-ceil-main {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 2;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-ceil-rail {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 1.5;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-ceil-sub,
+  .mri-ceil-tick {
+    fill: none;
+    stroke: var(--mri-grey);
+    stroke-width: 1.25;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-pendant {
+    transform-origin: var(--px) var(--py);
+  }
+  .mri-cord {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 1.5;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-lamp-head {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  .mri-shade {
+    fill: var(--mri-surface);
+    stroke: var(--mri-ink);
+    stroke-width: 1.75;
+    stroke-linejoin: round;
+    transition: fill 0.45s var(--ease), stroke 0.45s var(--ease);
+  }
+  .mri-bulb {
+    fill: var(--mri-bulb-fill);
+    stroke: var(--mri-ink);
+    stroke-width: 1.25;
+    transition: fill 0.45s var(--ease), stroke 0.45s var(--ease);
+  }
+  .mri-light-emit {
+    opacity: 0;
+  }
+  .mri-light-cone {
+    fill: none;
+    stroke: var(--mri-grey-light);
+    stroke-width: 1;
+    stroke-dasharray: 2.5 3.5;
+    opacity: var(--mri-cone-op);
+    transition: opacity 0.5s var(--ease);
+  }
+  .mri-lamp-aura {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0.45);
+  }
+  .mri-glow-inner {
+    fill: var(--mri-glow);
+    stroke: var(--mri-grey-light);
+    stroke-width: 1;
+    opacity: var(--mri-glow-inner-op);
+    transition: opacity 0.45s var(--ease), fill 0.45s var(--ease);
+  }
+  .mri-glow-outer {
+    fill: none;
+    stroke: var(--mri-grey-light);
+    stroke-width: 1;
+    stroke-dasharray: 2.5 3;
+    opacity: var(--mri-glow-outer-op);
+    transition: opacity 0.45s var(--ease), stroke 0.45s var(--ease);
+  }
+  .mri-light-pool {
+    stroke: var(--mri-ink);
+    stroke-width: 1.75;
+    opacity: var(--mri-pool-op);
+    transition: opacity 0.45s var(--ease), stroke 0.45s var(--ease);
+  }
+
+  .mri-box.is-playing .mri-ceil-main,
+  .mri-box.is-playing .mri-ceil-rail,
+  .mri-box.is-playing .mri-ceil-sub,
+  .mri-box.is-playing .mri-ceil-tick {
+    animation: mri-draw 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--cd, 0s) forwards;
+  }
+  .mri-box.is-playing .mri-cord {
+    animation: mri-draw 0.45s cubic-bezier(0.22, 1, 0.36, 1) calc(0.45s + var(--li) * 0.14s) forwards;
+  }
+  .mri-box.is-playing .mri-lamp-head {
+    animation: mri-lamp-drop 0.52s cubic-bezier(0.22, 1, 0.36, 1) calc(0.58s + var(--li) * 0.14s) forwards;
+  }
+  .mri-box.is-playing .mri-lamp-aura {
+    animation:
+      mri-aura-enter 0.5s ease-out calc(1.12s + var(--li) * 0.12s) forwards,
+      mri-aura-breathe 5.2s ease-in-out calc(1.65s + var(--li) * 0.6s) infinite;
+  }
+  .mri-box.is-playing .mri-light-emit {
+    animation: mri-emit-enter 0.55s ease-out calc(1.22s + var(--li) * 0.12s) forwards;
+  }
+  /* Ultra-slow, calm pendulum stillness after lamps drop in */
+  .mri-box.is-playing .mri-sway-a {
+    animation: mri-sway 6.8s ease-in-out 1.5s infinite;
+  }
+  .mri-box.is-playing .mri-sway-b {
+    animation: mri-sway-rev 7.6s ease-in-out 1.8s infinite;
+  }
+  .mri-box.is-playing .mri-sway-c {
+    animation: mri-sway 6.2s ease-in-out 2.1s infinite;
+  }
+
+  @keyframes mri-lamp-drop {
+    0% { opacity: 0; transform: translateY(-16px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes mri-aura-enter {
+    0% { opacity: 0; transform: scale(0.45); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes mri-aura-breathe {
+    0%, 100% { transform: scale(var(--mri-aura-scale-min)); }
+    50% { transform: scale(var(--mri-aura-scale-max)); }
+  }
+  @keyframes mri-emit-enter {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes mri-sway {
+    0%, 100% { transform: rotate(-1.1deg); }
+    50% { transform: rotate(1.1deg); }
+  }
+  @keyframes mri-sway-rev {
+    0%, 100% { transform: rotate(0.9deg); }
+    50% { transform: rotate(-0.9deg); }
+  }
+
+  /* =========================================================
+     4. SPATIAL PARTITION & GLAZING (drawn once + slow continuous daylight sheen)
+     ========================================================= */
+  .mri-glass-fill {
+    fill: var(--mri-surface);
+    opacity: 0;
+  }
+  .mri-frame-outer {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 2;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-frame-inner {
+    fill: none;
+    stroke: var(--mri-grey);
+    stroke-width: 1.25;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-mullion {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 1.75;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-transom {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 1.5;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-handle {
+    fill: none;
+    stroke: var(--mri-ink);
+    stroke-width: 2;
+    stroke-linecap: square;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .mri-sheen-group {
+    opacity: 0;
+    transform: translate(-36px, 36px);
+  }
+  .mri-sheen-bold {
+    fill: none;
+    stroke: var(--mri-grey);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  .mri-sheen-fine {
+    fill: none;
+    stroke: var(--mri-grey-light);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+  }
+
+  .mri-box.is-playing .mri-frame-outer {
+    animation: mri-draw 0.72s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
+  }
+  .mri-box.is-playing .mri-frame-inner {
+    animation: mri-draw 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards;
+  }
+  .mri-box.is-playing .mri-mullion,
+  .mri-box.is-playing .mri-transom {
+    animation: mri-draw 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--md, 0.4s) forwards;
+  }
+  .mri-box.is-playing .mri-handle {
+    animation: mri-draw 0.35s ease-out 0.88s forwards;
+  }
+  .mri-box.is-playing .mri-glass-fill {
+    animation: mri-glass-appear 0.45s ease-out 0.72s forwards;
+  }
+  /* Slow continuous daylight reflection gliding smoothly across glazing */
+  .mri-box.is-playing .mri-sheen-group {
+    animation: mri-sheen-drift 7.2s cubic-bezier(0.4, 0, 0.2, 1) 0.9s infinite;
+  }
+
+  @keyframes mri-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes mri-glass-appear {
+    to { opacity: 0.42; }
+  }
+  @keyframes mri-sheen-drift {
+    0% { opacity: 0; transform: translate(-42px, 42px); }
+    16% { opacity: 0.92; transform: translate(-8px, 8px); }
+    42% { opacity: 0.92; transform: translate(0, 0); }
+    72% { opacity: 0.85; transform: translate(10px, -10px); }
+    88% { opacity: 0; transform: translate(38px, -38px); }
+    100% { opacity: 0; transform: translate(-42px, 42px); }
+  }
+
+  /* ---------- Reduced motion: show crisp final completed states immediately ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .mri-plaster-coat { animation: none !important; transform: scaleX(1); opacity: 1; }
+    .mri-trowel { animation: none !important; opacity: 0; }
+    .mri-plaster-finish { animation: none !important; opacity: 1; }
+    .mri-tile { animation: none !important; opacity: 1; transform: none; }
+    .mri-ceil-main, .mri-ceil-rail, .mri-ceil-sub, .mri-ceil-tick, .mri-cord,
+    .mri-frame-outer, .mri-frame-inner, .mri-mullion, .mri-transom, .mri-handle {
+      animation: none !important;
+      stroke-dashoffset: 0;
+    }
+    .mri-pendant { animation: none !important; transform: none; }
+    .mri-lamp-head { animation: none !important; opacity: 1; transform: none; }
+    .mri-lamp-aura { animation: none !important; opacity: 1; transform: scale(1); }
+    .mri-light-emit { animation: none !important; opacity: 1; }
+    .mri-glass-fill { animation: none !important; opacity: 0.42; }
+    .mri-sheen-group { animation: none !important; opacity: 0.9; transform: none; }
+  }
+</style>

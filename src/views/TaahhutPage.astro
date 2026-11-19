@@ -2,12 +2,14 @@
 import Base from '../layouts/Base.astro';
 import ProjectList from '../components/ProjectList.astro';
 import CtaBand from '../components/CtaBand.astro';
+import MiniRenovationIcons, { type RenovationScene } from '../components/MiniRenovationIcons.astro';
 import { ROUTES, useT, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useT(lang);
 const p = t.taahhut;
+const stripScenes: RenovationScene[] = ['flooring', 'plaster', 'lighting'];
 ---
 <Base lang={lang} page="taahhut" title={t.meta.taahhut.title} description={t.meta.taahhut.desc} alternates={ROUTES.taahhut}>
   <header class="page-head">
@@ -18,7 +20,15 @@ const p = t.taahhut;
 
   <section class="section tight">
     <div class="scope-strip stagger">
-      {p.strip.map(([a, b]) => <div class="reveal"><b>{a}</b><p>{b}</p></div>)}
+      {p.strip.map(([a, b], i) => (
+        <div class="reveal scope-item">
+          <div class="scope-item-head">
+            <MiniRenovationIcons scene={stripScenes[i] ?? 'plaster'} lang={lang} size="sm" />
+            <b>{a}</b>
+          </div>
+          <p>{b}</p>
+        </div>
+      ))}
     </div>
   </section>
 
