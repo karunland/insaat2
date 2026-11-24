@@ -117,6 +117,8 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
   (function () {
     const STORAGE_KEY = 'maksef-intro-seen';
     const PHASE_STARTS = [0, 0.22, 0.45, 0.72];
+    const PLAYBACK_RATE = 1.8;
+    const REPLAY_RATE = 2.4;
 
     const root = document.documentElement;
     const figure = document.getElementById('heroRenovation');
@@ -374,17 +376,21 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       replayRaf = requestAnimationFrame(tickReplayProgress);
     }
 
-    function startDockedReplay() {
+    function startDockedReplay(rate?: number) {
       if (state !== 'docked' || !video) return;
       cancelAnimationFrame(replayRaf);
+      const targetRate = rate || REPLAY_RATE;
       video.muted = true;
       video.playsInline = true;
+      video.defaultPlaybackRate = targetRate;
+      video.playbackRate = targetRate;
       video.currentTime = 0;
       figure!.classList.add('is-replaying');
 
       const p = video.play();
       if (p && typeof p.then === 'function') {
         p.then(() => {
+          video.playbackRate = targetRate;
           replayRaf = requestAnimationFrame(tickReplayProgress);
         }).catch(() => {
           stopReplayUI();
@@ -404,6 +410,9 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     });
 
     /* ---------- Boot ---------- */
+    video.defaultPlaybackRate = PLAYBACK_RATE;
+    video.playbackRate = PLAYBACK_RATE;
+
     if (state === 'splash') {
       window.scrollTo(0, 0);
       if (video.parentElement !== mover) {
@@ -414,6 +423,8 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       video.muted = true;
       video.playsInline = true;
       video.loop = false;
+      video.defaultPlaybackRate = PLAYBACK_RATE;
+      video.playbackRate = PLAYBACK_RATE;
       video.currentTime = 0;
 
       skipBtn?.addEventListener('click', () => dockIntoHero(true));
@@ -424,11 +435,14 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       window.addEventListener('keydown', onSplashKeyDown);
 
       const playPromise = video.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(() => {
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.then(() => {
+          video.playbackRate = PLAYBACK_RATE;
+        }).catch(() => {
           // If browser blocks autoplay, allow a tap/click on the splash to start or skip
           const resumeOrSkip = () => {
             if (state !== 'splash') return;
+            video.playbackRate = PLAYBACK_RATE;
             video.play().catch(() => dockIntoHero(true));
           };
           chrome.addEventListener('pointerdown', resumeOrSkip, { once: true });
@@ -441,7 +455,17 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       }
       hideSplashElements();
       root.setAttribute('data-intro', 'docked');
-      seekToFinalFrame();
+      // Kullanıcı sayfayı yenilediğinde kenardaki küçük halinde hızlıca baştan oynayıp tamamlansın
+      const playDockedIntro = () => {
+        startDockedReplay(REPLAY_RATE);
+      };
+      if (video.readyState >= 2) {
+        playDockedIntro();
+      } else {
+        video.addEventListener('canplay', playDockedIntro, { once: true });
+        // Emniyet amaçlı zaman aşımı
+        setTimeout(playDockedIntro, 150);
+      }
     }
   })();
 </script>

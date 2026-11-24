@@ -7,7 +7,7 @@ interface Props { lang: Lang; p: Project }
 const { lang, p } = Astro.props;
 const t = useT(lang);
 ---
-<a class="sheet reveal" href={projectPath(lang, p.id)} data-status={p.data.durum}>
+<a class="sheet reveal" href={projectPath(lang, p.id)} data-status={p.data.durum} data-cat={p.data.kategori}>
   <div class="sheet-img">
     <Image src={p.data.kapak} alt="" widths={[480, 720, 960]} sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 400px" />
     <span class="badge" data-status={p.data.durum}>{t.common.status[p.data.durum]}</span>

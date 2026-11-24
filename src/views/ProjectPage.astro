@@ -45,7 +45,7 @@ const breadcrumb = {
   ],
 };
 ---
-<Base lang={lang} page="project" navCurrent={d.kategori} title={`${title} — MAKSEF`} description={p.text.ozet}
+<Base lang={lang} page="project" navCurrent="projects" title={`${title} — MAKSEF`} description={p.text.ozet}
       alternates={{ tr: projectPath('tr', id), en: projectPath('en', id) }}
       og={{ image: og.src, width: og.attributes.width as number, height: og.attributes.height as number, alt: title, type: 'article' }}
       jsonLd={[breadcrumb]}>
@@ -69,7 +69,6 @@ const breadcrumb = {
   )}
 
   <header class="page-head detail-head">
-    <p class="sheet-tag"><Fragment set:html={pt.tag} /> · {p.code}</p>
     <h1>{title}</h1>
   </header>
 

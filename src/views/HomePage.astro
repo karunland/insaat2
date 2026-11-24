@@ -30,7 +30,6 @@ const fmt = (v: number) => v.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
 <Base lang={lang} page="home" title={t.meta.home.title} description={t.meta.home.desc} alternates={ROUTES.home}>
   <section class="hero">
     <div class="hero-text">
-      <p class="sheet-tag" set:html={h.tag} />
       <h1 set:html={h.h1} />
       <p class="lead">{h.lead}</p>
       <div class="hero-actions">

@@ -765,3 +765,16 @@ body[data-page="project"] .detail-head {
 .map-canvas .leaflet-popup-content strong {
   font: 700 12px var(--f-mono); letter-spacing: .04em; text-transform: uppercase;
 }
+
+/* ---------- Projeler sayfası: filtre + sonsuz kaydırma ---------- */
+.projects-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
+.projects-count { margin: 20px 0 22px; font: 500 12px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.projects-more { display: flex; flex-direction: column; align-items: center; margin-top: 32px; }
+.projects-sentinel { display: block; width: 100%; height: 1px; }
+.btn-more {
+  padding: 12px 22px; border: 1.5px solid var(--ink); border-radius: 999px;
+  background: transparent; color: var(--ink); font: 500 13px var(--f-mono); cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.btn-more:hover { background: var(--ink); color: var(--paper); }
+.btn-more[hidden] { display: none; }

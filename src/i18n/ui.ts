@@ -26,7 +26,7 @@ const tr = {
     rights: 'Tüm hakları saklıdır.',
     footerNav: 'Alt menü',
     tb: { firm: 'FİRMA', page: 'SAYFA', sheet: 'PAFTA NO', scale: 'ÖLÇEK', lang: 'DİL', phone: 'TELEFON', mail: 'E-POSTA', date: 'TARİH', approved: 'ONAYLAYAN', gravity: 'Yer çekimi' },
-    nav: { home: 'Ana Sayfa', about: 'Hakkımızda', taahhut: 'Taahhüt', kentsel: 'Kentsel Dönüşüm', contact: 'İletişim', project: 'Proje' },
+    nav: { home: 'Ana Sayfa', about: 'Hakkımızda', taahhut: 'Taahhüt', kentsel: 'Kentsel Dönüşüm', projects: 'Projeler', contact: 'İletişim', project: 'Proje' },
     cat: { taahhut: 'Taahhüt', kentsel: 'Kentsel Dönüşüm' },
     status: { tamamlandi: 'Tamamlandı', devam: 'Devam Ediyor' },
     filterAria: 'Duruma göre filtrele',
@@ -42,6 +42,7 @@ const tr = {
     about: { title: 'Hakkımızda — MAKSEF', desc: 'MAKSEF hakkında: faaliyet alanları, çalışma ilkeleri ve referans kurumlar.' },
     taahhut: { title: 'Taahhüt Projeleri — MAKSEF', desc: 'Kamu kurumları için yürüttüğümüz altyapı ve bina taahhüt projeleri.' },
     kentsel: { title: 'Kentsel Dönüşüm — MAKSEF', desc: 'Riskli binanız için kentsel dönüşüm: süreç, projelerimiz ve ön değerlendirme başvurusu.' },
+    projects: { title: 'Projeler — MAKSEF', desc: 'MAKSEF taahhüt ve kentsel dönüşüm projelerinin tamamı: kategori ve duruma göre filtreleyin.' },
     contact: { title: 'İletişim — MAKSEF', desc: 'MAKSEF ile iletişime geçin: adres, telefon, e-posta, harita ve iletişim formu.' },
     notFound: { title: 'Sayfa bulunamadı — MAKSEF', desc: 'Aradığınız sayfa bulunamadı.' },
   },
@@ -64,7 +65,7 @@ const tr = {
       phases: ['Söküm & Hazırlık', 'Zemin & Altyapı', 'Tavan & Sistemler', 'İnce İşler & Teslim'],
     },
     ticker: ['Taahhüt', 'Kentsel Dönüşüm', 'Altyapı', 'Kamu Binaları', 'Atıksu & İçme Suyu', 'Güçlendirme', 'Anahtar Teslim', '6306 Sayılı Kanun'],
-    areasTag: 'FAALİYET ALANLARI',
+    areasTag: '',
     areasH: 'İki alan, <em>tek disiplin.</em>',
     featuredTag: '',
     featuredH: 'Projeler',
@@ -131,7 +132,7 @@ const tr = {
       'Altyapıda atıksu ve içme suyu hatlarından, üstyapıda hastane ve eğitim binalarının onarım ve güçlendirmesine kadar geniş bir alanda deneyim kazandık.',
       'Kentsel dönüşümde işimiz yalnızca bina yapmak değil: riskli yapı tespitinden anahtar teslime kadar, her hak sahibinin sürecin neresinde olduğunu bildiği şeffaf bir ilişki kurmak.',
     ],
-    areasTag: 'FAALİYET ALANLARI',
+    areasTag: '',
     areasH: 'Neler <em>yapıyoruz?</em>',
     expTag: 'DENEYİM',
     expH: 'Üç ilke, <em>her projede.</em>',
@@ -225,6 +226,14 @@ const tr = {
     mapCaption: 'KONUM PLANI',
   },
 
+  projects: {
+    tag: 'PAFTA 04 <i></i> PROJELER',
+    h1: 'Projeler',
+    catAria: 'Kategoriye göre filtrele',
+    count: '{total} projeden {shown} tanesi gösteriliyor',
+    loadMore: 'Daha fazla proje göster',
+  },
+
   project: {
     tag: 'PAFTA 04 <i></i> PROJE',
     kunye: 'KÜNYE',
@@ -278,7 +287,7 @@ const en: typeof tr = {
     rights: 'All rights reserved.',
     footerNav: 'Footer menu',
     tb: { firm: 'COMPANY', page: 'PAGE', sheet: 'SHEET NO', scale: 'SCALE', lang: 'LANG', phone: 'PHONE', mail: 'EMAIL', date: 'DATE', approved: 'APPROVED BY', gravity: 'Gravity' },
-    nav: { home: 'Home', about: 'About', taahhut: 'Contracting', kentsel: 'Urban Renewal', contact: 'Contact', project: 'Project' },
+    nav: { home: 'Home', about: 'About', taahhut: 'Contracting', kentsel: 'Urban Renewal', projects: 'Projects', contact: 'Contact', project: 'Project' },
     cat: { taahhut: 'Contracting', kentsel: 'Urban Renewal' },
     status: { tamamlandi: 'Completed', devam: 'Ongoing' },
     filterAria: 'Filter by status',
@@ -294,6 +303,7 @@ const en: typeof tr = {
     about: { title: 'About — MAKSEF', desc: 'About MAKSEF: business areas, working principles and references.' },
     taahhut: { title: 'Contracting Projects — MAKSEF', desc: 'Infrastructure and building projects delivered for public institutions.' },
     kentsel: { title: 'Urban Renewal — MAKSEF', desc: 'Urban renewal for at-risk buildings: the process, our projects and a preliminary assessment application.' },
+    projects: { title: 'Projects — MAKSEF', desc: 'All MAKSEF contracting and urban renewal projects — filter by category and status.' },
     contact: { title: 'Contact — MAKSEF', desc: 'Contact MAKSEF: address, phone, email, map and contact form.' },
     notFound: { title: 'Page not found — MAKSEF', desc: 'The page you are looking for could not be found.' },
   },
@@ -474,6 +484,14 @@ const en: typeof tr = {
     info: { addr: 'Address', phone: 'Phone', mail: 'Email', hours: 'Office hours', hoursValue: 'Mon–Fri · 08:30–18:00', directions: 'Get directions ↗' },
     mapTitle: 'Map of the MAKSEF office location',
     mapCaption: 'SITE PLAN',
+  },
+
+  projects: {
+    tag: 'SHEET 04 <i></i> PROJECTS',
+    h1: 'Projects',
+    catAria: 'Filter by category',
+    count: 'Showing {shown} of {total} projects',
+    loadMore: 'Show more projects',
   },
 
   project: {

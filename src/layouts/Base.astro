@@ -22,7 +22,7 @@ const t = useT(lang);
 const other = otherLang(lang);
 const abs = (p: string) => new URL(p, SITE.url).href;
 const canonical = abs(Astro.url.pathname);
-const PAFTA: Record<string, string> = { home: '00', about: '01', taahhut: '02', kentsel: '03', project: '04', contact: '05', notFound: '—' };
+const PAFTA: Record<string, string> = { home: '00', about: '01', taahhut: '02', kentsel: '03', project: '04', projects: '04', contact: '05', notFound: '—' };
 const pageName = page === 'notFound' ? '404' : t.common.nav[page];
 const current = navCurrent ?? page;
 const year = new Date().getFullYear();
@@ -64,8 +64,8 @@ const website = {
 };
 const ld = { '@context': 'https://schema.org', '@graph': [org, website, ...jsonLd] };
 
-const navKeys: RouteKey[] = ['about', 'taahhut', 'kentsel', 'contact'];
-const footKeys: RouteKey[] = ['home', 'about', 'taahhut', 'kentsel', 'contact'];
+const navKeys: RouteKey[] = ['about', 'taahhut', 'kentsel', 'projects', 'contact'];
+const footKeys: RouteKey[] = ['home', 'about', 'taahhut', 'kentsel', 'projects', 'contact'];
 ---
 <!doctype html>
 <html lang={lang}>
@@ -97,6 +97,9 @@ const footKeys: RouteKey[] = ['home', 'about', 'taahhut', 'kentsel', 'contact'];
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/logo.png">
   <link rel="sitemap" href="/sitemap-index.xml">
+  {page === 'home' && (
+    <link rel="preload" href="/assets/aistudio/gemini_generated_video_9b3b5cb3_e95d0ef8.mp4" as="video" type="video/mp4" />
+  )}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">

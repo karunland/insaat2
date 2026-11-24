@@ -455,4 +455,102 @@
       msg.textContent = I18N.formMail;
     });
   });
+  /* ---------- Projeler sayfası: kategori + durum filtresi, aşağı kaydırdıkça yükleme ---------- */
+  (function () {
+    var wrap = $('[data-projects]');
+    if (!wrap) return;
+    var list = $('[data-projects-list]', wrap);
+    var cards = $$('.sheet', list);
+    var empty = $('.empty', list);
+    var counter = $('[data-projects-count]', wrap);
+    var moreBtn = $('[data-projects-more]', wrap);
+    var sentinel = $('[data-projects-sentinel]', wrap);
+    var pageSize = parseInt(wrap.dataset.pageSize, 10) || 9;
+    var tpl = wrap.dataset.countTpl || '{shown} / {total}';
+    var state = { cat: 'all', status: 'all', limit: pageSize };
+
+    // Adres çubuğundaki ?kategori=…&durum=… ile başlangıç filtresi
+    var params = new URLSearchParams(window.location.search);
+    var keys = { cat: 'kategori', status: 'durum' };
+    var groups = $$('.filters[data-filter]', wrap);
+    groups.forEach(function (g) {
+      var key = g.dataset.filter;
+      var v = params.get(keys[key]);
+      if (v && $('.chip[data-value="' + v + '"]', g)) state[key] = v;
+    });
+
+    function matches(card) {
+      return (state.cat === 'all' || card.dataset.cat === state.cat) &&
+             (state.status === 'all' || card.dataset.status === state.status);
+    }
+
+    function render(animateFrom) {
+      var matched = cards.filter(matches);
+      var shownCount = Math.min(state.limit, matched.length);
+      cards.forEach(function (card) {
+        var idx = matched.indexOf(card);
+        var visible = idx > -1 && idx < state.limit;
+        var wasHidden = card.hidden;
+        card.hidden = !visible;
+        if (visible) {
+          card.classList.add('is-in');
+          if (wasHidden && !reduceMotion && typeof card.animate === 'function' && idx >= (animateFrom || 0)) {
+            card.animate([
+              { opacity: 0, transform: 'translateY(14px) scale(.98)' },
+              { opacity: 1, transform: 'translateY(0) scale(1)' },
+            ], { duration: 430, delay: Math.min(idx - (animateFrom || 0), 5) * 55, easing: 'cubic-bezier(.2, .7, .1, 1)' }).finished.catch(function () {});
+          }
+        }
+      });
+      if (empty) empty.hidden = matched.length > 0;
+      if (counter) counter.textContent = matched.length ? tpl.replace('{shown}', shownCount).replace('{total}', matched.length) : '';
+      var hasMore = matched.length > state.limit;
+      moreBtn.hidden = !hasMore;
+      sentinel.hidden = !hasMore;
+      groups.forEach(function (g) {
+        $$('.chip', g).forEach(function (c) {
+          var on = c.dataset.value === state[g.dataset.filter];
+          c.classList.toggle('is-active', on);
+          c.setAttribute('aria-pressed', String(on));
+        });
+      });
+    }
+
+    function syncUrl() {
+      var q = new URLSearchParams();
+      if (state.cat !== 'all') q.set(keys.cat, state.cat);
+      if (state.status !== 'all') q.set(keys.status, state.status);
+      var qs = q.toString();
+      history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+    }
+
+    function loadMore() {
+      var from = state.limit;
+      state.limit += pageSize;
+      render(from);
+    }
+
+    groups.forEach(function (g) {
+      $$('.chip', g).forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          var key = g.dataset.filter;
+          if (state[key] === chip.dataset.value) return;
+          state[key] = chip.dataset.value;
+          state.limit = pageSize;
+          render(0);
+          syncUrl();
+        });
+      });
+    });
+
+    moreBtn.addEventListener('click', loadMore);
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting && !sentinel.hidden) loadMore(); });
+      }, { rootMargin: '0px 0px 300px 0px' }).observe(sentinel);
+    }
+
+    render(cards.length);
+  })();
 })();

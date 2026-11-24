@@ -207,8 +207,35 @@ for (let sum = 0; sum <= 4; sum++) {
       {/* Subtle glass tint fill */}
       <rect x="27" y="25" width="106" height="110" class="mri-glass-fill" />
 
-      {/* Sleek diagonal grey glass reflection lines slowly drifting across panes */}
+      {/* Background celestial view behind the window (Sun by day / Moon & stars by night) */}
       <g clip-path={`url(#${uid}-panes)`}>
+        {/* Daytime: Warm radiant sun in the top-right pane */}
+        <g class="mri-sky-day">
+          <circle cx="114" cy="44" r="9" class="mri-sun-core" />
+          <g class="mri-sun-rays">
+            <line x1="114" y1="30" x2="114" y2="33" class="mri-sun-ray" />
+            <line x1="114" y1="55" x2="114" y2="58" class="mri-sun-ray" />
+            <line x1="100" y1="44" x2="103" y2="44" class="mri-sun-ray" />
+            <line x1="125" y1="44" x2="128" y2="44" class="mri-sun-ray" />
+            <line x1="104" y1="34" x2="106" y2="36" class="mri-sun-ray" />
+            <line x1="122" y1="52" x2="124" y2="54" class="mri-sun-ray" />
+            <line x1="104" y1="54" x2="106" y2="52" class="mri-sun-ray" />
+            <line x1="122" y1="36" x2="124" y2="34" class="mri-sun-ray" />
+          </g>
+        </g>
+
+        {/* Nighttime: Crescent moon and twinkling stars in dark mode */}
+        <g class="mri-sky-night">
+          {/* Elegant architectural crescent moon */}
+          <path d="M118 36 A10 10 0 1 0 126 50 A8.5 8.5 0 1 1 118 36 Z" class="mri-moon" />
+          {/* Twinkling stars */}
+          <circle cx="48" cy="40" r="1.4" class="mri-star mri-star-1" />
+          <circle cx="82" cy="38" r="1.2" class="mri-star mri-star-2" />
+          <circle cx="74" cy="46" r="0.9" class="mri-star mri-star-3" />
+          <circle cx="104" cy="46" r="1.1" class="mri-star mri-star-4" />
+        </g>
+
+        {/* Sleek diagonal glass reflection lines slowly drifting across panes */}
         <g class="mri-sheen-group">
           <line x1="16" y1="92" x2="72" y2="36" class="mri-sheen-bold" />
           <line x1="24" y1="102" x2="80" y2="46" class="mri-sheen-fine" />
@@ -288,33 +315,44 @@ for (let sum = 0; sum <= 4; sum++) {
     --mri-grey: #8E8E93;
     --mri-grey-light: #D1D1D6;
     --mri-surface: #FFFFFF;
-    --mri-glow: #FFFFFF;
 
-    /* Theme-reactive Lighting states — Light mode = daytime (subtle/off architectural luminaire) */
-    --mri-bulb-fill: #D1D1D6;
-    --mri-glow-inner-op: 0.16;
-    --mri-glow-outer-op: 0.28;
+    /* GÜNDÜZ / AÇIK TEMA: Lamba kapalı (gündüz vakti), pencerede güneş var */
+    --mri-bulb-fill: #E5E5EA;
+    --mri-glow: transparent;
+    --mri-glow-inner-op: 0;
+    --mri-glow-outer-op: 0;
+    --mri-cone-stroke: transparent;
     --mri-cone-op: 0;
-    --mri-pool-op: 0.16;
-    --mri-aura-scale-min: 0.96;
-    --mri-aura-scale-max: 1.02;
+    --mri-pool-op: 0;
+    --mri-aura-scale-min: 1;
+    --mri-aura-scale-max: 1;
+
+    /* Gündüz gökyüzü görünürlüğü (Güneş açık, Gece kapalı) */
+    --mri-day-op: 1;
+    --mri-night-op: 0;
   }
 
-  /* Dark "Ozalit" blueprint mode (#0D3466) = nighttime illuminated pendants! */
+  /* GECE / KARANLIK (OZALİT) TEMA: Lamba AÇIK, sıcak sarı parlıyor! Pencerede ay & yıldızlar var */
   :root[data-theme="dark"] {
     --mri-ink: #FFFFFF;
     --mri-grey: #8E8E93;
     --mri-grey-light: #D1D1D6;
     --mri-surface: #0D3466;
-    --mri-glow: #FFFFFF;
 
-    --mri-bulb-fill: #FFFFFF;
-    --mri-glow-inner-op: 0.34;
-    --mri-glow-outer-op: 0.85;
-    --mri-cone-op: 0.28;
-    --mri-pool-op: 0.85;
-    --mri-aura-scale-min: 0.92;
-    --mri-aura-scale-max: 1.1;
+    /* Gece vakti lamba ışığı yanıyor */
+    --mri-bulb-fill: #FFB800;
+    --mri-glow: #FFD439;
+    --mri-glow-inner-op: 0.85;
+    --mri-glow-outer-op: 0.65;
+    --mri-cone-stroke: #FFC72C;
+    --mri-cone-op: 0.55;
+    --mri-pool-op: 0.75;
+    --mri-aura-scale-min: 0.95;
+    --mri-aura-scale-max: 1.15;
+
+    /* Gece gökyüzü görünürlüğü (Ay ve Yıldızlar açık) */
+    --mri-day-op: 0;
+    --mri-night-op: 1;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -322,15 +360,19 @@ for (let sum = 0; sum <= 4; sum++) {
       --mri-grey: #8E8E93;
       --mri-grey-light: #D1D1D6;
       --mri-surface: #0D3466;
-      --mri-glow: #FFFFFF;
 
-      --mri-bulb-fill: #FFFFFF;
-      --mri-glow-inner-op: 0.34;
-      --mri-glow-outer-op: 0.85;
-      --mri-cone-op: 0.28;
-      --mri-pool-op: 0.85;
-      --mri-aura-scale-min: 0.92;
-      --mri-aura-scale-max: 1.1;
+      --mri-bulb-fill: #FFB800;
+      --mri-glow: #FFD439;
+      --mri-glow-inner-op: 0.85;
+      --mri-glow-outer-op: 0.65;
+      --mri-cone-stroke: #FFC72C;
+      --mri-cone-op: 0.55;
+      --mri-pool-op: 0.75;
+      --mri-aura-scale-min: 0.95;
+      --mri-aura-scale-max: 1.15;
+
+      --mri-day-op: 0;
+      --mri-night-op: 1;
     }
   }
 
@@ -553,11 +595,11 @@ for (let sum = 0; sum <= 4; sum++) {
   }
   .mri-light-cone {
     fill: none;
-    stroke: var(--mri-grey-light);
-    stroke-width: 1;
+    stroke: var(--mri-cone-stroke, var(--mri-grey-light));
+    stroke-width: 1.25;
     stroke-dasharray: 2.5 3.5;
     opacity: var(--mri-cone-op);
-    transition: opacity 0.5s var(--ease);
+    transition: opacity 0.5s var(--ease), stroke 0.5s var(--ease);
   }
   .mri-lamp-aura {
     opacity: 0;
@@ -757,4 +799,56 @@ for (let sum = 0; sum <= 4; sum++) {
     .mri-glass-fill { animation: none !important; opacity: 0.42; }
     .mri-sheen-group { animation: none !important; opacity: 0.9; transform: none; }
   }
+
+  /* =========================================================
+     SUN / MOON & STARS (Theme-reactive glazing backdrop)
+     ========================================================= */
+  .mri-sky-day {
+    opacity: var(--mri-day-op, 1);
+    transition: opacity 0.4s var(--ease);
+  }
+  .mri-sun-core {
+    fill: #FFB800;
+    stroke: #E8A900;
+    stroke-width: 1.25;
+    transition: transform 0.4s var(--ease);
+  }
+  .mri-sun-ray {
+    stroke: #FFB800;
+    stroke-width: 1.25;
+    stroke-linecap: round;
+  }
+  .mri-box.is-playing .mri-sun-rays {
+    animation: mri-sun-spin 18s linear infinite;
+    transform-origin: 114px 44px;
+  }
+
+  .mri-sky-night {
+    opacity: var(--mri-night-op, 0);
+    transition: opacity 0.4s var(--ease);
+  }
+  .mri-moon {
+    fill: #F5E8C7;
+    stroke: #FFF7DB;
+    stroke-width: 0.75;
+    filter: drop-shadow(0 0 3px rgba(255, 247, 219, 0.4));
+  }
+  .mri-star {
+    fill: #FFFFFF;
+    opacity: 0.85;
+  }
+  .mri-star-1 { animation: mri-twinkle 2.8s ease-in-out infinite; }
+  .mri-star-2 { animation: mri-twinkle 3.4s ease-in-out 0.8s infinite; }
+  .mri-star-3 { animation: mri-twinkle 2.2s ease-in-out 1.4s infinite; }
+  .mri-star-4 { animation: mri-twinkle 3.1s ease-in-out 0.4s infinite; }
+
+  @keyframes mri-sun-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes mri-twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
 </style>

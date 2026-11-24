@@ -5,6 +5,7 @@ export const ROUTES = {
   about:   { tr: '/hakkimizda/',      en: '/en/about/' },
   taahhut: { tr: '/taahhut/',         en: '/en/contracting/' },
   kentsel: { tr: '/kentsel-donusum/', en: '/en/urban-renewal/' },
+  projects: { tr: '/projeler/',       en: '/en/projects/' },
   contact: { tr: '/iletisim/',        en: '/en/contact/' },
   project: { tr: '/projeler/',        en: '/en/projects/' },
 };

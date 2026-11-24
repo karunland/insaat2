@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { ROUTES, useT, type Lang } from '../i18n/ui';
+import { getProjects } from '../lib/projects';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const pt = t.projects;
+
+const items = await getProjects(lang);
+const cats = ['all', 'taahhut', 'kentsel'] as const;
+const statuses = ['all', 'tamamlandi', 'devam'] as const;
+const catCount = (c: (typeof cats)[number]) => items.filter((p) => c === 'all' || p.data.kategori === c).length;
+const statusCount = (s: (typeof statuses)[number]) => items.filter((p) => s === 'all' || p.data.durum === s).length;
+const catLabel = (c: (typeof cats)[number]) => (c === 'all' ? t.common.filter.all : t.common.cat[c]);
+// Sayfa başına gösterilecek kart sayısı; aşağı kaydırdıkça bir sonraki grup yüklenir
+const PAGE_SIZE = 9;
+---
+<Base lang={lang} page="projects" title={t.meta.projects.title} description={t.meta.projects.desc} alternates={ROUTES.projects}>
+  <header class="page-head">
+    <h1 set:html={pt.h1} />
+  </header>
+
+  <section class="section tight" data-projects data-page-size={PAGE_SIZE} data-count-tpl={pt.count}>
+    <div class="projects-toolbar reveal">
+      <div class="filters" role="group" aria-label={pt.catAria} data-filter="cat">
+        {cats.map((c, i) => (
+          <button type="button" class:list={['chip', { 'is-active': i === 0 }]} data-value={c} aria-pressed={i === 0 ? 'true' : 'false'}>
+            {catLabel(c)} <small>{catCount(c)}</small>
+          </button>
+        ))}
+      </div>
+      <div class="filters" role="group" aria-label={t.common.filterAria} data-filter="status">
+        {statuses.map((s, i) => (
+          <button type="button" class:list={['chip', { 'is-active': i === 0 }]} data-value={s} aria-pressed={i === 0 ? 'true' : 'false'}>
+            {t.common.filter[s]} <small>{statusCount(s)}</small>
+          </button>
+        ))}
+      </div>
+    </div>
+    <p class="projects-count" aria-live="polite" data-projects-count></p>
+
+    <div class="projects" data-projects-list>
+      {items.map((p) => <ProjectCard lang={lang} p={p} />)}
+      <p class="empty" hidden={items.length > 0}>{t.common.empty}</p>
+    </div>
+
+    <div class="projects-more">
+      <span class="projects-sentinel" data-projects-sentinel aria-hidden="true"></span>
+      <button type="button" class="btn-more" data-projects-more hidden>{pt.loadMore}</button>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>
