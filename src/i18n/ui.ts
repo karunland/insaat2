@@ -114,13 +114,13 @@ const tr = {
     taahhut: {
       h: 'Taahhüt',
       p: 'Kamu kurumlarının ihaleyle verdiği altyapı ve bina işlerini; şartnameye, takvime ve bütçeye sadık kalarak yürütüyoruz.',
-      ticks: ['Atıksu, içme suyu ve yağmursuyu hatları', 'Kamu binalarında onarım ve güçlendirme', 'İş programı ve hakediş disiplini'],
+      ticks: ['Kamu binalarında onarım ve güçlendirme', 'İş programı ve hakediş disiplini'],
       link: 'Taahhüt projeleri',
     },
     kentsel: {
       h: 'Kentsel Dönüşüm',
       p: 'Deprem riski taşıyan binanızı, hak sahipleriyle şeffaf bir süreç içinde yıkıp bugünün yönetmeliğine göre yeniden inşa ediyoruz.',
-      ticks: ['Riskli yapı tespitinden anahtar teslime', 'Her malikle açık sözleşme ve düzenli bilgi', "TBDY 2018'e uygun yeni yapı"],
+      ticks: ['Her malikle açık sözleşme ve düzenli bilgi'],
       link: 'Kentsel dönüşüm',
     },
   },
