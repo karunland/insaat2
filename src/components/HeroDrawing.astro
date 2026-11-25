@@ -1,10 +1,35 @@
 ---
-import { useT, type Lang } from '../i18n/ui';
+import { projectPath, useT, type Lang } from '../i18n/ui';
+import { getProjects } from '../lib/projects';
+
 interface Props { lang: Lang }
-const t = useT(Astro.props.lang);
+const { lang } = Astro.props;
+const t = useT(lang);
 const r = t.home.renovation;
-const videoSrc = '/assets/aistudio/gemini_generated_video_9b3b5cb3_e95d0ef8.mp4';
-const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
+
+const allProjects = await getProjects(lang);
+const byId = new Map(allProjects.map((p) => [p.id, p]));
+
+const slides = [
+  {
+    slug: 'altinboynuz-tesisleri',
+    title: byId.get('altinboynuz-tesisleri')?.text.baslik ?? 'Haliç Altınboynuz Sosyal Tesisleri ve Kıyı Düzenlemesi',
+    href: projectPath(lang, 'altinboynuz-tesisleri'),
+    src: '/assets/aistudio/gemini_generated_video_9b3b5cb3_e95d0ef8.mp4',
+    poster: '/assets/aistudio/renovation_end_poster.webp',
+    masked: true,
+  },
+  {
+    slug: 'bostanci-kentsel-donusum',
+    title: byId.get('bostanci-kentsel-donusum')?.text.baslik ?? 'Bostancı Mahallesi Kentsel Dönüşüm Projesi',
+    href: projectPath(lang, 'bostanci-kentsel-donusum'),
+    src: '/assets/aistudio/bostanci_kentsel_donusum.mp4',
+    poster: '/assets/aistudio/bostanci_end_poster.jpg',
+    masked: false,
+  },
+];
+
+const slidesMeta = slides.map(({ title, href }) => ({ title, href }));
 ---
 
 <div class="intro-backdrop" id="introBackdrop" aria-hidden="true"></div>
@@ -62,20 +87,34 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
   class="hero-drawing hero-renovation"
   id="heroRenovation"
   aria-label={t.home.drawingAria}
-  data-caption-default={r.captionLeft}
   data-phases={JSON.stringify(r.phases)}
+  data-slides={JSON.stringify(slidesMeta)}
 >
   <div class="hero-video-slot" id="heroVideoSlot">
-    <video
-      id="renovationVideo"
-      class="renovation-video"
-      src={videoSrc}
-      poster={posterSrc}
-      muted
-      playsinline
-      preload="auto"
-      disablepictureinpicture
-    ></video>
+    <div class="hero-slider-track" id="heroSliderTrack">
+      {slides.map((slide, idx) => (
+        <div class:list={['hero-slide', { 'is-masked': slide.masked }]} data-slide={idx}>
+          <div class="hero-slide-media" id={`heroSlideSlot${idx}`}>
+            <video
+              id={idx === 0 ? 'renovationVideo' : `renovationVideo${idx}`}
+              class:list={['renovation-video', { 'renovation-video--masked': slide.masked }]}
+              src={slide.src}
+              poster={slide.poster}
+              muted
+              playsinline
+              preload={idx === 0 ? 'auto' : 'metadata'}
+              disablepictureinpicture
+            ></video>
+          </div>
+          <a
+            class="hero-slide-overlay"
+            href={slide.href}
+            aria-label={`${slide.title} — ${r.viewProject}`}
+            tabindex="-1"
+          ></a>
+        </div>
+      ))}
+    </div>
   </div>
 
   <div class="hero-progress-track" aria-hidden="true">
@@ -83,19 +122,42 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
   </div>
 
   <figcaption class="caption hero-renovation-caption">
-    <span class="hero-phase-label" id="heroPhaseLabel">{r.captionLeft}</span>
-    <button
-      type="button"
-      class="hero-replay-btn"
-      id="heroReplay"
-      aria-label={r.replayAria}
-    >
-      <svg class="replay-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" aria-hidden="true">
-        <path d="M2.75 7.5A5.25 5.25 0 1 1 4.4 11.4" />
-        <path d="M2.5 3.5v4h4" />
-      </svg>
-      <span>{r.replay}</span>
-    </button>
+    <a class="hero-project-link" id="heroProjectLink" href={slides[0].href} title={r.viewProject}>
+      <span class="hero-project-title" id="heroProjectTitle">{slides[0].title}</span>
+      <span class="hero-project-arrow" aria-hidden="true">↗</span>
+    </a>
+
+    <div class="hero-slider-controls">
+      <button type="button" class="hero-nav-btn" id="heroPrev" aria-label={r.prevAria}>
+        <span aria-hidden="true">←</span>
+      </button>
+      <div class="hero-dots" id="heroDots">
+        {slides.map((slide, idx) => (
+          <button
+            type="button"
+            class:list={['hero-dot', { 'is-active': idx === 0 }]}
+            data-dot={idx}
+            aria-label={slide.title}
+            aria-pressed={idx === 0 ? 'true' : 'false'}
+          ></button>
+        ))}
+      </div>
+      <button type="button" class="hero-nav-btn" id="heroNext" aria-label={r.nextAria}>
+        <span aria-hidden="true">→</span>
+      </button>
+      <button
+        type="button"
+        class="hero-replay-btn"
+        id="heroReplay"
+        aria-label={r.replayAria}
+        title={r.replay}
+      >
+        <svg class="replay-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" aria-hidden="true">
+          <path d="M2.75 7.5A5.25 5.25 0 1 1 4.4 11.4" />
+          <path d="M2.5 3.5v4h4" />
+        </svg>
+      </button>
+    </div>
   </figcaption>
 </figure>
 
@@ -118,12 +180,15 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     const STORAGE_KEY = 'maksef-intro-seen';
     const PHASE_STARTS = [0, 0.22, 0.45, 0.72];
     const PLAYBACK_RATE = 1.8;
-    const REPLAY_RATE = 2.4;
+    const REPLAY_RATE = 1.35;
+    const AUTO_SLIDE_DELAY = 1400;
 
     const root = document.documentElement;
     const figure = document.getElementById('heroRenovation');
     const slot = document.getElementById('heroVideoSlot');
-    const video = document.getElementById('renovationVideo') as HTMLVideoElement | null;
+    const track = document.getElementById('heroSliderTrack');
+    const slideSlot0 = document.getElementById('heroSlideSlot0');
+    const video0 = document.getElementById('renovationVideo') as HTMLVideoElement | null;
     const backdrop = document.getElementById('introBackdrop');
     const mover = document.getElementById('introMover');
     const chrome = document.getElementById('introChrome');
@@ -132,12 +197,28 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     const mobilePhaseEl = document.getElementById('introMobilePhase');
     const phaseItems = Array.from(document.querySelectorAll<HTMLLIElement>('#introPhases .intro-phase'));
     const replayBtn = document.getElementById('heroReplay');
+    const prevBtn = document.getElementById('heroPrev');
+    const nextBtn = document.getElementById('heroNext');
+    const dotBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('#heroDots .hero-dot'));
+    const projectLink = document.getElementById('heroProjectLink') as HTMLAnchorElement | null;
+    const projectTitle = document.getElementById('heroProjectTitle');
     const heroProgressFill = document.getElementById('heroProgressFill');
-    const heroPhaseLabel = document.getElementById('heroPhaseLabel');
 
-    if (!figure || !slot || !video || !backdrop || !mover || !chrome) return;
+    if (!figure || !slot || !track || !slideSlot0 || !video0 || !backdrop || !mover || !chrome) return;
 
-    const defaultCaption = figure.dataset.captionDefault || '';
+    const videos = Array.from(figure.querySelectorAll<HTMLVideoElement>('.renovation-video'));
+    if (!videos.includes(video0)) {
+      videos.unshift(video0);
+    }
+
+    const slidesMeta: { title: string; href: string }[] = (() => {
+      try {
+        return JSON.parse(figure.dataset.slides || '[]');
+      } catch {
+        return [];
+      }
+    })();
+
     const phases: string[] = (() => {
       try {
         return JSON.parse(figure.dataset.phases || '[]');
@@ -150,11 +231,21 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     const initialMode = root.getAttribute('data-intro');
     let state: 'splash' | 'transitioning' | 'docked' = initialMode === 'splash' && !reduceMotion ? 'splash' : 'docked';
 
+    let activeIdx = 0;
     let splashRaf = 0;
     let replayRaf = 0;
+    let autoSlideTimer = 0;
+    let isHovered = false;
     let touchStartY = 0;
+    let swipeStartX = 0;
+    let swipeStartY = 0;
+    let didSwipe = false;
     let hasStartedPlayback = false;
     let activeFlipAnim: Animation | null = null;
+
+    function getActiveVideo(): HTMLVideoElement | null {
+      return videos[activeIdx] ?? video0;
+    }
 
     function getPhaseIndex(ratio: number): number {
       let idx = 0;
@@ -164,25 +255,25 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       return idx;
     }
 
-    function seekToFinalFrame() {
-      if (!video) return;
-      video.pause();
+    function seekToFinalFrame(vid: HTMLVideoElement | null = getActiveVideo()) {
+      if (!vid) return;
+      vid.pause();
       const applyEnd = () => {
-        if (Number.isFinite(video.duration) && video.duration > 0) {
-          const target = Math.max(0, video.duration - 0.06);
-          if (Math.abs(video.currentTime - target) > 0.04) {
+        if (Number.isFinite(vid.duration) && vid.duration > 0) {
+          const target = Math.max(0, vid.duration - 0.06);
+          if (Math.abs(vid.currentTime - target) > 0.04) {
             try {
-              video.currentTime = target;
+              vid.currentTime = target;
             } catch {
               // Ignore seek errors on unloaded media
             }
           }
         }
       };
-      if (video.readyState >= 1) {
+      if (vid.readyState >= 1) {
         applyEnd();
       } else {
-        video.addEventListener('loadedmetadata', applyEnd, { once: true });
+        vid.addEventListener('loadedmetadata', applyEnd, { once: true });
       }
     }
 
@@ -197,17 +288,32 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       if (progressFill) {
         progressFill.style.transform = `scaleX(${clamped.toFixed(4)})`;
       }
-      const activeIdx = getPhaseIndex(clamped);
+      const activePhaseIdx = getPhaseIndex(clamped);
       phaseItems.forEach((item, idx) => {
-        const nextState = idx < activeIdx ? 'done' : idx === activeIdx ? 'active' : 'pending';
+        const nextState = idx < activePhaseIdx ? 'done' : idx === activePhaseIdx ? 'active' : 'pending';
         if (item.dataset.state !== nextState) {
           item.dataset.state = nextState;
         }
       });
-      if (mobilePhaseEl && phases[activeIdx]) {
-        const text = `0${activeIdx + 1} · ${phases[activeIdx]}`;
+      if (mobilePhaseEl && phases[activePhaseIdx]) {
+        const text = `0${activePhaseIdx + 1} · ${phases[activePhaseIdx]}`;
         if (mobilePhaseEl.textContent !== text) mobilePhaseEl.textContent = text;
       }
+    }
+
+    function clearAutoSlide() {
+      if (autoSlideTimer) {
+        window.clearTimeout(autoSlideTimer);
+        autoSlideTimer = 0;
+      }
+    }
+
+    function scheduleAutoSlide() {
+      clearAutoSlide();
+      if (state !== 'docked' || reduceMotion || videos.length < 2 || isHovered) return;
+      autoSlideTimer = window.setTimeout(() => {
+        goToSlide((activeIdx + 1) % videos.length, true);
+      }, AUTO_SLIDE_DELAY);
     }
 
     function finishDocking() {
@@ -220,14 +326,15 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
         activeFlipAnim = null;
       }
 
-      if (video!.parentElement !== slot) {
-        slot!.appendChild(video!);
+      if (video0!.parentElement !== slideSlot0) {
+        slideSlot0!.appendChild(video0!);
       }
-      seekToFinalFrame();
+      seekToFinalFrame(video0);
       hideSplashElements();
       mover!.removeAttribute('style');
       root.setAttribute('data-intro', 'docked');
       state = 'docked';
+      scheduleAutoSlide();
     }
 
     function cleanupSplashListeners() {
@@ -235,7 +342,7 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       window.removeEventListener('touchstart', onSplashTouchStart);
       window.removeEventListener('touchmove', onSplashTouchMove);
       window.removeEventListener('keydown', onSplashKeyDown);
-      video?.removeEventListener('ended', onSplashVideoEnded);
+      video0?.removeEventListener('ended', onSplashVideoEnded);
     }
 
     function dockIntoHero(skipped: boolean) {
@@ -251,14 +358,13 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       }
 
       updateSplashUI(1);
-      video!.pause();
+      video0!.pause();
       if (skipped) {
-        seekToFinalFrame();
+        seekToFinalFrame(video0);
       }
 
       chrome!.classList.add('is-leaving');
 
-      // Measure FIRST (current splash video box) and LAST (target Hero slot box)
       const fromRect = mover!.getBoundingClientRect();
       const toRect = slot!.getBoundingClientRect();
 
@@ -267,7 +373,6 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
         return;
       }
 
-      // Pin mover to its exact current viewport box so transform originates cleanly from center
       mover!.style.left = `${fromRect.left}px`;
       mover!.style.top = `${fromRect.top}px`;
       mover!.style.width = `${fromRect.width}px`;
@@ -278,7 +383,6 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
       const dy = (toRect.top + toRect.height / 2) - (fromRect.top + fromRect.height / 2);
       const scale = toRect.width / fromRect.width;
 
-      // Fade out splash backdrop while shrinking and sliding the video straight into the Hero slot
       backdrop!.classList.add('is-fading');
 
       const duration = 760;
@@ -334,137 +438,240 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     }
 
     function tickSplashProgress() {
-      if (state !== 'splash' || !video) return;
-      const dur = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 10;
-      const cur = video.currentTime || 0;
+      if (state !== 'splash' || !video0) return;
+      const dur = Number.isFinite(video0.duration) && video0.duration > 0 ? video0.duration : 10;
+      const cur = video0.currentTime || 0;
       if (cur > 0.05) hasStartedPlayback = true;
       const ratio = cur / dur;
       updateSplashUI(ratio);
 
-      if (video.ended || (hasStartedPlayback && dur > 0 && cur >= dur - 0.06)) {
+      if (video0.ended || (hasStartedPlayback && dur > 0 && cur >= dur - 0.06)) {
         dockIntoHero(false);
         return;
       }
       splashRaf = requestAnimationFrame(tickSplashProgress);
     }
 
-    /* ---------- Docked Replay Flow ---------- */
+    /* ---------- Docked Slider & Replay Flow ---------- */
     function stopReplayUI() {
       cancelAnimationFrame(replayRaf);
       figure!.classList.remove('is-replaying');
       if (heroProgressFill) heroProgressFill.style.transform = 'scaleX(0)';
-      if (heroPhaseLabel) heroPhaseLabel.textContent = defaultCaption;
     }
 
     function tickReplayProgress() {
-      if (state !== 'docked' || !video || video.paused) return;
-      const dur = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 10;
-      const ratio = Math.max(0, Math.min(1, video.currentTime / dur));
+      const vid = getActiveVideo();
+      if (state !== 'docked' || !vid || vid.paused) return;
+      const dur = Number.isFinite(vid.duration) && vid.duration > 0 ? vid.duration : 10;
+      const ratio = Math.max(0, Math.min(1, vid.currentTime / dur));
       if (heroProgressFill) {
         heroProgressFill.style.transform = `scaleX(${ratio.toFixed(4)})`;
       }
-      const idx = getPhaseIndex(ratio);
-      if (heroPhaseLabel && phases[idx]) {
-        const text = `0${idx + 1} · ${phases[idx]}`;
-        if (heroPhaseLabel.textContent !== text) heroPhaseLabel.textContent = text;
-      }
-      if (video.ended || ratio >= 0.994) {
-        seekToFinalFrame();
+      if (vid.ended || ratio >= 0.994) {
+        seekToFinalFrame(vid);
         stopReplayUI();
+        scheduleAutoSlide();
         return;
       }
       replayRaf = requestAnimationFrame(tickReplayProgress);
     }
 
     function startDockedReplay(rate?: number) {
-      if (state !== 'docked' || !video) return;
+      const vid = getActiveVideo();
+      if (state !== 'docked' || !vid) return;
+      clearAutoSlide();
       cancelAnimationFrame(replayRaf);
-      const targetRate = rate || REPLAY_RATE;
-      video.muted = true;
-      video.playsInline = true;
-      video.defaultPlaybackRate = targetRate;
-      video.playbackRate = targetRate;
-      video.currentTime = 0;
+      const targetRate = typeof rate === 'number' ? rate : REPLAY_RATE;
+      vid.muted = true;
+      vid.playsInline = true;
+      vid.defaultPlaybackRate = targetRate;
+      vid.playbackRate = targetRate;
+      try {
+        vid.currentTime = 0;
+      } catch {
+        // Ignore
+      }
       figure!.classList.add('is-replaying');
 
-      const p = video.play();
+      const p = vid.play();
       if (p && typeof p.then === 'function') {
         p.then(() => {
-          video.playbackRate = targetRate;
+          vid.playbackRate = targetRate;
           replayRaf = requestAnimationFrame(tickReplayProgress);
         }).catch(() => {
           stopReplayUI();
-          seekToFinalFrame();
+          seekToFinalFrame(vid);
+          scheduleAutoSlide();
         });
       } else {
         replayRaf = requestAnimationFrame(tickReplayProgress);
       }
     }
 
-    replayBtn?.addEventListener('click', startDockedReplay);
-    video.addEventListener('ended', () => {
-      if (state === 'docked') {
-        seekToFinalFrame();
-        stopReplayUI();
+    function goToSlide(nextIdx: number, autoPlay = true) {
+      if (state !== 'docked' || videos.length < 2) return;
+      const clamped = (nextIdx + videos.length) % videos.length;
+      if (clamped === activeIdx && !autoPlay) return;
+
+      clearAutoSlide();
+      stopReplayUI();
+      const prevVid = getActiveVideo();
+      if (prevVid) prevVid.pause();
+
+      activeIdx = clamped;
+      track!.style.transform = `translate3d(-${activeIdx * 100}%, 0, 0)`;
+
+      const meta = slidesMeta[activeIdx];
+      if (meta && projectLink && projectTitle) {
+        projectLink.href = meta.href;
+        projectTitle.textContent = meta.title;
+      }
+
+      dotBtns.forEach((btn, i) => {
+        const on = i === activeIdx;
+        btn.classList.toggle('is-active', on);
+        btn.setAttribute('aria-pressed', String(on));
+      });
+
+      const nextVid = getActiveVideo();
+      if (!nextVid) return;
+
+      if (autoPlay && !reduceMotion) {
+        if (nextVid.readyState >= 2) {
+          startDockedReplay(REPLAY_RATE);
+        } else {
+          nextVid.preload = 'auto';
+          if (nextVid.readyState === 0) nextVid.load();
+          let started = false;
+          const playOnce = () => {
+            if (started || getActiveVideo() !== nextVid) return;
+            started = true;
+            startDockedReplay(REPLAY_RATE);
+          };
+          nextVid.addEventListener('canplay', playOnce, { once: true });
+          window.setTimeout(playOnce, 300);
+        }
+      } else {
+        seekToFinalFrame(nextVid);
+        scheduleAutoSlide();
+      }
+    }
+
+    replayBtn?.addEventListener('click', () => startDockedReplay(REPLAY_RATE));
+    prevBtn?.addEventListener('click', () => goToSlide(activeIdx - 1, true));
+    nextBtn?.addEventListener('click', () => goToSlide(activeIdx + 1, true));
+    dotBtns.forEach((btn, idx) => {
+      btn.addEventListener('click', () => goToSlide(idx, true));
+    });
+
+    const captionBar = figure.querySelector('.hero-renovation-caption');
+    captionBar?.addEventListener('mouseenter', () => {
+      isHovered = true;
+      clearAutoSlide();
+    });
+    captionBar?.addEventListener('mouseleave', () => {
+      isHovered = false;
+      const vid = getActiveVideo();
+      if (state === 'docked' && vid && vid.paused) {
+        scheduleAutoSlide();
       }
     });
 
+    // Touch swipe support on the slider slot
+    slot.addEventListener('touchstart', (e) => {
+      if (state !== 'docked' || !e.touches.length) return;
+      swipeStartX = e.touches[0].clientX;
+      swipeStartY = e.touches[0].clientY;
+      didSwipe = false;
+    }, { passive: true });
+
+    slot.addEventListener('touchend', (e) => {
+      if (state !== 'docked' || !e.changedTouches.length) return;
+      const dx = e.changedTouches[0].clientX - swipeStartX;
+      const dy = e.changedTouches[0].clientY - swipeStartY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        didSwipe = true;
+        goToSlide(dx < 0 ? activeIdx + 1 : activeIdx - 1, true);
+      }
+    }, { passive: true });
+
+    slot.addEventListener('click', (e) => {
+      if (didSwipe) {
+        e.preventDefault();
+        didSwipe = false;
+      }
+    });
+
+    videos.forEach((vid, idx) => {
+      vid.addEventListener('ended', () => {
+        if (state === 'docked' && idx === activeIdx) {
+          seekToFinalFrame(vid);
+          stopReplayUI();
+          scheduleAutoSlide();
+        }
+      });
+    });
+
     /* ---------- Boot ---------- */
-    video.defaultPlaybackRate = PLAYBACK_RATE;
-    video.playbackRate = PLAYBACK_RATE;
+    video0.defaultPlaybackRate = PLAYBACK_RATE;
+    video0.playbackRate = PLAYBACK_RATE;
 
     if (state === 'splash') {
       window.scrollTo(0, 0);
-      if (video.parentElement !== mover) {
-        video.removeAttribute('poster');
-        mover.appendChild(video);
+      if (video0.parentElement !== mover) {
+        video0.removeAttribute('poster');
+        mover.appendChild(video0);
       }
 
-      video.muted = true;
-      video.playsInline = true;
-      video.loop = false;
-      video.defaultPlaybackRate = PLAYBACK_RATE;
-      video.playbackRate = PLAYBACK_RATE;
-      video.currentTime = 0;
+      video0.muted = true;
+      video0.playsInline = true;
+      video0.loop = false;
+      video0.defaultPlaybackRate = PLAYBACK_RATE;
+      video0.playbackRate = PLAYBACK_RATE;
+      video0.currentTime = 0;
 
       skipBtn?.addEventListener('click', () => dockIntoHero(true));
-      video.addEventListener('ended', onSplashVideoEnded);
+      video0.addEventListener('ended', onSplashVideoEnded);
       window.addEventListener('wheel', onSplashWheel, { passive: true });
       window.addEventListener('touchstart', onSplashTouchStart, { passive: true });
       window.addEventListener('touchmove', onSplashTouchMove, { passive: true });
       window.addEventListener('keydown', onSplashKeyDown);
 
-      const playPromise = video.play();
+      const playPromise = video0.play();
       if (playPromise && typeof playPromise.then === 'function') {
         playPromise.then(() => {
-          video.playbackRate = PLAYBACK_RATE;
+          video0.playbackRate = PLAYBACK_RATE;
         }).catch(() => {
-          // If browser blocks autoplay, allow a tap/click on the splash to start or skip
           const resumeOrSkip = () => {
             if (state !== 'splash') return;
-            video.playbackRate = PLAYBACK_RATE;
-            video.play().catch(() => dockIntoHero(true));
+            video0.playbackRate = PLAYBACK_RATE;
+            video0.play().catch(() => dockIntoHero(true));
           };
           chrome.addEventListener('pointerdown', resumeOrSkip, { once: true });
         });
       }
       splashRaf = requestAnimationFrame(tickSplashProgress);
     } else {
-      if (video.parentElement !== slot) {
-        slot.appendChild(video);
+      if (video0.parentElement !== slideSlot0) {
+        slideSlot0.appendChild(video0);
       }
       hideSplashElements();
       root.setAttribute('data-intro', 'docked');
-      // Kullanıcı sayfayı yenilediğinde kenardaki küçük halinde hızlıca baştan oynayıp tamamlansın
-      const playDockedIntro = () => {
-        startDockedReplay(REPLAY_RATE);
-      };
-      if (video.readyState >= 2) {
-        playDockedIntro();
+      if (reduceMotion) {
+        seekToFinalFrame(video0);
       } else {
-        video.addEventListener('canplay', playDockedIntro, { once: true });
-        // Emniyet amaçlı zaman aşımı
-        setTimeout(playDockedIntro, 150);
+        let started = false;
+        const playDockedIntro = () => {
+          if (started) return;
+          started = true;
+          startDockedReplay(REPLAY_RATE);
+        };
+        if (video0.readyState >= 2) {
+          playDockedIntro();
+        } else {
+          video0.addEventListener('canplay', playDockedIntro, { once: true });
+          window.setTimeout(playDockedIntro, 150);
+        }
       }
     }
   })();
@@ -679,14 +886,19 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     color: var(--ink);
   }
 
-  /* ---------- Pixel-exact alpha silhouette cutout (100% original video colors in Light & Dark modes) ---------- */
+  /* ---------- Video rendering ---------- */
   .renovation-video {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
     background: transparent;
     pointer-events: none;
+  }
+
+  /* Pixel-exact alpha silhouette cutout for the Altınboynuz isometric interior */
+  .renovation-video--masked {
+    object-fit: fill;
     -webkit-mask-image: url('/assets/aistudio/renovation_mask.png');
     -webkit-mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
@@ -696,24 +908,23 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     mask-mode: alpha;
   }
 
-  .hero-video-slot {
+  .hero-slide.is-masked .hero-slide-media {
     filter: drop-shadow(0 12px 22px rgba(20, 33, 61, 0.1));
   }
 
-  /* Subtle elevation shadow on Ozalit dark blueprint without altering a single pixel of building color */
   :root[data-theme="dark"] .intro-mover,
-  :root[data-theme="dark"] .hero-video-slot {
+  :root[data-theme="dark"] .hero-slide.is-masked .hero-slide-media {
     filter: drop-shadow(0 20px 34px rgba(3, 14, 34, 0.45));
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) .intro-mover,
-    :root:not([data-theme="light"]) .hero-video-slot {
+    :root:not([data-theme="light"]) .hero-slide.is-masked .hero-slide-media {
       filter: drop-shadow(0 20px 34px rgba(3, 14, 34, 0.45));
     }
   }
 
-  /* ---------- Docked Hero Renovation Slot ---------- */
+  /* ---------- Docked Hero Renovation Slider ---------- */
   .hero-renovation {
     position: relative;
     margin: 0;
@@ -727,6 +938,35 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     width: 100%;
     aspect-ratio: 16 / 9;
     background: transparent;
+    overflow: hidden;
+  }
+
+  .hero-slider-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  .hero-slide {
+    position: relative;
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-slide-media {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-slide-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    cursor: pointer;
   }
 
   .hero-progress-track {
@@ -764,36 +1004,62 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     border-top-color: transparent;
   }
 
-  .hero-phase-label {
-    font: 500 11px/1.2 var(--f-mono);
-    letter-spacing: 0.12em;
-    color: var(--muted);
+  .hero-project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    color: var(--ink);
+    text-decoration: none;
+    font: 500 12px/1.3 var(--f-mono);
+    letter-spacing: 0.04em;
+    transition: color 0.18s var(--ease);
+  }
+  .hero-project-link:hover {
+    color: var(--accent);
+  }
+  .hero-project-title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .hero-renovation.is-replaying .hero-phase-label {
-    color: var(--ink);
+  .hero-project-arrow {
+    flex: none;
+    display: inline-block;
+    transition: transform 0.18s var(--ease);
+  }
+  .hero-project-link:hover .hero-project-arrow {
+    transform: translate(2px, -2px);
   }
 
+  .hero-slider-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .hero-nav-btn,
   .hero-replay-btn {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    min-height: 36px;
-    padding: 0 12px;
-    border: 1px dashed var(--line-strong);
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--line-strong);
     border-radius: 2px;
     background: transparent;
     color: var(--ink);
-    font: 600 11px/1 var(--f-mono);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    flex-shrink: 0;
+    font: 600 12px/1 var(--f-mono);
     cursor: pointer;
     transition: border-color 0.18s var(--ease), background 0.18s var(--ease), color 0.18s var(--ease);
   }
+  .hero-replay-btn {
+    border-style: dashed;
+    margin-left: 2px;
+  }
+  .hero-nav-btn:hover,
   .hero-replay-btn:hover {
     border-style: solid;
     border-color: var(--ink);
@@ -808,6 +1074,33 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     height: 13px;
     flex: none;
     transition: transform 0.25s var(--ease);
+  }
+
+  .hero-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+  }
+  .hero-dot {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.45;
+    transition: opacity 0.2s var(--ease), background 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .hero-dot:hover {
+    opacity: 0.85;
+  }
+  .hero-dot.is-active {
+    opacity: 1;
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.15);
   }
 
   /* ---------- Responsive ---------- */
@@ -831,12 +1124,13 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     .hero-renovation-caption {
       gap: 8px;
     }
-    .hero-phase-label {
-      font-size: 10px;
+    .hero-project-link {
+      font-size: 11px;
     }
+    .hero-nav-btn,
     .hero-replay-btn {
-      min-height: 40px;
-      padding: 0 10px;
+      width: 34px;
+      height: 34px;
     }
   }
 
@@ -845,6 +1139,9 @@ const posterSrc = '/assets/aistudio/renovation_end_poster.webp';
     .intro-mover,
     .intro-chrome {
       display: none !important;
+    }
+    .hero-slider-track {
+      transition: none;
     }
   }
 </style>
