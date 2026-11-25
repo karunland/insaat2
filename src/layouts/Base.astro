@@ -181,7 +181,7 @@ const footKeys: RouteKey[] = ['home', 'about', 'taahhut', 'kentsel', 'projects',
       <div class="tb-cell"><span class="tb-l">{t.common.tb.phone}</span><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></div>
       <div class="tb-cell"><span class="tb-l">{t.common.tb.mail}</span><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div>
       <div class="tb-cell"><span class="tb-l">{t.common.tb.date}</span>{year}</div>
-      <div class="tb-cell"><span class="tb-l">{t.common.tb.approved}</span>{t.common.tb.gravity}</div>
+      <div class="tb-cell tb-empty" aria-hidden="true"></div>
     </div>
     <p class="tb-copy">© {year} {SITE.legalName}. {t.common.rights}</p>
   </footer>

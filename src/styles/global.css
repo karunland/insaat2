@@ -687,7 +687,8 @@ body[data-page="project"] .detail-head {
   .num { border-right: 0 !important; border-bottom: 1px solid color-mix(in srgb, var(--paper) 20%, transparent); }
   .tb-grid { grid-template-columns: 1fr; }
   .tb-grid > .tb-cell { border-right: 0 !important; border-bottom: 1px solid var(--ink) !important; }
-  .tb-grid > .tb-cell:last-child { border-bottom: 0 !important; }
+  .tb-grid > .tb-cell:last-child, .tb-grid > .tb-cell:nth-last-child(2):has(+ .tb-empty) { border-bottom: 0 !important; }
+  .tb-empty { display: none !important; }
   .hud { right: 8px; bottom: 8px; }
   .brand-text small { display: none; }
 }
