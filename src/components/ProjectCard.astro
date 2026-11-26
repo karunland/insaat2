@@ -6,19 +6,20 @@ import type { Project } from '../lib/projects';
 interface Props { lang: Lang; p: Project }
 const { lang, p } = Astro.props;
 const t = useT(lang);
+const sub = p.client?.kisa ?? p.text.konum.split(',')[0];
 ---
 <a class="sheet reveal" href={projectPath(lang, p.id)} data-status={p.data.durum} data-cat={p.data.kategori}>
-  <div class="sheet-img">
-    <Image src={p.data.kapak} alt="" widths={[480, 720, 960]} sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 400px" />
+  <div class="sheet-media">
+    <div class="sheet-img">
+      <Image src={p.data.kapak} alt="" widths={[480, 720, 960]} sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 400px" />
+    </div>
+  </div>
+  <div class="sheet-meta">
+    <span class="sheet-meta-left">{p.data.yil} / {t.common.cat[p.data.kategori]}</span>
+    <span class="sheet-status" data-status={p.data.durum}>{t.common.status[p.data.durum]}</span>
   </div>
   <div class="sheet-body">
-    <span class="sheet-cat">{t.common.cat[p.data.kategori]}{p.client && ` · ${p.client.kisa}`}</span>
     <h3>{p.text.baslik}</h3>
-    {p.text.olcek && <p>{p.text.olcek}</p>}
+    {sub && <p class="sheet-sub">{sub}</p>}
   </div>
-  <footer class="sheet-block">
-    <span>{p.text.konum.split(',')[0]}</span>
-    <span>{p.data.yil}</span>
-    <span class="sheet-status" data-status={p.data.durum}>{t.common.status[p.data.durum]}</span>
-  </footer>
 </a>

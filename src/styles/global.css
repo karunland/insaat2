@@ -23,8 +23,8 @@
 
   --f-display: "Archivo", system-ui, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --gutter: clamp(16px, 4vw, 56px);
-  --maxw: 1240px;
+  --gutter: clamp(16px, 2.4vw, 36px);
+  --maxw: 1480px;
   --ease: cubic-bezier(.2, .7, .1, 1);
   color-scheme: light;
 }
@@ -301,21 +301,54 @@ h1 em, h2 em { font-style: normal; color: var(--accent-text); }
 .chip:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .chip.is-active { background: var(--ink); color: var(--paper); }
 
-.projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 3vw, 40px) clamp(22px, 2.4vw, 32px); }
 .sheet {
   position: relative; display: flex; flex-direction: column;
-  border: 1.5px solid var(--ink); background: var(--card);
-  padding: 10px; text-decoration: none;
-  transition: border-color .28s var(--ease), box-shadow .28s var(--ease);
+  background: transparent;
+  padding: 6px 6px 0; text-decoration: none;
 }
-.sheet::before { content: ""; position: absolute; inset: 5px; border: 1px solid var(--line); pointer-events: none; transition: border-color .28s var(--ease); }
-.sheet:hover {
-  border-color: var(--accent-text);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent), 0 0 18px color-mix(in srgb, var(--accent) 22%, transparent);
+.sheet-media { position: relative; }
+.sheet-media::before,
+.sheet-media::after {
+  content: ""; position: absolute; width: 12px; height: 12px;
+  pointer-events: none;
+  border-color: var(--line-strong);
+  border-style: solid;
+  border-width: 0;
+  transition: border-color .25s var(--ease), filter .25s var(--ease);
 }
-.sheet:hover::before { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.sheet-media::before { top: -6px; left: -6px; border-top-width: 1.5px; border-left-width: 1.5px; }
+.sheet-media::after { right: -6px; bottom: -6px; border-right-width: 1.5px; border-bottom-width: 1.5px; }
+.sheet:hover .sheet-media::before,
+.sheet:hover .sheet-media::after {
+  border-color: var(--ink);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--ink) 35%, transparent));
+}
 .sheet-img { position: relative; overflow: hidden; aspect-ratio: 3 / 2; background: var(--paper-2); }
 .sheet-img img { width: 100%; height: 100%; object-fit: cover; }
+.sheet-meta {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0 11px;
+  border-bottom: 1px solid var(--line);
+  font: 500 11px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase;
+  transition: border-color .25s var(--ease);
+}
+.sheet:hover .sheet-meta { border-bottom-color: var(--line-strong); }
+.sheet-meta-left { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sheet-status {
+  display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
+  color: var(--ink-soft); font-weight: 500;
+}
+.sheet-status::before {
+  content: ""; display: inline-block; width: 7px; height: 7px; flex: none;
+  background: var(--muted);
+}
+.sheet-status[data-status="devam"]::before {
+  background: #C97A57;
+}
+.sheet-body { padding: 14px 0 4px; flex: 1; }
+.sheet-body h3 { font-size: clamp(19px, 1.55vw, 22px); font-weight: 700; font-stretch: 95%; line-height: 1.24; letter-spacing: -.015em; margin: 0 0 7px; color: var(--ink); }
+.sheet-sub { margin: 0; color: var(--muted); font-size: 14px; font-weight: 400; letter-spacing: .01em; }
 .badge {
   position: absolute; top: 10px; left: 10px;
   padding: 6px 10px; font: 600 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase;
@@ -325,16 +358,6 @@ h1 em, h2 em { font-style: normal; color: var(--accent-text); }
 .badge[data-status="devam"]::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: currentColor; animation: blink 1.6s infinite; vertical-align: 1px; }
 @keyframes blink { 50% { opacity: .2; } }
 .badge.inline { position: static; display: inline-block; }
-.sheet-body { padding: 16px 8px 14px; flex: 1; }
-.sheet-cat { display: block; margin-bottom: 8px; font: 500 11px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.sheet-body h3 { font-size: 22px; font-stretch: 95%; margin-bottom: 6px; }
-.sheet-body p { margin: 0; color: var(--ink-soft); font-size: 15px; }
-.sheet-block { display: grid; grid-template-columns: 1fr auto auto; border-top: 1.5px solid var(--ink); margin: 0 -10px -10px; }
-.sheet-block span { padding: 9px 12px; font: 500 11px var(--f-mono); letter-spacing: .08em; border-right: 1px solid var(--line-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.sheet-block span:last-child { border-right: 0; }
-.sheet-status { text-transform: uppercase; font-weight: 600; color: var(--muted); }
-.sheet-status[data-status="devam"] { color: var(--accent-text); }
-.sheet-status[data-status="devam"]::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: currentColor; animation: blink 1.6s infinite; vertical-align: 1px; }
 .empty { grid-column: 1 / -1; padding: 40px; border: 1.5px dashed var(--line-strong); text-align: center; font: 500 14px var(--f-mono); color: var(--muted); }
 
 /* ---------- Hakkımızda ---------- */

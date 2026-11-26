@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import HeroDrawing from '../components/HeroDrawing.astro';
+import TeamShowcase from '../components/TeamShowcase.astro';
 import Areas from '../components/Areas.astro';
 import RenovationDisciplines from '../components/RenovationDisciplines.astro';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -44,7 +45,9 @@ const fmt = (v: number) => v.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
     <div class="ticker-track">{[...h.ticker, ...h.ticker].map((w) => <span>{w}</span>)}</div>
   </div>
 
-  <section class="section" id="alanlar">
+  <TeamShowcase lang={lang} />
+
+  <section class="section tight" id="alanlar">
     <header class="section-head reveal">
       <p class="sheet-tag">{h.areasTag}</p>
       <h2 set:html={h.areasH} />
