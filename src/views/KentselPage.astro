@@ -11,7 +11,6 @@ const { lang } = Astro.props;
 const t = useT(lang);
 const k = t.kentsel;
 const f = k.form;
-const kots = ['+15.00', '+12.00', '+9.00', '+6.00', '+3.00', '±0.00'];
 const endpoint = SITE.forms.kentsel;
 ---
 <Base lang={lang} page="kentsel" title={t.meta.kentsel.title} description={t.meta.kentsel.desc} alternates={ROUTES.kentsel}>
@@ -31,8 +30,8 @@ const endpoint = SITE.forms.kentsel;
       <p class="section-sub">{k.processSub}</p>
     </header>
     <ol class="loadpath">
-      {k.steps.map(([h, p], i) => (
-        <li class="lp-step reveal"><span class="lp-kot">{kots[i]}</span><h3>{h}</h3><p>{p}</p></li>
+      {k.steps.map(([h, p]) => (
+        <li class="lp-step reveal"><h3>{h}</h3><p>{p}</p></li>
       ))}
     </ol>
   </section>

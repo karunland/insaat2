@@ -1,43 +1,118 @@
 ---
-import { ROUTES, useT, type Lang } from '../i18n/ui';
+import { ROUTES, useT, type Lang } from "../i18n/ui";
 
-interface Props { lang: Lang }
+interface Props {
+  lang: Lang;
+}
 const { lang } = Astro.props;
 const t = useT(lang);
 const items = [
-  { code: 'A', key: 'taahhut' as const },
-  { code: 'B', key: 'kentsel' as const },
+  { code: "A", key: "taahhut" as const },
+  { code: "B", key: "kentsel" as const },
 ];
 ---
+
 <div class="areas stagger">
   {items.map(({ code, key }) => {
     const a = t.areas[key];
     return (
       <a class="area reveal" href={ROUTES[key][lang]}>
-        <span class="area-code"><b>{code}</b>{t.areas.label} {code}</span>
-        {key === 'taahhut' ? (
+        {/* <span class="area-code"><b>{code}</b>{t.areas.label} {code}</span> */}
+        {key === "taahhut" ? (
           <svg viewBox="0 0 400 150" class="area-diagram" aria-hidden="true">
-            <path class="ad-draw" pathLength="1" style="--ad:0.05s" d="M0 60H140V140H260V60H400" />
-            <path class="soil ad-fade" style="--ad:0.25s" d="M10 80l20-20M30 100l40-40M50 120l60-60M80 130l60-70M290 130l60-70M320 130l60-70M350 130l40-45M380 130l20-25" />
-            <path class="acc ad-draw" pathLength="1" style="--ad:0.35s" d="M146 60V140M254 60V140M146 80H254" />
-            <circle class="acc ad-draw ad-pipe-outer" pathLength="1" style="--ad:0.55s" cx="200" cy="114" r="20" />
-            <circle class="ad-draw ad-pipe-inner" pathLength="1" style="--ad:0.7s" cx="200" cy="114" r="13" />
-            <path class="ad-draw" pathLength="1" style="--ad:0.45s" d="M290 60V18H380V60M300 30h12M324 30h12M348 30h12M300 44h12M324 44h12M348 44h12" />
-            <path class="ad-draw" pathLength="1" style="--ad:0.3s" d="M20 60V40h70v20M30 40l10-14h30l10 14" />
+            <path
+              class="ad-draw"
+              pathLength="1"
+              style="--ad:0.05s"
+              d="M0 60H140V140H260V60H400"
+            />
+            <path
+              class="soil ad-fade"
+              style="--ad:0.25s"
+              d="M10 80l20-20M30 100l40-40M50 120l60-60M80 130l60-70M290 130l60-70M320 130l60-70M350 130l40-45M380 130l20-25"
+            />
+            <path
+              class="acc ad-draw"
+              pathLength="1"
+              style="--ad:0.35s"
+              d="M146 60V140M254 60V140M146 80H254"
+            />
+            <circle
+              class="acc ad-draw ad-pipe-outer"
+              pathLength="1"
+              style="--ad:0.55s"
+              cx="200"
+              cy="114"
+              r="20"
+            />
+            <circle
+              class="ad-draw ad-pipe-inner"
+              pathLength="1"
+              style="--ad:0.7s"
+              cx="200"
+              cy="114"
+              r="13"
+            />
+            <path
+              class="ad-draw"
+              pathLength="1"
+              style="--ad:0.45s"
+              d="M290 60V18H380V60M300 30h12M324 30h12M348 30h12M300 44h12M324 44h12M348 44h12"
+            />
+            <path
+              class="ad-draw"
+              pathLength="1"
+              style="--ad:0.3s"
+              d="M20 60V40h70v20M30 40l10-14h30l10 14"
+            />
           </svg>
         ) : (
           <svg viewBox="0 0 400 150" class="area-diagram" aria-hidden="true">
-            <path class="ad-draw" pathLength="1" style="--ad:0.05s" d="M0 140H400" />
-            <path class="ad-draw" pathLength="1" style="--ad:0.18s" d="M40 140V62H140V140M52 76h16M80 76h16M108 76h16M52 96h16M80 96h16M108 96h16M52 116h16M108 116h16M80 140v-20h16v20" />
-            <path class="acc ad-draw" pathLength="1" style="--ad:0.42s" d="M70 66l6 10-5 8 7 11M126 100l-6 10 5 7-7 12" />
-            <path class="acc ad-draw ad-arrow" pathLength="1" style="--ad:0.62s" d="M168 100H232M220 88l12 12-12 12" />
-            <path class="ad-draw" pathLength="1" style="--ad:0.76s" d="M262 140V16H372V140M262 34H372M262 52H372M262 70H372M262 88H372M262 106H372M262 124H372M290 16v124M344 16v124" />
-            <path class="acc ad-draw" pathLength="1" style="--ad:1.05s" d="M256 34h-8M256 70h-8M256 106h-8" />
+            <path
+              class="ad-draw"
+              pathLength="1"
+              style="--ad:0.05s"
+              d="M0 140H400"
+            />
+            <path
+              class="ad-draw"
+              pathLength="1"
+              style="--ad:0.18s"
+              d="M40 140V62H140V140M52 76h16M80 76h16M108 76h16M52 96h16M80 96h16M108 96h16M52 116h16M108 116h16M80 140v-20h16v20"
+            />
+            <path
+              class="acc ad-draw"
+              pathLength="1"
+              style="--ad:0.42s"
+              d="M70 66l6 10-5 8 7 11M126 100l-6 10 5 7-7 12"
+            />
+            <path
+              class="acc ad-draw ad-arrow"
+              pathLength="1"
+              style="--ad:0.62s"
+              d="M168 100H232M220 88l12 12-12 12"
+            />
+            <path
+              class="ad-draw"
+              pathLength="1"
+              style="--ad:0.76s"
+              d="M262 140V16H372V140M262 34H372M262 52H372M262 70H372M262 88H372M262 106H372M262 124H372M290 16v124M344 16v124"
+            />
+            <path
+              class="acc ad-draw"
+              pathLength="1"
+              style="--ad:1.05s"
+              d="M256 34h-8M256 70h-8M256 106h-8"
+            />
           </svg>
         )}
         <h3>{a.h}</h3>
         <p>{a.p}</p>
-        <ul class="ticks">{a.ticks.map((x) => <li>{x}</li>)}</ul>
+        <ul class="ticks">
+          {a.ticks.map((x) => (
+            <li>{x}</li>
+          ))}
+        </ul>
         <span class="link-arrow">{a.link} →</span>
       </a>
     );
@@ -53,7 +128,8 @@ const items = [
     opacity: 0;
   }
   .area.is-in .area-diagram .ad-draw {
-    animation: area-line-draw 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--ad, 0s) forwards;
+    animation: area-line-draw 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--ad, 0s)
+      forwards;
   }
   .area.is-in .area-diagram .ad-fade {
     animation: area-line-fade 0.65s ease var(--ad, 0.2s) forwards;
@@ -72,18 +148,34 @@ const items = [
   }
 
   @keyframes area-line-draw {
-    to { stroke-dashoffset: 0; }
+    to {
+      stroke-dashoffset: 0;
+    }
   }
   @keyframes area-line-fade {
-    to { opacity: 1; }
+    to {
+      opacity: 1;
+    }
   }
   @keyframes area-pipe-breath {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(0.88); opacity: 0.65; }
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(0.88);
+      opacity: 0.65;
+    }
   }
   @keyframes area-arrow-drift {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(5px);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

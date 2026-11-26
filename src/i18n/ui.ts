@@ -69,7 +69,7 @@ const tr = {
     },
     ticker: ['Taahhüt', 'Kentsel Dönüşüm', 'Altyapı', 'Kamu Binaları', 'Atıksu & İçme Suyu', 'Güçlendirme', 'Anahtar Teslim', '6306 Sayılı Kanun'],
     areasTag: '',
-    areasH: 'İki alan, <em>tek disiplin.</em>',
+    areasH: '',
     featuredTag: '',
     featuredH: 'Projeler',
     allTaahhut: 'Tüm taahhüt projeleri',
@@ -110,7 +110,7 @@ const tr = {
   },
 
   areas: {
-    label: 'FAALİYET ALANI',
+    label: '',
     taahhut: {
       h: 'Taahhüt',
       p: 'Kamu kurumlarının ihaleyle verdiği altyapı ve bina işlerini; şartnameye, takvime ve bütçeye sadık kalarak yürütüyoruz.',
@@ -179,7 +179,7 @@ const tr = {
       ['Yıkım ve inşaat', "Bina güvenle yıkılır; yeni yapı TBDY 2018'e uygun olarak inşa edilir. Düzenli ilerleme raporu paylaşılır."],
       ['Anahtar teslim', 'İskân alınır ve daireler hak sahiplerine teslim edilir.'],
     ],
-    quakeTag: 'NEDEN DÖNÜŞÜM?',
+    quakeTag: '',
     quakeH: 'Aynı deprem, <em>iki farklı bina.</em>',
     quakeSub: 'Eski yönetmeliklerle yapılmış, zemin katı dükkân için boşaltılmış binalar depremde en çok hasar gören yapılar arasındadır. Farkı kendiniz görün.',
     quake: {

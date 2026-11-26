@@ -1,6 +1,8 @@
 ---
-import MiniRenovationIcons, { type RenovationScene } from './MiniRenovationIcons.astro';
-import { useT, type Lang } from '../i18n/ui';
+import MiniRenovationIcons, {
+  type RenovationScene,
+} from "./MiniRenovationIcons.astro";
+import { useT, type Lang } from "../i18n/ui";
 
 interface Props {
   lang: Lang;
@@ -9,13 +11,21 @@ interface Props {
 
 const { lang, attached = false } = Astro.props;
 const t = useT(lang);
-const scenes: RenovationScene[] = ['plaster', 'flooring', 'lighting', 'glazing'];
+const scenes: RenovationScene[] = [
+  "plaster",
+  "flooring",
+  "lighting",
+  "glazing",
+];
 ---
 
-<div class:list={['disciplines-block reveal', { 'is-attached': attached }]} data-disciplines>
-  <div class="disciplines-bar">
+<div
+  class:list={["disciplines-block reveal", { "is-attached": attached }]}
+  data-disciplines
+>
+  <!-- <div class="disciplines-bar">
     <span class="disciplines-tag">{t.home.disciplinesTag}</span>
-  </div>
+  </div> -->
   <div class="disciplines-grid">
     {scenes.map((scene) => {
       const item = t.miniIcons[scene];
@@ -23,7 +33,9 @@ const scenes: RenovationScene[] = ['plaster', 'flooring', 'lighting', 'glazing']
         <article class="discipline-cell" data-discipline-card>
           <div class="discipline-head">
             <span class="discipline-code">{item.code}</span>
-            <span class="discipline-replay-mark" aria-hidden="true">↻</span>
+            <span class="discipline-replay-mark" aria-hidden="true">
+              ↻
+            </span>
           </div>
           <div class="discipline-visual">
             <MiniRenovationIcons scene={scene} lang={lang} size="lg" />
@@ -42,20 +54,24 @@ const scenes: RenovationScene[] = ['plaster', 'flooring', 'lighting', 'glazing']
     if (win.__discInit) return;
     win.__discInit = true;
 
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (reduceMotion) return;
 
-    document.querySelectorAll<HTMLElement>('[data-discipline-card]').forEach((card) => {
-      card.addEventListener('click', (e) => {
-        // Avoid double-triggering when user directly clicked the inner [data-mri] button
-        if ((e.target as HTMLElement | null)?.closest('[data-mri]')) return;
-        const box = card.querySelector<HTMLElement>('[data-mri]');
-        if (!box) return;
-        box.classList.remove('is-playing');
-        void box.offsetWidth;
-        box.classList.add('is-playing');
+    document
+      .querySelectorAll<HTMLElement>("[data-discipline-card]")
+      .forEach((card) => {
+        card.addEventListener("click", (e) => {
+          // Avoid double-triggering when user directly clicked the inner [data-mri] button
+          if ((e.target as HTMLElement | null)?.closest("[data-mri]")) return;
+          const box = card.querySelector<HTMLElement>("[data-mri]");
+          if (!box) return;
+          box.classList.remove("is-playing");
+          void box.offsetWidth;
+          box.classList.add("is-playing");
+        });
       });
-    });
   })();
 </script>
 
@@ -92,18 +108,22 @@ const scenes: RenovationScene[] = ['plaster', 'flooring', 'lighting', 'glazing']
   }
 
   .discipline-cell {
+    position: relative;
     display: flex;
     flex-direction: column;
     padding: clamp(18px, 2.2vw, 26px);
     border-right: 1px solid var(--line-strong);
     cursor: pointer;
-    transition: background 0.2s var(--ease);
+    transition: background 0.25s var(--ease), box-shadow 0.25s var(--ease);
   }
   .discipline-cell:last-child {
     border-right: 0;
   }
   .discipline-cell:hover {
-    background: color-mix(in srgb, var(--ink) 3.5%, transparent);
+    background: color-mix(in srgb, var(--accent) 4%, transparent);
+    box-shadow:
+      inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 60%, transparent),
+      0 0 16px color-mix(in srgb, var(--accent) 16%, transparent);
   }
 
   .discipline-head {
@@ -117,12 +137,14 @@ const scenes: RenovationScene[] = ['plaster', 'flooring', 'lighting', 'glazing']
   }
   .discipline-code {
     font-variant-numeric: tabular-nums;
-    color: var(--accent);
+    color: var(--accent-text);
   }
   .discipline-replay-mark {
     font-size: 13px;
     opacity: 0.45;
-    transition: opacity 0.2s var(--ease), transform 0.25s var(--ease);
+    transition:
+      opacity 0.2s var(--ease),
+      transform 0.25s var(--ease);
   }
   .discipline-cell:hover .discipline-replay-mark {
     opacity: 1;
@@ -159,7 +181,7 @@ const scenes: RenovationScene[] = ['plaster', 'flooring', 'lighting', 'glazing']
     .discipline-cell:nth-child(2n) {
       border-right: 0;
     }
-    .discipline-cell:nth-child(-n+2) {
+    .discipline-cell:nth-child(-n + 2) {
       border-bottom: 1px solid var(--line-strong);
     }
   }
